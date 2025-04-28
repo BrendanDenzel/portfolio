@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Highschool Sport Photo Gallery</title>
+
+  <!-- Lightbox CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,13 +24,13 @@
       gap: 20px;
       padding: 0 20px;
     }
-    .gallery img {
+    .gallery a img {
       width: 100%;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: transform 0.3s;
     }
-    .gallery img:hover {
+    .gallery a img:hover {
       transform: scale(1.05);
     }
   </style>
@@ -36,13 +40,21 @@
   <h1>Highschool Sport Photos</h1>
 
   <div class="gallery">
-    <!-- Paste your gallery images here -->
-    <img src="photo1.jpg" alt="Photo 1">
-    <img src="photo2.jpg" alt="Photo 2">
-    <img src="photo3.jpg" alt="Photo 3">
-    <img src="photo4.jpg" alt="Photo 4">
-    <!-- Add as many images as you need -->
+    <!-- Lightbox-enabled images -->
+    <a href="images/photo1-large.jpg" data-lightbox="sports-gallery" data-title="Photo 1 Description">
+      <img src="images/photo1-thumb.jpg" alt="Photo 1">
+    </a>
+    <a href="images/photo2-large.jpg" data-lightbox="sports-gallery" data-title="Photo 2 Description">
+      <img src="images/photo2-thumb.jpg" alt="Photo 2">
+    </a>
+    <a href="images/photo3-large.jpg" data-lightbox="sports-gallery" data-title="Photo 3 Description">
+      <img src="images/photo3-thumb.jpg" alt="Photo 3">
+    </a>
+    <!-- Add more photos as needed -->
   </div>
+
+  <!-- Lightbox JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 
 </body>
 </html>
