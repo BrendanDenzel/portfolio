@@ -16,7 +16,7 @@ window.onload = function () {
       }, delay);
       delay += 100;
     });
-  }, 500); // delay after full load before starting fade-ins
+  }, 2000); // delay after full load before starting fade-ins
 };
 
 
