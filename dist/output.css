@@ -50,10 +50,6 @@ html {
   /* 5 */
 }
 
-.h-menu {
-  height: 16rem; /* or more, depending on how much space you need */
-}
-
 /*
 1. Remove the margin in all browsers.
 2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
