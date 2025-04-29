@@ -33,6 +33,7 @@
 5. Use the user's configured `sans` font-feature-settings by default.
 */
 
+
 html {
   line-height: 1.5;
   /* 1 */
@@ -47,6 +48,10 @@ html {
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
+}
+
+.h-menu {
+  height: 16rem; /* or more, depending on how much space you need */
 }
 
 /*
