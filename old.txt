@@ -78,12 +78,18 @@
           <ul id="ulMenu"
             class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
             <li class="group transition duration-300">
-              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
+              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PRICES
                 <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
               </a>
             </li>
             <li class="group transition duration-300">
               <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
+                <span
+                  class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">PRICES
                 <span
                   class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
               </a>
@@ -108,184 +114,209 @@
   <!-- Content -->
   <div class="container mx-auto">
     <h1 class="text-4xl pt-10 pb-3 font-bold">PHOTOGRAPHS</h1>
-    <section class="text-neutral-700">
-      <div class="container w-full">
-        <div class="flex flex-wrap w-full">
-          <div class="flex w-full md:w-1/2 flex-wrap">
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-1.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 1"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-1.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-2.jpg" data-fancybox="gallery">
-                  <img
-                    alt="Image 2"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-2.jpg"
-                  />
-                </a>
-              </div>
-            </div>
-            <div class="w-full p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-3.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 3"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-3.jpg" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="flex w-full md:w-1/2 flex-wrap">
-            <div class="w-full p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-4.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 4"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-4.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-5.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 5"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-5.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-6.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 6"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-6.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-7.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 7"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-7.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-8.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 8"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-8.jpg" />
-                </a>
-              </div>
-            </div>
-          </div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Pricing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --card-bg: #f5f5f5;
+      --accent-bg: #111111;
+      --accent-text: #ffffff;
+      --btn-bg: #111111;
+      --btn-text: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
 
-          <div class="flex w-full md:w-1/2 flex-wrap">
-            <div class="w-full p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-9.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 9"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-9.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-10.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 10"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-10.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-11.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 11"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-11.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-12.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 12"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-12.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-13.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 13"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-13.jpg" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="flex w-full md:w-1/2 flex-wrap">
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-14.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 14"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-14.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-15.jpg"
-                  data-fancybox="gallery">
-                  <img alt="Image 15"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-15.jpg" />
-                </a>
-              </div>
-            </div>
-            <div class="w-full p-1">
-              <div class="overflow-hidden h-full w-full">
-                <a href="dist/assets/image-16.jpg"
-                  data-fancybox="gallery">
-                  <img
-                    alt="Image 16"
-                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                    src="dist/assets/image-16.jpg" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111111;
+        --text: #ffffff;
+        --card-bg: #1e1e1e;
+        --accent-bg: #ffffff;
+        --accent-text: #111111;
+        --btn-bg: #ffffff;
+        --btn-text: #111111;
+        --shadow: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    h2, p {
+      text-align: center;
+    }
+
+    .pricing-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow);
+      overflow: hidden;
+      max-width: 320px;
+      width: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .card-header {
+      background-color: var(--accent-bg);
+      color: var(--accent-text);
+      padding: 16px;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .card-subtitle {
+      background-color: var(--accent-bg);
+      color: var(--accent-text);
+      padding: 12px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .card-price {
+      background-color: var(--card-bg);
+      font-size: 22px;
+      text-align: center;
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .card ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .card li {
+      padding: 12px 16px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .card-actions {
+      background-color: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .button {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  font-weight: 600;
+}
+
+.example-button {
+  background-color: transparent;
+  color: var(--text);
+  padding: 6px 14px;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid var(--text);
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.example-button:hover {
+  background-color: var(--text);
+  color: var(--bg);
+}
+
+
+    @media (max-width: 768px) {
+      .pricing-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pricing-container">
+
+    <div class="card">
+      <div class="card-header">PHOTO SET</div>
+      <div class="card-subtitle">High School Sports Photos</div>
+      <div class="card-price">$25</div>
+      <ul>
+        <li>14–18 Photos</li>
+        <li>1–2 Days After Game</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
+        <a href="#" class="example-button" target="_blank">Show Examples</a>
       </div>
-    </section>
+    </div>
+
+    <div class="card">
+      <div class="card-header">GRAPHIC</div>
+      <div class="card-subtitle">Sports Design Graphic</div>
+      <div class="card-price">$8</div>
+      <ul>
+        <li>1 Graphic</li>
+        <li>1–2 Days</li>
+        <li>Must provide photos unless photo set is purchased</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
+        <a href="#" class="example-button" target="_blank">Show Examples</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">OTHER</div>
+      <div class="card-subtitle">Non-Sports Photos/Graphics</div>
+      <div class="card-price">Contact</div>
+      <ul>
+        <li>Flexible</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
+      </div>
+    </div>
+
   </div>
+
+<div style="text-align: center; padding: 30px 20px; max-width: 700px; margin: 0 auto; font-size: 15px; line-height: 1.6;">
+    <p>Preview images will be provided before purchase. Final products will only be delivered after payment is received via Cash or Venmo.</p>
+  </div>
+
+</body>
+</html>
+
   <!-- Footer -->
   <footer>
     <div class="max-w-screen-xl py-16 mx-auto">
@@ -316,7 +347,7 @@
                 src="https://www.google.com/maps?q=Amherst,+NY&output=embed"
                 width="100%" height="100%" frameborder="0"
                 class="rounded-xl border-2 border-black"
-                allowfullscreen="" loading="lazy">
+                allowfullscreen="">
               </iframe>
             </div>
             
@@ -337,7 +368,7 @@
     Fancybox.bind("[data-fancybox]", {});
   </script>
   <script src="dist/fade_in.js"></script>
-  <script src="dist/menu.js"></script>
+  <script src="dist/menu.js?v=2"></script>
 </body>
 
 </html>
