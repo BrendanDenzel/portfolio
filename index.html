@@ -2,110 +2,71 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dizz Studios</title>
-  <meta name="description"
-    content="Im a 16 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
-  <!-- Favicon -->
+  <meta name="description" content="I'm a 16-year-old beginner photographer focusing on sports, based in Amherst, NY.">
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&family=Signika:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="/dist/output.css" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- Alpine.js -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <!-- Start - Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
-  <!-- End - Fonts -->
-  <!-- Start - Fancybox Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-  <!-- End - Fancybox Scripts -->
+
+  <!-- Scripts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      content: ["./dist/*.{html,js}"],
       theme: {
-        extend:
-                {
-                  fontFamily: {
-                    'nothingyoucoulddo': ['Nothing You Could Do', 'cursive'],
-                    'signika': ['Signika', 'sans-serif'],
-                  },
-                },
-      },
-      plugins: [],
+        extend: {
+          fontFamily: {
+            nothingyoucoulddo: ['Nothing You Could Do', 'cursive'],
+            signika: ['Signika', 'sans-serif'],
+          },
+        },
+      }
     }
   </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 </head>
 
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
 
-<body
-  class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
-  <!-- Navbar -->
-  <header class="flex w-full overflow-hidden pt-10 pb-1">
-    <!-- Navbar -->
-    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
-      <div class="container mx-auto flex flex-wrap items-center md:flex-no-wrap">
+  <!-- Header -->
+  <header class="w-full pt-10 pb-1">
+    <nav x-data="{ open: false }" class="w-full" role="navigation">
+      <div class="container mx-auto flex items-center flex-wrap">
         <div class="mr-4 md:mr-8">
           <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
         </div>
-        <div class="ml-auto md:hidden flex items-center justify-start">
-          <button onclick="menuToggle()" @click="open = !open"
-            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
-            @click="open = !open">
-            <span class="sr-only">Open main menu</span>
-            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <span aria-hidden="true"
-                class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
-                :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
-              <span aria-hidden="true"
-                class="block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out"
-                :class="{'opacity-0': open } "></span>
-              <span aria-hidden="true"
-                class="block absolute h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out"
-                :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+        <div class="ml-auto md:hidden flex items-center">
+          <button @click="open = !open" class="text-black dark:text-white w-6 h-6 relative focus:outline-none">
+            <span class="sr-only">Toggle menu</span>
+            <div class="block w-6 h-6 relative">
+              <span class="absolute h-0.5 w-6 bg-current transition duration-500 ease-in-out"
+                :class="{'rotate-45 translate-y-1.5': open, '-translate-y-1.5': !open}"></span>
+              <span class="absolute h-0.5 w-6 bg-current top-1/2 transform -translate-y-1/2 transition-opacity duration-500"
+                :class="{'opacity-0': open, 'opacity-100': !open}"></span>
+              <span class="absolute h-0.5 w-6 bg-current transition duration-500 ease-in-out"
+                :class="{'-rotate-45 -translate-y-1.5': open, 'translate-y-1.5': !open}"></span>
             </div>
           </button>
         </div>
-        <div id="menu"
-          class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
-          <ul id="ulMenu"
-            class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
-            <li class="group transition duration-300">
-              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
-                <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent">PRICES
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="https://www.instagram.com/dizzstudios/" target="_blank" class="font-signika text-2xl">CONTACT</a>
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
+        <div class="w-full md:flex md:items-center md:ml-auto mt-5 md:mt-0" :class="{ 'hidden': !open, 'flex': open }">
+          <ul class="flex flex-col md:flex-row md:space-x-5 font-signika text-2xl">
+            <li><a href="/" class="tap-highlight-transparent hover:underline">PHOTOGRAPHS</a></li>
+            <li><a href="/graphics" class="tap-highlight-transparent hover:underline">GRAPHICS</a></li>
+            <li><a href="/prices" class="tap-highlight-transparent hover:underline">PRICES</a></li>
+            <li><a href="/dist/about" class="tap-highlight-transparent hover:underline">ABOUT ME</a></li>
+            <li><a href="https://www.instagram.com/dizzstudios/" target="_blank" class="tap-highlight-transparent hover:underline">CONTACT</a></li>
           </ul>
         </div>
       </div>
