@@ -45,20 +45,18 @@
 </head>
 
 
-<body
-  class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
   <!-- Navbar -->
   <header class="flex w-full overflow-hidden pt-10 pb-1">
-    <!-- Navbar -->
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
       <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
         <!-- Logo -->
-        <div class="mr-4 md:mr-8">
+        <div class="mr-4 md:mr-8 flex items-center">
           <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
         </div>
-        
+
         <!-- Contact Link -->
-        <div>
+        <div class="flex items-center">
           <a href="https://www.instagram.com/dizzstudios/" target="_blank" class="font-signika text-2xl group transition duration-300">
             CONTACT
             <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
@@ -350,6 +348,6 @@
     Fancybox.bind("[data-fancybox]", {});
   </script>
   <script src="dist/fade_in.js"></script>
-  <script src="dist/menu.js?v=7"></script>
+  <script src="dist/menu.js?v=2"></script>
 </body>
 </html>
