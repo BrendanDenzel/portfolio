@@ -140,23 +140,30 @@
   </style>
 </head>
 
-<body class="bg-white dark:bg-black text-black dark:text-white">
-
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
   <!-- Navbar -->
-
   <header class="flex w-full overflow-hidden pt-10 pb-1">
-
-    <!-- Navbar -->
-
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
-
-      <div class="container mx-auto flex flex-wrap items-center md:flex-no-wrap">
-
-        <div class="mr-4 md:mr-8">
-
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+        <!-- Logo -->
+        <div class="mr-4 md:mr-8 flex items-center">
           <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
-
         </div>
+
+        <!-- Contact Link -->
+       <div class="mr-4 md:mr-8 flex items-center">
+  <a href="https://www.instagram.com/dizzstudios/" 
+     target="_blank" 
+     class="font-signika text-xl px-1.5 py-0.4
+            bg-black text-white 
+            dark:bg-white dark:text-black 
+            dark:border dark:border-black 
+            rounded-md 
+            hover:bg-neutral-800 dark:hover:bg-neutral-200 
+            transition">
+    CONTACT
+  </a>
+</div>
 
         <div class="ml-auto md:hidden flex items-center justify-start">
 
