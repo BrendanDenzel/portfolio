@@ -44,15 +44,30 @@
   </script>
 </head>
 
-<body
-  class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
   <!-- Navbar -->
   <header class="flex w-full overflow-hidden pt-10 pb-1">
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
-      <div class="container mx-auto flex flex-wrap items-center md:flex-no-wrap">
-        <div class="mr-4 md:mr-8">
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+        <!-- Logo -->
+        <div class="mr-4 md:mr-8 flex items-center">
           <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
         </div>
+
+        <!-- Contact Link -->
+       <div class="mr-4 md:mr-8 flex items-center">
+  <a href="https://www.instagram.com/dizzstudios/" 
+     target="_blank" 
+     class="font-signika text-xl px-1.5 py-0.4
+            bg-black text-white 
+            dark:bg-white dark:text-black 
+            dark:border dark:border-black 
+            rounded-md 
+            hover:bg-neutral-800 dark:hover:bg-neutral-200 
+            transition">
+    CONTACT
+  </a>
+</div>
         <div class="ml-auto md:hidden flex items-center justify-start">
           <button onclick="menuToggle()" @click="open = !open"
             class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
@@ -96,12 +111,6 @@
               <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
                 <span
                   class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="https://www.instagram.com/dizzstudios/" target="_blank" class="font-signika text-2xl">CONTACT</a>
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
               </a>
             </li>
           </ul>
