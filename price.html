@@ -42,6 +42,103 @@
       plugins: [],
     }
   </script>
+
+ <style>
+    .pricing-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--card-bg, #f5f5f5);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 320px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header, .card-subtitle {
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .card-price {
+      font-size: 22px;
+      text-align: center;
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card li {
+      padding: 12px;
+      text-align: center;
+      border-top: 1px solid #ccc;
+    }
+
+    .card-actions {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .button, .example-button {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .button {
+      background-color: #111;
+      color: #fff;
+    }
+
+    .example-button {
+      background: transparent;
+      color: #000;
+      border: 1px solid #000;
+    }
+
+    .example-button:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card {
+        background-color: #1e1e1e;
+      }
+      .example-button {
+        color: #fff;
+        border-color: #fff;
+      }
+      .example-button:hover {
+        background-color: #fff;
+        color: #111;
+      }
+    }
+  </style>
+	
 </head>
 
 
