@@ -1,0 +1,54 @@
+#statContainer {
+  font-family: sans-serif;
+  color: black;
+  font-weight: 700;
+}
+
+#statBoxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px; /* optional general padding */
+}
+
+.statLabel {
+  font-size: 1.5rem;
+}
+
+#statBox {
+  border: 2px solid black;
+  border-radius: 6px;
+  padding: 2px 4px;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+#statBox:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+#statNumber {
+  font-size: 1rem;
+  font-weight: 700;
+  color: black;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  #statContainer,
+  #statNumber {
+    color: white;
+  }
+
+  #statBox {
+    border-color: white;
+  }
+}
+
+/* Mobile padding */
+@media (max-width: 600px) {
+  #statBoxWrapper {
+    margin-bottom: 12px;
+  }
+}
