@@ -12,7 +12,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
   <link rel="stylesheet" href="/dist/output.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/counter/styles.css" />
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Start - Fonts -->
@@ -140,6 +140,18 @@
   <!-- Content -->
   <div class="container mx-auto">
     <h1 class="text-4xl pt-10 pb-3 font-bold">PHOTOGRAPHS</h1>
+
+    
+    <div id="statContainer">
+      <div id="statBoxWrapper">
+        <h1 class="statLabel">Pictures Sold:</h1>
+        <div id="statBox">
+          <span id="statNumber">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+
     <section class="text-neutral-700">
       <div class="container w-full">
         <div class="flex flex-wrap w-full">
@@ -367,5 +379,6 @@
   </script>
   <script src="dist/fade_in.js"></script>
   <script src="dist/menu.js?v=2"></script>
+  <script src="/counter/script.js"></script>
 </body>
 </html>
