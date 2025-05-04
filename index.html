@@ -51,17 +51,29 @@
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
       <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
 
-        <div class="mr-0">
-        <img src="/dist/assets/blacklogo.png" alt="Dizz Studios Logo" style="width:81.375px;height:45.75px;">
-        </div>
+        <!-- Desktop Logo + Text -->
+<div class="hidden md:flex items-center">
+  <!-- Light Mode Logo -->
+  <img src="/dist/assets/blacklogo.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;">
+  <!-- Dark Mode Logo -->
+  <img src="/dist/assets/whitelogo.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;">
+  <!-- Text -->
+  <div class="ml-1">
+    <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
+  </div>
+</div>
 
-        <!-- Logo -->
-        <div class="mr-4 md:mr-8 flex items-center">
-          <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
-        </div>
+<!-- Mobile Logo Only -->
+<div class="flex md:hidden items-center">
+  <!-- Light Mode Mobile Logo -->
+  <img src="/dist/assets/blacklogo2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;">
+  <!-- Dark Mode Mobile Logo -->
+  <img src="/dist/assets/whitelogo2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;">
+</div>
+        
 
         <!-- Contact Link -->
-       <div class="mr-4 md:mr-8 flex items-center">
+        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
   <a href="https://www.instagram.com/dizzstudios/" 
      target="_blank" 
      class="font-signika text-xl px-1.5 py-0.4
