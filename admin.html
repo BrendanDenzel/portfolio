@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dizz Studios</title>
+  <meta name="description"
+    content="Im a 16 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+  <link rel="stylesheet" href="/dist/output.css" />
+  <link rel="stylesheet" href="/counter/styles.css" />
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Start - Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
+  <!-- End - Fonts -->
+  <!-- Start - Fancybox Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <!-- End - Fancybox Scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      content: ["./dist/*.{html,js}"],
+      theme: {
+        extend:
+                {
+                  fontFamily: {
+                    'nothingyoucoulddo': ['Nothing You Could Do', 'cursive'],
+                    'signika': ['Signika', 'sans-serif'],
+                  },
+                },
+      },
+      plugins: [],
+    }
+  </script>
+</head>
+
+
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+  <!-- Navbar -->
+  <header class="flex w-full overflow-hidden pt-10 pb-0">
+    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+
+        <!-- Desktop Logo + Text -->
+<div class="hidden md:flex items-center">
+  <!-- Light Mode Logo -->
+  <img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;">
+  <!-- Dark Mode Logo -->
+  <img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;">
+  <!-- Text -->
+  <div class="ml-1">
+    <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
+  </div>
+</div>
+
+<!-- Mobile Logo Only -->
+<div class="flex md:hidden items-center">
+  <!-- Light Mode Mobile Logo -->
+  <img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;">
+  <!-- Dark Mode Mobile Logo -->
+  <img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;">
+</div>
+        
+
+        <!-- Contact Link -->
+        <div class="ml-4 md:ml-5 mr-4 md:mr-8 flex items-center">
+            <button
+              class="font-signika text-xl px-1.5 py-0.4
+                     bg-red-600 text-white
+                     rounded-md
+                     hover:bg-red-700
+                     dark:hover:bg-red-700
+                     transition cursor-default"
+              disabled
+            >
+              ADMIN PAGE
+            </button>
+          </div>
+          
+          
+          
+
+        <div class="ml-auto md:hidden flex items-center justify-start">
+          <button onclick="menuToggle()" @click="open = !open"
+            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
+            @click="open = !open">
+            <span class="sr-only">Open main menu</span>
+            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span aria-hidden="true"
+                class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
+                :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+              <span aria-hidden="true"
+                class="block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out"
+                :class="{'opacity-0': open } "></span>
+              <span aria-hidden="true"
+                class="block absolute h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out"
+                :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+            </div>
+          </button>
+        </div>
+        <div id="menu"
+          class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
+          <ul id="ulMenu"
+            class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
+            <li class="group transition duration-300">
+              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent">PRICES
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+<!-- Content -->
+<div id="dashboardContent" class="hidden">
+  <div class="container mx-auto">
+    <h1 id="authOnly" class="text-4xl pt-0 md:pt-2 pb-3 font-bold text-red-600 hidden">AUTHORIZED ONLY</h1>
+
+    <div id="statsDashboard">
+        <div class="statGroup">
+          <div class="groupTitle">Sales</div>
+          <div class="statItem"><h2>Pictures Sold:</h2><span id="pictureNumber">Loading...</span></div>
+          <div class="statItem"><h2>Graphics Sold:</h2><span id="graphicNumber">Loading...</span></div>
+          <div class="statItem"><h2>Orders Complete:</h2><span id="completeNumber">Loading...</span></div>
+          <div class="statItem"><h2>Orders On Hold:</h2><span id="holdNumber">Loading...</span></div>
+        </div>
+      
+        <div class="statGroup">
+          <div class="groupTitle">Money</div>
+          <div class="statItem"><h2>Total Expected Money:</h2><span id="totalNumber">Loading...</span></div>
+          <div class="statItem"><h2>Expected Money:</h2><span id="expectedNumber">Loading...</span></div>
+          <div class="statItem"><h2>Received Money:</h2><span id="receivedNumber">Loading...</span></div>
+        </div>
+      
+        <div class="statGroup">
+          <div class="groupTitle">Open Orders</div>
+          <div class="statItem"><h2>Needs Photos:</h2><span id="openphotoNumber">Loading...</span></div>
+          <div class="statItem"><h2>Needs Edits:</h2><span id="openeditNumber">Loading...</span></div>
+          <div class="statItem"><h2>Needs Pay:</h2><span id="openpayNumber">Loading...</span></div>
+        </div>
+      
+        <div class="statGroup">
+          <div class="groupTitle">On Hold</div>
+          <div class="statItem"><h2>Needs Photos:</h2><span id="holdphotoNumber">Loading...</span></div>
+          <div class="statItem"><h2>Needs Edits:</h2><span id="holdeditNumber">Loading...</span></div>
+          <div class="statItem"><h2>Needs Pay:</h2><span id="holdpayNumber">Loading...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+    <div class="statGroup statGroup-wide">
+        <div class="groupTitle">All Orders</div>
+        <div class="statColumns">
+            <div class="statItem"><h2>Complete:</h2><span id="complete2Number">Loading...</span></div>
+            <div class="statItem"><h2>On Hold:</h2><span id="hold2Number">Loading...</span></div>
+            <div class="statItem"><h2>Date:</h2><span id="date2Number">Loading...</span></div>
+            <div class="statItem"><h2>Jersey #:</h2><span id="jersey2Number">Loading...</span></div>
+            <div class="statItem"><h2>Name:</h2><span id="name2Number">Loading...</span></div>
+            <div class="statItem"><h2>School:</h2><span id="school2Number">Loading...</span></div>
+            <div class="statItem"><h2>Level:</h2><span id="level2Number">Loading...</span></div>
+            <div class="statItem"><h2>Sport:</h2><span id="sport2Number">Loading...</span></div>
+            <div class="statItem"><h2>Picture #:</h2><span id="picture2Number">Loading...</span></div>
+            <div class="statItem"><h2>Graphic #:</h2><span id="graphic2Number">Loading...</span></div>
+            <div class="statItem"><h2>Video #:</h2><span id="video2Number">Loading...</span></div>
+            <div class="statItem"><h2>Price $:</h2><span id="price2Number">Loading...</span></div>
+            <div class="statItem"><h2>Needs Photo:</h2><span id="needphoto2Number">Loading...</span></div>
+            <div class="statItem"><h2>Needs Edit:</h2><span id="neededit2Number">Loading...</span></div>
+            <div class="statItem"><h2>Needs Pay:</h2><span id="needpay2Number">Loading...</span></div>
+        </div>
+    </div>
+</div>
+</div>
+           
+
+    <div class="container mx-auto mt-20 max-w-md">
+      <h1 id="mainTitle" class="text-5xl pb-10 font-bold text-center">
+        <span class="text-red-600"></span> DIZZ STUDIOS <br>
+        <span class="text-red-600">|</span> <span class="text-red-600">ADMIN LOGIN</span> <span class="text-red-600">|</span>
+      </h1>
+  
+      <div id="login-form" class="flex flex-col gap-4">
+        <input id="username" type="password" placeholder="Username"
+          class="border p-2 rounded-md bg-white dark:bg-neutral-900 dark:text-white" />
+        <input id="password" type="password" placeholder="Password"
+          class="border p-2 rounded-md bg-white dark:bg-neutral-900 dark:text-white" />
+        <button id="submitBtn"
+          class="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
+          Submit
+        </button>
+        <p id="error-msg" class="text-red-500 text-sm hidden"></p>
+      </div>
+  
+      <!-- SUCCESS MESSAGE -->
+      <p id="success-msg" class="hidden text-green-600 text-center text-lg font-semibold transition-opacity duration-1000">
+        SUCCESSFUL
+      </p>
+  
+      <!-- FINAL CONTENT -->
+      <div id="success-container" class="hidden mt-10 text-2xl font-bold">
+      </div>
+    </div>
+  
+    <script>
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const submitBtn = document.getElementById('submitBtn');
+      const errorMsg = document.getElementById('error-msg');
+      const loginForm = document.getElementById('login-form');
+      const successContainer = document.getElementById('success-container');
+      const successMsg = document.getElementById('success-msg');
+      const authOnly = document.getElementById('authOnly');
+      const mainTitle = document.getElementById('mainTitle');
+  
+      // Initial state: authOnly hidden, mainTitle visible
+      document.getElementById('dashboardContent').classList.add('hidden'); // SHOW dashboard
+      authOnly.classList.add('hidden');
+      mainTitle.classList.remove('hidden');
+  
+      function showError(message) {
+        errorMsg.textContent = message;
+        errorMsg.classList.remove('hidden');
+        // No title changes on error
+      }
+  
+      function clearError() {
+        errorMsg.classList.add('hidden');
+        // No title changes on input
+      }
+  
+      function handleSubmit() {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+  
+        if (!username || !password) {
+          showError('Please fill out both the username and password.');
+          return;
+        }
+  
+        if (username === 'admin' && password === 'DizZstudioS03270912!#') {
+          loginForm.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+          successMsg.style.opacity = '1';
+  
+          setTimeout(() => {
+            successMsg.style.opacity = '0';
+          }, 500); // fade out after 0.5s
+  
+          setTimeout(() => {
+            successMsg.classList.add('hidden');
+            successContainer.classList.remove('hidden');
+            // On success:
+            document.getElementById('dashboardContent').classList.remove('hidden'); // SHOW dashboard
+            mainTitle.classList.add('hidden');  // hide main title
+            authOnly.classList.remove('hidden'); // show authorized only title
+          }, 1000); // after 1s
+        } else {
+          showError('Incorrect username or password.');
+        }
+      }
+  
+      submitBtn.addEventListener('click', handleSubmit);
+  
+      usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === 'Tab') {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
+  
+      passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          handleSubmit();
+        }
+      });
+  
+      usernameInput.addEventListener('input', clearError);
+      passwordInput.addEventListener('input', clearError);
+    </script>
+  </div>
+  
+  
+  
+  
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for the LightBox -->
+  <script>
+    Fancybox.bind("[data-fancybox]", {});
+  </script>
+  <script src="dist/fade_in.js"></script>
+  <script src="dist/menu.js?v=2"></script>
+  <script src="/counter/script.js"></script>
+  <script src="/counter/orders.js"></script>
+</body>
+</html>
