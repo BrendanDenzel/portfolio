@@ -23,32 +23,136 @@
   transition: transform 0.2s ease;
 }
 
-#statBox:hover {
-  transform: scale(1.05);
+#statsDashboard {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  overflow-x: auto;
+  font-family: sans-serif;
+}
+
+/*
+  flex-wrap: wrap;
+  overflow-x: unset;
+*/
+
+.statGroup {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 16px;
+  width: 250px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.groupTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+.statItem:hover {
+  transform: scale(1.02);
   cursor: pointer;
 }
 
-#statNumber {
+.statItem h2 {
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.statItem span {
   font-size: 1rem;
   font-weight: 700;
-  color: black;
+  color: #111;
+  text-align: center; /* center the text itself */
 }
 
-/* Dark mode styles */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
-  #statContainer,
-  #statNumber {
-    color: white;
+  #statsDashboard {
+    background: #111;
   }
 
-  #statBox {
-    border-color: white;
+  .statGroup {
+    background: #222;
+    box-shadow: none;
   }
+
+  .groupTitle {
+    color: #fff;
+    border-color: #444;
+  }
+
+  .statItem {
+    background: #333;
+    border-color: #555;
+  }
+
+  .statItem h2,
+  .statItem span {
+    color: #fff;
+  }
+}
+.statGroup-wide {
+  width: fit-content;
+  max-width: calc(100vw - 50px); /* still cap the width */
+  margin: auto;
+  margin-top: 30px; /* Adds 50px space above the big box */
+  padding: 15px 20px;            /* 20px padding on both sides */
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
-/* Mobile padding */
-@media (max-width: 600px) {
-  #statBoxWrapper {
-    margin-bottom: 12px;
-  }
+
+.statGroup-wide .statColumns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* No wrapping */
+  gap: 10px;
+  overflow-x: auto;
 }
+
+.statGroup-wide .statItem {
+  min-width: 50px; /* Adjust width per item as needed */
+  flex: 0 0 auto;
+  flex-direction: column;
+  text-align: left;
+  padding-top: 5px; /* adds spacing below */
+  padding-bottom: 10px; /* adds spacing below */
+}
+
+/* Prevent scale on hover for items inside .statGroup-wide */
+.statGroup-wide .statItem:hover {
+  transform: none;
+  cursor: default; /* or cursor: auto; */
+}
+
+#success-container {
+  padding-bottom: 1px;
+  /* or margin-bottom: 50px; */
+}
+
+
+
+
+
