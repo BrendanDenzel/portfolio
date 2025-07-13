@@ -44,8 +44,44 @@
   </script>
 </head>
 
+<script>
+    window.onload = async function () {
+      const hash = window.location.hash.substring(1); // e.g., #Smith
+      const galleryContainer = document.getElementById("gallery-content");
+  
+      if (!galleryContainer) return console.error("Missing #gallery-content div in HTML.");
+  
+      if (!hash) {
+        galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">No Gallery ID Provided</h2>`;
+        return;
+      }
+  
+      galleryContainer.innerHTML = `<p class="text-center text-gray-500 text-lg">Loading gallery...</p>`;
+  
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
+        const data = await res.json();
+  
+        if (data.error) {
+          galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Gallery Not Found</h2>`;
+          return;
+        }
+  
+        galleryContainer.innerHTML = `
+          <div class="text-center mt-8">
+            <h2 class="text-3xl font-bold uppercase mb-2">${data.title}</h2>
+            <a href="${data.link}" target="_blank" class="text-blue-600 underline text-lg">Open Gallery Folder</a>
+          </div>
+        `;
+      } catch (err) {
+        console.error("Error fetching gallery:", err);
+        galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Error Loading Gallery</h2>`;
+      }
+    };
+  </script>
+  
 
-<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20">
   <!-- Navbar -->
   <header class="flex w-full overflow-hidden pt-10 pb-1">
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
@@ -140,28 +176,8 @@
   <!-- Content -->
   <div class="container mx-auto">
     <h1 class="text-4xl pt-10 pb-3 font-bold">ORDERS</h1>
-    <script>
-        window.onload = async function () {
-          const hash = window.location.hash.substring(1); // e.g., "Smith"
-          if (!hash) return;
-      
-          const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
-          const data = await res.json();
-      
-          if (data.error) {
-            document.body.innerHTML = `<h1 class="text-center mt-10 text-3xl">Gallery Not Found</h1>`;
-            return;
-          }
-      
-          // Render the data
-          document.body.innerHTML = `
-            <main class="text-center p-8">
-              <h1 class="text-3xl font-bold mb-4">${data.title}</h1>
-              <p><a href="${data.link}" class="text-blue-600 underline" target="_blank">Open Folder</a></p>
-            </main>
-          `;
-        };
-      </script>
+    <div id="gallery-content" class="py-10"></div>
+
   <!-- Script for the LightBox -->
   <script>
     Fancybox.bind("[data-fancybox]", {});
