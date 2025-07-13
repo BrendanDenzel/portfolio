@@ -43,8 +43,7 @@
       plugins: [],
     }
   </script>
-<script src="https://apis.google.com/js/api.js"></script>
-
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 
@@ -230,127 +229,134 @@
     }
   </style>
   
-  <h2>Create New Photo Gallery</h2>
-  <form id="galleryForm">
-    <label for="lastName">Client Last Name:</label>
-    <input type="text" id="lastName" name="lastName" required>
+
+    <h2 class="text-3xl mb-6">Create New Photo Gallery</h2>
   
-    <div id="dropArea">Drag & Drop Images Here or Click to Upload (0 files)</div>
-    <input type="file" id="fileInput" multiple accept="image/*" style="display:none;">
+    <form id="galleryForm">
+      <label for="lastName">Client Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required />
   
-    <button type="submit">Create Gallery</button>
-  </form>
+      <div id="dropArea">Drag & Drop Images Here or Click to Upload (0 files)</div>
+      <input type="file" id="fileInput" multiple accept="image/*" style="display:none;" />
   
-  <div id="result" style="display:none;"></div>
+      <button type="submit">Create Gallery</button>
+    </form>
   
-  <script>
-    const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
-    const SCOPES = "https://www.googleapis.com/auth/drive.file";
+    <div id="result" style="display:none;"></div>
   
-    let selectedFiles = [];
+    <script>
+      const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
+      const SCOPES = "https://www.googleapis.com/auth/drive.file";
   
-    const form = document.getElementById("galleryForm");
-    const lastNameInput = document.getElementById("lastName");
-    const dropArea = document.getElementById("dropArea");
-    const fileInput = document.getElementById("fileInput");
-    const resultBox = document.getElementById("result");
+      let selectedFiles = [];
+      let accessToken = null;
+      let tokenClient;
   
-    // Handle Drag & Drop
-    dropArea.addEventListener("click", () => fileInput.click());
-    dropArea.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropArea.classList.add("dragover");
-    });
-    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("dragover"));
-    dropArea.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropArea.classList.remove("dragover");
-      handleFiles(e.dataTransfer.files);
-    });
-    fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+      const form = document.getElementById("galleryForm");
+      const lastNameInput = document.getElementById("lastName");
+      const dropArea = document.getElementById("dropArea");
+      const fileInput = document.getElementById("fileInput");
+      const resultBox = document.getElementById("result");
   
-    function handleFiles(files) {
-      selectedFiles = [...selectedFiles, ...Array.from(files)];
-      dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
-    }
-  
-    // Initialize gapi
-    function initGoogleAPI() {
-      gapi.load("client:auth2", async () => {
-        await gapi.client.init({
-          clientId: CLIENT_ID,
-          scope: SCOPES
-        });
-  
-        const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-        if (!isSignedIn) {
-          await gapi.auth2.getAuthInstance().signIn();
-        }
+      // Drag-and-drop
+      dropArea.addEventListener("click", () => fileInput.click());
+      dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("dragover");
       });
-    }
+      dropArea.addEventListener("dragleave", () => dropArea.classList.remove("dragover"));
+      dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("dragover");
+        handleFiles(e.dataTransfer.files);
+      });
+      fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
   
-    window.onload = initGoogleAPI;
+      function handleFiles(files) {
+        selectedFiles = [...selectedFiles, ...Array.from(files)];
+        dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
+      }
   
-    // Upload to Drive
-    async function uploadFileToDrive(file) {
-      const metadata = {
-        name: file.name,
-        mimeType: file.type
+      // Load GIS client
+      window.onload = () => {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: SCOPES,
+          callback: (tokenResponse) => {
+            if (!tokenResponse || !tokenResponse.access_token) {
+              alert("Error getting access token");
+              return;
+            }
+            accessToken = tokenResponse.access_token;
+            uploadSelectedFiles();
+          },
+        });
       };
   
-      const accessToken = gapi.auth.getToken().access_token;
-  
-      const form = new FormData();
-      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      form.append('file', file);
-  
-      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-        method: 'POST',
-        headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
-        body: form
-      });
-  
-      const data = await res.json();
-      return data.webViewLink;
-    }
-  
-    // Submit form
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-  
-      if (selectedFiles.length === 0) {
-        alert("Please add at least one image.");
-        return;
+      function authenticateAndUpload() {
+        tokenClient.requestAccessToken();
       }
   
-      const lastName = lastNameInput.value.trim();
-      if (!lastName) {
-        alert("Please enter a client last name.");
-        return;
+      async function uploadFileToDrive(file) {
+        const metadata = {
+          name: file.name,
+          mimeType: file.type
+        };
+  
+        const formData = new FormData();
+        formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        formData.append('file', file);
+  
+        const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
+          method: 'POST',
+          headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
+          body: formData
+        });
+  
+        const data = await res.json();
+        return data.webViewLink;
       }
   
-      try {
-        let links = [];
+      async function uploadSelectedFiles() {
+        try {
+          const lastName = lastNameInput.value.trim();
+          const links = [];
   
-        for (const file of selectedFiles) {
-          const link = await uploadFileToDrive(file);
-          links.push(link);
+          for (const file of selectedFiles) {
+            const link = await uploadFileToDrive(file);
+            links.push(link);
+          }
+  
+          form.style.display = "none";
+          resultBox.style.display = "block";
+          resultBox.innerHTML = `
+            <strong>Gallery Created!</strong><br><br>
+            Files uploaded for: <strong>${lastName}</strong><br><br>
+            ${links.map((link, i) => `<a href="${link}" target="_blank">File ${i + 1}</a>`).join("<br>")}
+          `;
+        } catch (err) {
+          alert("Upload failed: " + err.message);
+          console.error(err);
+        }
+      }
+  
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+  
+        if (selectedFiles.length === 0) {
+          alert("Please add at least one image.");
+          return;
         }
   
-        // Show uploaded links
-        form.style.display = "none";
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `
-          <strong>Gallery Created!</strong><br><br>
-          Files uploaded under: <strong>${lastName}</strong><br><br>
-          ${links.map((link, i) => `<a href="${link}" target="_blank">File ${i + 1}</a>`).join("<br>")}
-        `;
-      } catch (err) {
-        alert("Upload failed: " + err.message);
-        console.error(err);
-      }
-    });
-  </script>
+        const lastName = lastNameInput.value.trim();
+        if (!lastName) {
+          alert("Please enter a client last name.");
+          return;
+        }
+  
+        authenticateAndUpload();
+      });
+    </script>
   
 
   <!-- Script for the LightBox -->
