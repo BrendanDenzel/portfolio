@@ -2,7 +2,6 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
-  <meta name="robots" content="noindex">
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,7 +12,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
   <link rel="stylesheet" href="/dist/output.css" />
-  <link rel="stylesheet" href="/counter/styles.css?v=3" />
+  <link rel="stylesheet" href="/counter/styles.css" />
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Start - Fonts -->
@@ -43,13 +42,12 @@
       plugins: [],
     }
   </script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 
 <body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
   <!-- Navbar -->
-  <header class="flex w-full overflow-hidden pt-10 pb-0">
+  <header class="flex w-full overflow-hidden pt-10 pb-1">
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
       <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
 
@@ -75,22 +73,19 @@
         
 
         <!-- Contact Link -->
-        <div class="ml-4 md:ml-5 mr-4 md:mr-8 flex items-center">
-            <button
-              class="font-signika text-xl px-1.5 py-0.4
-                     bg-red-600 text-white
-                     rounded-md
-                     hover:bg-red-700
-                     dark:hover:bg-red-700
-                     transition cursor-default"
-              disabled
-            >
-              ADMIN PAGE
-            </button>
-          </div>
-          
-          
-          
+        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
+  <a href="https://www.instagram.com/dizzstudios/" 
+     target="_blank" 
+     class="font-signika text-xl px-1.5 py-0.4
+            bg-black text-white 
+            dark:bg-white dark:text-black 
+            dark:border dark:border-black 
+            rounded-md 
+            hover:bg-neutral-800 dark:hover:bg-neutral-200 
+            transition">
+    CONTACT
+  </a>
+</div>
 
         <div class="ml-auto md:hidden flex items-center justify-start">
           <button onclick="menuToggle()" @click="open = !open"
@@ -116,7 +111,7 @@
             class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
             <li class="group transition duration-300">
               <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+                <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
               </a>
             </li>
             <li class="group transition duration-300">
@@ -142,152 +137,242 @@
       </div>
     </nav>
   </header>
+  <!-- Content -->
+  <div class="container mx-auto">
+    <h1 class="text-4xl pt-10 pb-3 font-bold">PHOTOGRAPHS</h1>
 
-
-
-  <!-- Admin Upload Section -->
-  <main class="flex flex-col items-center py-10">
-    <h2 class="text-3xl mb-6 font-bold font-signika">Create New Photo Gallery</h2>
-
-    <form id="galleryForm" class="w-full max-w-lg bg-white p-6 rounded-lg shadow">
-      <label for="lastName" class="font-semibold">Client Last Name:</label>
-      <input type="text" id="lastName" name="lastName" required class="w-full mt-1 p-2 border rounded">
-
-      <div id="dropArea" class="mt-4 p-6 border-2 border-dashed text-center rounded cursor-pointer text-gray-600">
-        Drag & Drop Images Here or Click to Upload (0 files)
+    
+    <div id="statContainer">
+      <div id="statBoxWrapper">
+        <h1 class="statLabel">Moments Captured:</h1>
+        <div id="statBox">
+          <span id="pictureNumber">Loading...</span>
+        </div>
       </div>
-      <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+    </div>
 
-      <button type="submit" class="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Create Gallery</button>
-    </form>
 
-    <div id="result" class="hidden mt-8 max-w-xl bg-white p-4 rounded shadow text-base"></div>
-  </main>
 
-  <!-- Scripts -->
-  <script>
-    const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
-    const SCOPES = "https://www.googleapis.com/auth/drive.file";
-    const PARENT_FOLDER_ID = "1NcfxZufpOeg749C0JcnfqXfTwC97s7aR";
+    <section class="text-neutral-700">
+      <div class="container w-full">
+        <div class="flex flex-wrap w-full">
+          <div class="flex w-full md:w-1/2 flex-wrap">
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_1.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 1"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_1.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_2.jpg" data-fancybox="gallery">
+                  <img
+                    alt="Image 2"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_2.jpg"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="w-full p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_3.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 3"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_3.jpg" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="flex w-full md:w-1/2 flex-wrap">
+            <div class="w-full p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-4.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 4"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-4.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_5.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 5"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_5.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_6.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 6"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_6.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_7.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 7"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_7.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_8.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 8"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_8.jpg" />
+                </a>
+              </div>
+            </div>
+          </div>
 
-    let selectedFiles = [];
-    let accessToken = null;
-    let tokenClient;
-
-    const form = document.getElementById("galleryForm");
-    const lastNameInput = document.getElementById("lastName");
-    const dropArea = document.getElementById("dropArea");
-    const fileInput = document.getElementById("fileInput");
-    const resultBox = document.getElementById("result");
-
-    dropArea.addEventListener("click", () => fileInput.click());
-    dropArea.addEventListener("dragover", e => {
-      e.preventDefault();
-      dropArea.classList.add("bg-blue-100", "border-blue-400");
-    });
-    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("bg-blue-100", "border-blue-400"));
-    dropArea.addEventListener("drop", e => {
-      e.preventDefault();
-      dropArea.classList.remove("bg-blue-100", "border-blue-400");
-      handleFiles(e.dataTransfer.files);
-    });
-    fileInput.addEventListener("change", e => handleFiles(e.target.files));
-
-    function handleFiles(files) {
-      selectedFiles = [...selectedFiles, ...Array.from(files)];
-      dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
-    }
-
-    window.onload = () => {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: tokenResponse => {
-          if (!tokenResponse?.access_token) return alert("Failed to get access token");
-          accessToken = tokenResponse.access_token;
-          uploadSelectedFiles();
-        }
-      });
-    };
-
-    function authenticateAndUpload() {
-      tokenClient.requestAccessToken();
-    }
-
-    async function createFolder(folderName) {
-      const metadata = {
-        name: folderName,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [PARENT_FOLDER_ID]
-      };
-
-      const res = await fetch('https://www.googleapis.com/drive/v3/files', {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(metadata)
-      });
-
-      const data = await res.json();
-      return data.id;
-    }
-
-    async function uploadFileToDrive(file, folderId) {
-      const metadata = {
-        name: file.name,
-        mimeType: file.type,
-        parents: [folderId]
-      };
-
-      const formData = new FormData();
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      formData.append('file', file);
-
-      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-        method: 'POST',
-        headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
-        body: formData
-      });
-
-      const data = await res.json();
-      return data.webViewLink;
-    }
-
-    async function uploadSelectedFiles() {
-      const lastName = lastNameInput.value.trim();
-      if (!lastName) return alert("Client last name is required");
-
-      try {
-        const folderId = await createFolder(lastName);
-        const links = [];
-
-        for (const file of selectedFiles) {
-          const link = await uploadFileToDrive(file, folderId);
-          links.push(link);
-        }
-
-        form.style.display = "none";
-        resultBox.classList.remove("hidden");
-        resultBox.innerHTML = `
-          <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-          ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
-        `;
-      } catch (err) {
-        alert("Upload failed: " + err.message);
-        console.error(err);
-      }
-    }
-
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      if (selectedFiles.length === 0) return alert("Please upload at least one image.");
-      if (!lastNameInput.value.trim()) return alert("Please enter a last name.");
-      authenticateAndUpload();
-    });
-  </script>
+          <div class="flex w-full md:w-1/2 flex-wrap">
+            <div class="w-full p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-9.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 9"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-9.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-10.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 10"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-10.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-11.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 11"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-11.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_12.JPG"
+                  data-fancybox="gallery">
+                  <img alt="Image 12"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_12.JPG" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image_13.JPG"
+                  data-fancybox="gallery">
+                  <img alt="Image 13"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image_13.JPG" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="flex w-full md:w-1/2 flex-wrap">
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-14.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 14"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-14.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-15.jpg"
+                  data-fancybox="gallery">
+                  <img alt="Image 15"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-15.jpg" />
+                </a>
+              </div>
+            </div>
+            <div class="w-full p-1">
+              <div class="overflow-hidden h-full w-full">
+                <a href="dist/assets/image-16.jpg"
+                  data-fancybox="gallery">
+                  <img
+                    alt="Image 16"
+                    class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
+                    src="dist/assets/image-16.jpg" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="max-w-screen-xl py-16 mx-auto">
+      <div class="grid grid-cols-1 gap-8 text-center mx-auto">
+        <div>
+          <p class="font-signika text-xl"><b>BRENDAN DENZEL</b></p>
+          <!-- New flex container for text + map -->
+          <div class="flex flex-col md:flex-row items-center justify-center mt-6 space-y-8 md:space-y-0 md:space-x-12">
+            <!-- Text section -->
+            <div class="text-center md:text-left">
+              <p class="text-sm text-gray-600 dark:text-gray-300">East Amherst, NY</p>
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                Reach out through my Instagram below
+              </p>
+              <!-- Instagram icon -->
+              <div class="flex justify-center md:justify-start mt-4">
+                <a class="transition duration-300 hover:opacity-75" href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer">
+                  <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
   
+            <!-- Map section -->
+            <div class="w-[300px] h-[300px]">
+              <iframe
+                src="https://www.google.com/maps?q=Amherst,+NY&output=embed"
+                width="100%" height="100%" frameborder="0"
+                class="rounded-xl border-2 border-black"
+                allowfullscreen="">
+              </iframe>
+            </div>
+            
+            
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- Script for the LightBox -->
   <script>
@@ -296,6 +381,5 @@
   <script src="dist/fade_in.js"></script>
   <script src="dist/menu.js?v=2"></script>
   <script src="/counter/script.js?v=2"></script>
-  <script src="/counter/orders.js"></script>
 </body>
 </html>
