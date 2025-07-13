@@ -3,7 +3,7 @@
       const hash = window.location.hash.substring(1); // e.g., "Smith"
       if (!hash) return;
   
-      const res = await fetch(`https://script.google.com/macros/s/AKfycbwKFLcK9hsaFRSQAOWFR7ieH-2ZrINjS7pvQe4v5h3w_N854l4eKyIHlMXXURuqWfw71A/exec?id=${hash}`);
+      const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
       const data = await res.json();
   
       if (data.error) {
