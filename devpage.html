@@ -169,17 +169,18 @@
     const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
     const SCOPES = "https://www.googleapis.com/auth/drive.file";
     const PARENT_FOLDER_ID = "1NcfxZufpOeg749C0JcnfqXfTwC97s7aR";
-
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec";
+  
     let selectedFiles = [];
     let accessToken = null;
     let tokenClient;
-
+  
     const form = document.getElementById("galleryForm");
     const lastNameInput = document.getElementById("lastName");
     const dropArea = document.getElementById("dropArea");
     const fileInput = document.getElementById("fileInput");
     const resultBox = document.getElementById("result");
-
+  
     dropArea.addEventListener("click", () => fileInput.click());
     dropArea.addEventListener("dragover", e => {
       e.preventDefault();
@@ -192,12 +193,12 @@
       handleFiles(e.dataTransfer.files);
     });
     fileInput.addEventListener("change", e => handleFiles(e.target.files));
-
+  
     function handleFiles(files) {
       selectedFiles = [...selectedFiles, ...Array.from(files)];
       dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
     }
-
+  
     window.onload = () => {
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
@@ -209,18 +210,18 @@
         }
       });
     };
-
+  
     function authenticateAndUpload() {
       tokenClient.requestAccessToken();
     }
-
+  
     async function createFolder(folderName) {
       const metadata = {
         name: folderName,
         mimeType: 'application/vnd.google-apps.folder',
         parents: [PARENT_FOLDER_ID]
       };
-
+  
       const res = await fetch('https://www.googleapis.com/drive/v3/files', {
         method: 'POST',
         headers: {
@@ -229,87 +230,90 @@
         },
         body: JSON.stringify(metadata)
       });
-
+  
       const data = await res.json();
       return data.id;
     }
-
+  
     async function uploadFileToDrive(file, folderId) {
       const metadata = {
         name: file.name,
         mimeType: file.type,
         parents: [folderId]
       };
-
+  
       const formData = new FormData();
       formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
       formData.append('file', file);
-
+  
       const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
         method: 'POST',
         headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
         body: formData
       });
-
+  
       const data = await res.json();
       return data.webViewLink;
     }
-
+  
     async function uploadSelectedFiles() {
-  const lastName = lastNameInput.value.trim();
-  if (!lastName) return alert("Client last name is required");
-
-  let folderId; // <-- Declare outside the try block so it's accessible later
-
-  try {
-    folderId = await createFolder(lastName);
-    const links = [];
-
-    for (const file of selectedFiles) {
-      const link = await uploadFileToDrive(file, folderId);
-      links.push(link);
-    }
-
-    form.style.display = "none";
-    resultBox.classList.remove("hidden");
-    resultBox.innerHTML = `
-      <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-      <p>Gallery Link: <a class="text-blue-600 underline" href="/orders/#${lastName}">/orders/#${lastName}</a></p>
-      ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
-    `;
-  } catch (err) {
-    alert("Upload failed: " + err.message);
-    console.error(err);
-    return; // Exit if upload fails
-  }
-
-  // ✅ Now folderId is guaranteed to exist
-  const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
-
-  fetch("https://script.google.com/macros/s/AKfycbxKP-U10evh_NyPUJPDpWMnMxtGkE92hpw4eJbAytFB8msA_GDvt6WbSHbChZJI503KMg/exec", {
+      const lastName = lastNameInput.value.trim();
+      if (!lastName) return alert("Client last name is required");
+  
+      let folderId;
+      try {
+        folderId = await createFolder(lastName);
+        const links = [];
+  
+        for (const file of selectedFiles) {
+          const link = await uploadFileToDrive(file, folderId);
+          links.push(link);
+        }
+  
+        form.style.display = "none";
+        resultBox.classList.remove("hidden");
+        resultBox.innerHTML = `
+          <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
+          <p>Gallery Link: <a class="text-blue-600 underline" href="/orders/#${lastName}">/orders/#${lastName}</a></p>
+          ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
+        `;
+  
+      } catch (err) {
+        alert("Upload failed: " + err.message);
+        console.error(err);
+        return;
+      }
+  
+      const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
+  
+      // ✅ Send to Google Sheets via Apps Script
+      await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
         body: JSON.stringify({
-          id: "test",
-          title: "Test Gallery",
-          link: "https://example.com/gallery"
+          id: lastName,
+          title: `Gallery for ${lastName}`,
+          link: folderLink
         })
       })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.text();
+      .then(res => res.text())
+      .then(data => {
+        console.log("Apps Script response:", data);
+      })
+      .catch(err => {
+        console.error("Apps Script error:", err);
       });
-}
-
+    }
+  
     form.addEventListener("submit", e => {
       e.preventDefault();
       if (selectedFiles.length === 0) return alert("Please upload at least one image.");
       if (!lastNameInput.value.trim()) return alert("Please enter a last name.");
       authenticateAndUpload();
     });
-  </script>
+  </script>  
   
 
   <!-- Script for the LightBox -->
