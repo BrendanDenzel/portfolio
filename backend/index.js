@@ -3,51 +3,44 @@ import cors from 'cors';
 import multer from 'multer';
 import { google } from 'googleapis';
 import admin from 'firebase-admin';
-import fs from 'fs';
-import path from 'path';
 
-// === Setup ===
+// === Setup Express ===
 const app = express();
 app.use(cors());
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Load Firebase Admin credentials JSON (adjust path or use environment variable)
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-
-// Initialize Firebase Admin
+// === Firebase Admin SDK Setup ===
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    projectId: process.env.FIREBASE_PROJECT_ID,
+  }),
 });
 const db = admin.firestore();
 
-// Google Drive setup
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URI = 'https://developers.google.com/oauthplayground';
-const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
-const DRIVE_FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID;
-
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URI
-);
-oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
-
+// === Google Drive Setup ===
+const auth = new google.auth.GoogleAuth({
+  credentials: {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  },
+  scopes: ['https://www.googleapis.com/auth/drive'],
+});
 const drive = google.drive({
   version: 'v3',
-  auth: oauth2Client,
+  auth,
 });
 
-// Upload a file buffer to Google Drive folder
+// === Upload a file buffer to Google Drive folder ===
 async function uploadFileToDrive(filename, buffer) {
   const res = await drive.files.create({
     requestBody: {
       name: filename,
-      parents: [DRIVE_FOLDER_ID],
+      parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
     },
     media: {
-      mimeType: 'image/jpeg', // or detect dynamically
+      mimeType: 'image/jpeg',
       body: Buffer.from(buffer),
     },
     fields: 'id, webViewLink, webContentLink',
@@ -55,46 +48,47 @@ async function uploadFileToDrive(filename, buffer) {
   return res.data;
 }
 
-// API endpoint to receive photos and lastName
+// === Upload Endpoint ===
 app.post('/upload-gallery', upload.array('photos'), async (req, res) => {
   try {
     const lastName = req.body.lastName;
     const files = req.files;
+
     if (!lastName || !files || files.length === 0) {
       return res.status(400).json({ error: 'Missing lastName or photos' });
     }
 
-    // Upload photos to Google Drive
-    const uploadResults = [];
-    for (const file of files) {
-      const driveFile = await uploadFileToDrive(file.originalname, file.buffer);
-      uploadResults.push({
-        id: driveFile.id,
-        viewLink: driveFile.webViewLink,
-        downloadLink: driveFile.webContentLink,
-      });
-    }
+    // Upload each file to Google Drive
+    const uploadedPhotos = await Promise.all(
+      files.map(async (file) => {
+        const driveFile = await uploadFileToDrive(file.originalname, file.buffer);
+        return {
+          id: driveFile.id,
+          viewLink: driveFile.webViewLink,
+          downloadLink: driveFile.webContentLink,
+        };
+      })
+    );
 
-    // Save metadata to Firestore
-    const galleryRef = db.collection('galleries').doc(`${lastName}-${Date.now()}`);
-    await galleryRef.set({
+    // Save gallery metadata to Firestore
+    const galleryId = `${lastName}-${Date.now()}`;
+    await db.collection('galleries').doc(galleryId).set({
       lastName,
-      photos: uploadResults,
+      photos: uploadedPhotos,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    // Respond with gallery URL (you create this on frontend)
     res.json({
       success: true,
-      galleryId: galleryRef.id,
-      galleryUrl: `https://yourdomain.com/orders/${galleryRef.id}`,
+      galleryId,
+      galleryUrl: `https://yourwebsite.com/orders/${galleryId}`,
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+  } catch (err) {
+    console.error('Upload error:', err);
+    res.status(500).json({ error: 'Server error uploading gallery' });
   }
 });
 
-// Start server
+// === Start Server ===
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Backend running on port ${port}`));
+app.listen(port, () => console.log(`🚀 Backend running on port ${port}`));
