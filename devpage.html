@@ -300,22 +300,23 @@
       async function uploadFileToDrive(file) {
         const metadata = {
           name: file.name,
-          mimeType: file.type
+          mimeType: file.type,
+          parents: ["1NcfxZufpOeg749C0JcnfqXfTwC97s7aR"] 
         };
   
         const formData = new FormData();
-        formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-        formData.append('file', file);
-  
-        const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-          method: 'POST',
-          headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
-          body: formData
-        });
-  
-        const data = await res.json();
-        return data.webViewLink;
-      }
+  formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  formData.append('file', file);
+
+  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
+    method: 'POST',
+    headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
+    body: formData
+  });
+
+  const data = await res.json();
+  return data.webViewLink;
+}
   
       async function uploadSelectedFiles() {
         try {
