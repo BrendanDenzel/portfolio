@@ -43,6 +43,7 @@
       plugins: [],
     }
   </script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 
@@ -243,84 +244,116 @@
   
   <script>
     const backendURL = "https://portfolio-6u6d.onrender.com/upload-gallery";
-  
-    const form = document.getElementById("galleryForm");
-    const lastNameInput = document.getElementById("lastName");
-    const dropArea = document.getElementById("dropArea");
-    const fileInput = document.getElementById("fileInput");
-    const resultBox = document.getElementById("result");
-  
-    let selectedFiles = [];
-  
-    dropArea.addEventListener("click", () => fileInput.click());
-  
-    dropArea.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropArea.classList.add("dragover");
-    });
-  
-    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("dragover"));
-  
-    dropArea.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropArea.classList.remove("dragover");
-      handleFiles(e.dataTransfer.files);
-    });
-  
-    fileInput.addEventListener("change", (e) => {
-      handleFiles(e.target.files);
-    });
-  
-    function handleFiles(files) {
-      selectedFiles = [...selectedFiles, ...Array.from(files)];
-      dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
+
+const form = document.getElementById("galleryForm");
+const lastNameInput = document.getElementById("lastName");
+const dropArea = document.getElementById("dropArea");
+const fileInput = document.getElementById("fileInput");
+const resultBox = document.getElementById("result");
+
+let selectedFiles = [];
+
+// Google OAuth client setup
+const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";  // replace this with your OAuth client id
+const SCOPES = "https://www.googleapis.com/auth/drive.file"; // least privilege for uploading files
+
+// Google OAuth2 token client
+let tokenClient;
+
+function initializeGapi() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: '', // will set later dynamically
+  });
+}
+
+window.onload = () => {
+  initializeGapi();
+};
+
+dropArea.addEventListener("click", () => fileInput.click());
+dropArea.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropArea.classList.add("dragover");
+});
+dropArea.addEventListener("dragleave", () => dropArea.classList.remove("dragover"));
+dropArea.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropArea.classList.remove("dragover");
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener("change", (e) => {
+  handleFiles(e.target.files);
+});
+
+function handleFiles(files) {
+  selectedFiles = [...selectedFiles, ...Array.from(files)];
+  dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
+}
+
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  if (selectedFiles.length === 0) {
+    alert("Please add at least one image.");
+    return;
+  }
+
+  const lastName = lastNameInput.value.trim();
+  if (!lastName) {
+    alert("Please enter a client last name.");
+    return;
+  }
+
+  // Trigger Google OAuth to get tokens
+  tokenClient.callback = async (resp) => {
+    if (resp.error) {
+      alert('Google OAuth error: ' + resp.error);
+      return;
     }
-  
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-  
-      if (selectedFiles.length === 0) {
-        alert("Please add at least one image.");
-        return;
-      }
-  
-      const lastName = lastNameInput.value.trim();
-      if (!lastName) {
-        alert("Please enter a client last name.");
-        return;
-      }
-  
-      // Prepare form data to send
-      const formData = new FormData();
-      formData.append("lastName", lastName);
-  
-      selectedFiles.forEach((file, idx) => {
-        formData.append("photos", file);
-      });
-  
-      try {
-        const response = await fetch(backendURL, {
-          method: "POST",
-          body: formData,
-        });
-  
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.statusText}`);
-        }
-  
-        const data = await response.json();
-  
-        // Hide form and show success message with gallery URL returned by backend
-        form.style.display = "none";
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `
-          <strong>Gallery Created!</strong><br>
-          View it at: <a href="${data.galleryUrl}" target="_blank">${data.galleryUrl}</a>
-        `;
-      } catch (error) {
-        alert("Upload failed: " + error.message);
-      }
+    const access_token = resp.access_token;
+
+    // Note: refresh_token is only provided on first auth and needs server-side token management.  
+    // For this demo, just send access_token (backend can refresh or prompt user again if needed)
+    // So your backend must be updated to accept just access_token (or implement refresh token handling separately)
+
+    // Prepare form data
+    const formData = new FormData();
+    formData.append("lastName", lastName);
+    selectedFiles.forEach((file) => {
+      formData.append("photos", file);
     });
+    formData.append("access_token", access_token);
+
+    try {
+      const response = await fetch(backendURL, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Hide form and show success message with gallery URL
+      form.style.display = "none";
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `
+        <strong>Gallery Created!</strong><br>
+        View it at: <a href="${data.galleryUrl}" target="_blank">${data.galleryUrl}</a>
+      `;
+    } catch (error) {
+      alert("Upload failed: " + error.message);
+    }
+  };
+
+  // Request access token from Google
+  tokenClient.requestAccessToken();
+});
+
   </script>
 
   <!-- Script for the LightBox -->
