@@ -286,20 +286,22 @@
   // ✅ Now folderId is guaranteed to exist
   const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
 
-  await fetch("https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec", {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    id: lastName,
-    title: `Gallery for ${lastName}`,
-    link: folderLink
-  })
-})
-.then(res => res.text())
-.then(data => console.log("Apps Script response:", data))
-.catch(err => console.error("Apps Script error:", err));
+  fetch("https://script.google.com/macros/s/AKfycbxKP-U10evh_NyPUJPDpWMnMxtGkE92hpw4eJbAytFB8msA_GDvt6WbSHbChZJI503KMg/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          id: "test",
+          title: "Test Gallery",
+          link: "https://example.com/gallery"
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.text();
+      });
 }
-
 
     form.addEventListener("submit", e => {
       e.preventDefault();
