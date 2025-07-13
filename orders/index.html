@@ -1,0 +1,23 @@
+<script>
+    window.onload = async function () {
+      const hash = window.location.hash.substring(1); // e.g., "Smith"
+      if (!hash) return;
+  
+      const res = await fetch(`https://script.google.com/macros/s/AKfycbwKFLcK9hsaFRSQAOWFR7ieH-2ZrINjS7pvQe4v5h3w_N854l4eKyIHlMXXURuqWfw71A/exec?id=${hash}`);
+      const data = await res.json();
+  
+      if (data.error) {
+        document.body.innerHTML = `<h1 class="text-center mt-10 text-3xl">Gallery Not Found</h1>`;
+        return;
+      }
+  
+      // Render the data
+      document.body.innerHTML = `
+        <main class="text-center p-8">
+          <h1 class="text-3xl font-bold mb-4">${data.title}</h1>
+          <p><a href="${data.link}" class="text-blue-600 underline" target="_blank">Open Folder</a></p>
+        </main>
+      `;
+    };
+  </script>
+  
