@@ -3,6 +3,14 @@ import cors from 'cors';
 import multer from 'multer';
 import { google } from 'googleapis';
 import admin from 'firebase-admin';
+import { Readable } from 'stream';
+
+function bufferToStream(buffer) {
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+}
 
 // === Setup Express ===
 const app = express();
@@ -34,19 +42,20 @@ const drive = google.drive({
 
 // === Upload a file buffer to Google Drive folder ===
 async function uploadFileToDrive(filename, buffer) {
-  const res = await drive.files.create({
-    requestBody: {
-      name: filename,
-      parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
-    },
-    media: {
-      mimeType: 'image/jpeg',
-      body: Buffer.from(buffer),
-    },
-    fields: 'id, webViewLink, webContentLink',
-  });
-  return res.data;
-}
+    const res = await drive.files.create({
+      requestBody: {
+        name: filename,
+        parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
+      },
+      media: {
+        mimeType: 'image/jpeg',
+        body: bufferToStream(buffer), // ✅ FIXED
+      },
+      fields: 'id, webViewLink, webContentLink',
+    });
+    return res.data;
+  }
+  
 
 // === Upload Endpoint ===
 app.post('/upload-gallery', upload.array('photos'), async (req, res) => {
