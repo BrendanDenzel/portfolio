@@ -4,6 +4,9 @@ import multer from 'multer';
 import { google } from 'googleapis';
 import admin from 'firebase-admin';
 import { Readable } from 'stream';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 function bufferToStream(buffer) {
   const stream = new Readable();
@@ -15,6 +18,7 @@ function bufferToStream(buffer) {
 // === Setup Express ===
 const app = express();
 app.use(cors());
+app.use(express.json()); // parse JSON bodies
 const upload = multer({ storage: multer.memoryStorage() });
 
 // === Firebase Admin SDK Setup ===
@@ -27,50 +31,52 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
-// === Google Drive Setup ===
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  },
-  scopes: ['https://www.googleapis.com/auth/drive'],
-});
-const drive = google.drive({
-  version: 'v3',
-  auth,
-});
+// === OAuth2 Client Setup ===
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI
+);
 
-// === Upload a file buffer to Google Drive folder ===
-async function uploadFileToDrive(filename, buffer) {
-    const res = await drive.files.create({
-      requestBody: {
-        name: filename,
-        parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
-      },
-      media: {
-        mimeType: 'image/jpeg',
-        body: bufferToStream(buffer), // ✅ FIXED
-      },
-      fields: 'id, webViewLink, webContentLink',
-    });
-    return res.data;
-  }
-  
+// === Upload a file buffer to Google Drive folder with user OAuth2 credentials ===
+async function uploadFileToDrive(oAuth2Client, filename, buffer) {
+  const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+  const res = await drive.files.create({
+    requestBody: {
+      name: filename,
+      parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID],
+    },
+    media: {
+      mimeType: 'image/jpeg',
+      body: bufferToStream(buffer),
+    },
+    fields: 'id, webViewLink, webContentLink',
+  });
+  return res.data;
+}
 
 // === Upload Endpoint ===
+// Client must send lastName, photos[], access_token, refresh_token
 app.post('/upload-gallery', upload.array('photos'), async (req, res) => {
   try {
     const lastName = req.body.lastName;
     const files = req.files;
+    const { access_token, refresh_token } = req.body;
 
     if (!lastName || !files || files.length === 0) {
       return res.status(400).json({ error: 'Missing lastName or photos' });
     }
+    if (!access_token || !refresh_token) {
+      return res.status(400).json({ error: 'Missing OAuth tokens' });
+    }
 
-    // Upload each file to Google Drive
+    // Set OAuth2 credentials from frontend
+    oAuth2Client.setCredentials({ access_token, refresh_token });
+
+    // Upload each file to Drive as the authorized user
     const uploadedPhotos = await Promise.all(
       files.map(async (file) => {
-        const driveFile = await uploadFileToDrive(file.originalname, file.buffer);
+        const driveFile = await uploadFileToDrive(oAuth2Client, file.originalname, file.buffer);
         return {
           id: driveFile.id,
           viewLink: driveFile.webViewLink,
