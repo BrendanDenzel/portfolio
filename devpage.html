@@ -2,7 +2,6 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
-  <meta name="robots" content="noindex">
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,7 +12,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
   <link rel="stylesheet" href="/dist/output.css" />
-  <link rel="stylesheet" href="/counter/styles.css?v=3" />
+  <link rel="stylesheet" href="/counter/styles.css" />
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Start - Fonts -->
@@ -43,13 +42,70 @@
       plugins: [],
     }
   </script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
+<script>
+    window.onload = async function () {
+      const hash = window.location.hash.substring(1); // e.g., #Smith
+      const galleryContainer = document.getElementById("gallery-content");
+  
+      if (!galleryContainer) return console.error("Missing #gallery-content div in HTML.");
+  
+      if (!hash) {
+        galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">No Gallery ID Provided</h2>`;
+        return;
+      }
+  
+      galleryContainer.innerHTML = `<p class="text-center text-gray-500 text-lg">Loading gallery...</p>`;
+  
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
+        const data = await res.json();
+  
+        if (data.error) {
+          galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Gallery Not Found</h2>`;
+          return;
+        }
+  
+        galleryContainer.innerHTML = `
+          <div class="text-center mt-8">
+            <h2 class="text-3xl font-bold uppercase mb-2 flex flex-wrap items-center justify-center gap-2">
+  ${data.title} - Order Number:
+  <div class="relative group">
+    <button 
+      id="order-number-btn"
+      onclick="copyOrderNumber('${data.orderNumber}')"
+      class="font-signika text-base px-2 py-1
+             bg-white text-black border border-black
+             rounded-md transition-all duration-300
+             hover:scale-105"
+    >
+      <span id="order-number-text">${data.orderNumber}</span>
+    </button>
+    <!-- Tooltip -->
+    <div class="absolute left-1/2 -translate-x-1/2 -bottom-8
+                text-sm px-2 py-1 bg-black text-white rounded
+                opacity-0 group-hover:opacity-100 transition
+                whitespace-nowrap z-10">
+      📋 Click to copy
+    </div>
+  </div>
+</h2>
 
-<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+            <a href="${data.link}" target="_blank" class="text-blue-600 underline text-lg">Open Gallery Folder</a>
+          </div>
+        `;
+      } catch (err) {
+        console.error("Error fetching gallery:", err);
+        galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Error Loading Gallery</h2>`;
+      }
+    };
+  </script>
+  
+
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20">
   <!-- Navbar -->
-  <header class="flex w-full overflow-hidden pt-10 pb-0">
+  <header class="flex w-full overflow-hidden pt-10 pb-1">
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
       <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
 
@@ -75,22 +131,19 @@
         
 
         <!-- Contact Link -->
-        <div class="ml-4 md:ml-5 mr-4 md:mr-8 flex items-center">
-            <button
-              class="font-signika text-xl px-1.5 py-0.4
-                     bg-red-600 text-white
-                     rounded-md
-                     hover:bg-red-700
-                     dark:hover:bg-red-700
-                     transition cursor-default"
-              disabled
-            >
-              ADMIN PAGE
-            </button>
-          </div>
-          
-          
-          
+        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
+  <a href="https://www.instagram.com/dizzstudios/" 
+     target="_blank" 
+     class="font-signika text-xl px-1.5 py-0.4
+            bg-black text-white 
+            dark:bg-white dark:text-black 
+            dark:border dark:border-black 
+            rounded-md 
+            hover:bg-neutral-800 dark:hover:bg-neutral-200 
+            transition">
+    CONTACT
+  </a>
+</div>
 
         <div class="ml-auto md:hidden flex items-center justify-start">
           <button onclick="menuToggle()" @click="open = !open"
@@ -116,7 +169,7 @@
             class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
             <li class="group transition duration-300">
               <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+                <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
               </a>
             </li>
             <li class="group transition duration-300">
@@ -142,193 +195,26 @@
       </div>
     </nav>
   </header>
+  <!-- Content -->
+  <div class="container mx-auto">
+    <h1 class="text-4xl pt-10 pb-3 font-bold">ORDERS</h1>
+    <div id="gallery-content" class="py-10"></div>
 
-
-
-  <!-- Admin Upload Section -->
-  <main class="flex flex-col items-center py-10">
-    <h2 class="text-3xl mb-6 font-bold font-signika">Create New Photo Gallery</h2>
-
-    <form id="galleryForm" class="w-full max-w-lg bg-white p-6 rounded-lg shadow">
-      <label for="lastName" class="font-semibold">Client Last Name:</label>
-      <input type="text" id="lastName" name="lastName" required class="w-full mt-1 p-2 border rounded">
-
-      <div id="dropArea" class="mt-4 p-6 border-2 border-dashed text-center rounded cursor-pointer text-gray-600">
-        Drag & Drop Images Here or Click to Upload (0 files)
-      </div>
-      <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
-
-      <button type="submit" class="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Create Gallery</button>
-    </form>
-
-    <div id="result" class="hidden mt-8 max-w-xl bg-white p-4 rounded shadow text-base"></div>
-  </main>
-
-  <!-- Scripts -->
-  <script>
-    const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
-    const SCOPES = "https://www.googleapis.com/auth/drive.file";
-    const PARENT_FOLDER_ID = "1NcfxZufpOeg749C0JcnfqXfTwC97s7aR";
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzurDkMVKg3Lg--i32QHfnnZYuECf-CVNzVMOkH1PYRBsTaaYmtjqvKGyO4iwPJMC1W5A/exec";
-  
-    let selectedFiles = [];
-    let accessToken = null;
-    let tokenClient;
-  
-    const form = document.getElementById("galleryForm");
-    const lastNameInput = document.getElementById("lastName");
-    const dropArea = document.getElementById("dropArea");
-    const fileInput = document.getElementById("fileInput");
-    const resultBox = document.getElementById("result");
-  
-    dropArea.addEventListener("click", () => fileInput.click());
-    dropArea.addEventListener("dragover", e => {
-      e.preventDefault();
-      dropArea.classList.add("bg-blue-100", "border-blue-400");
-    });
-    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("bg-blue-100", "border-blue-400"));
-    dropArea.addEventListener("drop", e => {
-      e.preventDefault();
-      dropArea.classList.remove("bg-blue-100", "border-blue-400");
-      handleFiles(e.dataTransfer.files);
-    });
-    fileInput.addEventListener("change", e => handleFiles(e.target.files));
-  
-    function handleFiles(files) {
-      selectedFiles = [...selectedFiles, ...Array.from(files)];
-      dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
-    }
-  
-    window.onload = () => {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: tokenResponse => {
-          if (!tokenResponse?.access_token) return alert("Failed to get access token");
-          accessToken = tokenResponse.access_token;
-          uploadSelectedFiles();
+    <script>
+        function copyOrderNumber(orderNumber) {
+          const btn = document.getElementById('order-number-btn');
+          const textSpan = document.getElementById('order-number-text');
+      
+          navigator.clipboard.writeText(orderNumber).then(() => {
+            textSpan.textContent = 'Copied!';
+            setTimeout(() => {
+              textSpan.textContent = orderNumber;
+            }, 1000);
+          });
         }
-      });
-    };
-  
-    function authenticateAndUpload() {
-      tokenClient.requestAccessToken();
-    }
-  
-    async function createFolder(folderName) {
-      const metadata = {
-        name: folderName,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [PARENT_FOLDER_ID]
-      };
-  
-      const res = await fetch('https://www.googleapis.com/drive/v3/files', {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(metadata)
-      });
-  
-      const data = await res.json();
-      return data.id;
-    }
-  
-    async function uploadFileToDrive(file, folderId) {
-      const metadata = {
-        name: file.name,
-        mimeType: file.type,
-        parents: [folderId]
-      };
-  
-      const formData = new FormData();
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-      formData.append('file', file);
-  
-      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-        method: 'POST',
-        headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
-        body: formData
-      });
-  
-      const data = await res.json();
-      return data.webViewLink;
-    }
-  
-    async function uploadSelectedFiles() {
-      const lastName = lastNameInput.value.trim();
-      if (!lastName) return alert("Client last name is required");
-  
-      let folderId;
-      try {
-        folderId = await createFolder(lastName);
-        const links = [];
-  
-        for (const file of selectedFiles) {
-          const link = await uploadFileToDrive(file, folderId);
-          links.push(link);
-        }
-  
-        form.style.display = "none";
-        resultBox.classList.remove("hidden");
-        resultBox.innerHTML = `
-          <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-          <p>Gallery Link: <a class="text-blue-600 underline" href="/orders/#${lastName}">/orders/#${lastName}</a></p>
-          ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
-        `;
-  
-      } catch (err) {
-        alert("Upload failed: " + err.message);
-        console.error(err);
-        return;
-      }
-  
-      const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
-  
-      const now = new Date();
+      </script>
+      
 
-// Format: YY:DD:MM with leading zeros
-const year = String(now.getFullYear()).slice(-2);
-const day = String(now.getDate()).padStart(2, '0');
-const month = String(now.getMonth() + 1).padStart(2, '0');
-
-// First two letters of lastName, capitalized
-const prefix = lastName.slice(0, 2).toUpperCase();
-
-// Final order number
-const orderNumber = `${prefix}-${year}${day}${month}`;
-
-      // ✅ Send to Google Sheets via Apps Script
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({
-          id: lastName,
-          title: `Gallery for ${lastName}`,
-          link: folderLink,
-          orderNumber: orderNumber
-        })
-      })
-      .then(res => res.text())
-      .then(data => {
-        console.log("Apps Script response:", data);
-      })
-      .catch(err => {
-        console.error("Apps Script error:", err);
-      });
-    }
-  
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      if (selectedFiles.length === 0) return alert("Please upload at least one image.");
-      if (!lastNameInput.value.trim()) return alert("Please enter a last name.");
-      authenticateAndUpload();
-    });
-  </script>  
-  
 
   <!-- Script for the LightBox -->
   <script>
@@ -337,6 +223,7 @@ const orderNumber = `${prefix}-${year}${day}${month}`;
   <script src="dist/fade_in.js"></script>
   <script src="dist/menu.js?v=2"></script>
   <script src="/counter/script.js?v=2"></script>
-  <script src="/counter/orders.js"></script>
 </body>
 </html>
+
+  
