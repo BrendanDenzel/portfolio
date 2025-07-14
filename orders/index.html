@@ -56,7 +56,7 @@
         return;
       }
   
-      galleryContainer.innerHTML = `<p class="text-center text-gray-500 text-lg">Loading gallery...</p>`;
+      galleryContainer.innerHTML = `<p class="text-center pt-12 text-gray-500 text-xl">Loading gallery...</p>`;
   
       try {
         const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
@@ -68,33 +68,41 @@
         }
   
         galleryContainer.innerHTML = `
-          <div class="text-center mt-8">
-            <h2 class="text-3xl font-bold uppercase mb-2 flex flex-wrap items-center justify-center gap-2">
-  ${data.title} - Order Number:
-  <div class="relative group">
-    <button 
-      id="order-number-btn"
-      onclick="copyOrderNumber('${data.orderNumber}')"
-      class="font-signika text-base px-2 py-1
-             bg-white text-black border border-black
-             rounded-md transition-all duration-300
-             hover:scale-105"
-    >
-      <span id="order-number-text">${data.orderNumber}</span>
-    </button>
-    <!-- Tooltip -->
-    <div class="absolute left-1/2 -translate-x-1/2 -bottom-8
-                text-sm px-2 py-1 bg-black text-white rounded
-                opacity-0 group-hover:opacity-100 transition
-                whitespace-nowrap z-10">
-      📋 Click to copy
-    </div>
-  </div>
-</h2>
 
-            <a href="${data.link}" target="_blank" class="text-blue-600 underline text-lg">Open Gallery Folder</a>
-          </div>
-        `;
+    <!-- Gallery Title -->
+    <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
+        
+  <div class="mt-0 space-y-0 px-5 md:px-0">
+    <!-- ORDER NUMBER Label + Box -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-2xl md:text-3xl font-signika uppercase">ORDER NUMBER -</span>
+      <div class="relative group">
+        <button 
+          id="order-number-btn"
+          onclick="copyOrderNumber('${data.orderNumber}')"
+          class="font-signika text-xl md:text-2xl px-1 py-0
+                 bg-white text-black border-4 border-black
+                 rounded-md transition-all duration-300
+                 hover:scale-105"
+        >
+          <span id="order-number-text">${data.orderNumber}</span>
+        </button>
+        <!-- Tooltip -->
+        <div class="absolute left-1/2 -translate-x-1/2 -bottom-8
+                    text-sm px-2 py-1 bg-black text-white rounded
+                    opacity-0 group-hover:opacity-100 transition
+                    whitespace-nowrap z-10">
+          📋 Click to copy
+        </div>
+      </div>
+    </div>
+
+    <!-- Folder Link -->
+    <a href="${data.link}" target="_blank" class="block text-left text-blue-600 underline text-lg">Open Gallery Folder</a>
+  </div>
+`;
+
+
       } catch (err) {
         console.error("Error fetching gallery:", err);
         galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Error Loading Gallery</h2>`;
@@ -197,8 +205,7 @@
   </header>
   <!-- Content -->
   <div class="container mx-auto">
-    <h1 class="text-4xl pt-10 pb-3 font-bold">ORDERS</h1>
-    <div id="gallery-content" class="py-10"></div>
+<div id="gallery-content" class="pt-1 pb-1"></div>
 
     <script>
         function copyOrderNumber(orderNumber) {
