@@ -300,18 +300,25 @@ const prefix = lastName.slice(0, 2).toUpperCase();
 const orderNumber = `${prefix}-${year}${day}${month}`;
 
       // ✅ Send to Google Sheets via Apps Script
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({
-          id: lastName,
-          title: `${lastName}`,
-          link: folderLink,
-          orderNumber: orderNumber
-        })
-      })
+      const bodyData = {
+  id: lastName,
+  title: `${lastName}`,
+  link: folderLink,
+  orderNumber: orderNumber
+};
+
+// Add each link as a separate key: link1, link2, etc.
+links.forEach((link, index) => {
+  bodyData[`link${index + 1}`] = link;
+});
+
+await fetch(APPS_SCRIPT_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify(bodyData)
+})
       .then(res => res.text())
       .then(data => {
         console.log("Apps Script response:", data);
