@@ -104,6 +104,7 @@
 
       // Create image thumbnails
       const thumbContainer = document.getElementById("thumbnail-gallery");
+      const fileIds = [];
 
       Object.entries(data).forEach(([key, value]) => {
         if (key.startsWith("link") && typeof value === "string") {
@@ -111,15 +112,50 @@
           if (match && match[1]) {
             const fileId = match[1];
             const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+            fileIds.push(fileId); // 👈 Add this to collect the ID
+
             const img = document.createElement("img");
             img.src = thumbnailUrl;
             img.alt = "Gallery Image";
             img.className = "rounded-xl w-full object-cover shadow-md";
+
+            // 👇 Add protections
+            img.oncontextmenu = () => false; // Disable right-click
+            img.style.pointerEvents = "none"; // Disable tap/drag on mobile
+            img.style.userSelect = "none";
+            img.style.webkitUserDrag = "none";
+
             thumbContainer.appendChild(img);
           }
         }
       });
 
+// Append Download All button
+const downloadSection = document.createElement("div");
+        downloadSection.className = "text-center mt-8";
+        downloadSection.innerHTML = `
+          <button id="download-all-btn" class="font-signika text-xl md:text-2xl px-6 py-2 bg-black text-white border-4 border-black rounded-md transition-all duration-300 hover:bg-white hover:text-black hover:scale-105">
+          [COMPUTER] DOWNLOAD ALL
+          </button>`;
+        galleryContainer.appendChild(downloadSection);
+
+        const downloadBtn = document.getElementById("download-all-btn");
+        downloadBtn.addEventListener("click", () => {
+            fileIds.forEach((id, index) => {
+  setTimeout(() => {
+    const link = document.createElement("a");
+    link.href = `https://drive.google.com/uc?export=download&id=${id}`;
+    link.download = `image-${index + 1}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, index * 2000); // 600ms delay between each
+});
+
+        });
+
+
+      
 
       } catch (err) {
         console.error("Error fetching gallery:", err);
