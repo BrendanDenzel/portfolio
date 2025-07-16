@@ -43,7 +43,6 @@
     }
   </script>
 </head>
-
 <script>
     window.onload = async function () {
       const hash = window.location.hash.substring(1); // e.g., #Smith
@@ -59,7 +58,7 @@
       galleryContainer.innerHTML = `<p class="text-center pt-12 text-gray-500 text-xl">Loading gallery...</p>`;
   
       try {
-        const res = await fetch(`https://script.google.com/macros/s/AKfycbzkDwlJTrS9lvJgmDnbFHOZZAdjmgzjOxMQWqsV2gprBsHD_UP60rzIcDlU0XtokZEzxg/exec?id=${hash}`);
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbw8I9_pt_gDlCkyxLuoCbDm0e9T5FQzezSyfwEy6GsquSbIqk0aUrmMRCMcf8jEtQv-yg/exec?id=${hash}`);
         const data = await res.json();
   
         if (data.error) {
@@ -69,12 +68,13 @@
   
         galleryContainer.innerHTML = `
 
+        
     <!-- Gallery Title -->
     <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
-        
+
   <div class="mt-0 space-y-0 px-5 md:px-0">
     <!-- ORDER NUMBER Label + Box -->
-    <div class="flex items-center gap-3 flex-wrap">
+    <div class="flex items-center gap-3 pb-5 flex-wrap">
       <span class="text-2xl md:text-3xl font-signika uppercase">ORDER NUMBER -</span>
       <div class="relative group">
         <button 
@@ -97,10 +97,28 @@
       </div>
     </div>
 
-    <!-- Folder Link -->
-    <a href="${data.link}" target="_blank" class="block text-left text-blue-600 underline text-lg">Open Gallery Folder</a>
-  </div>
-`;
+
+<!-- Thumbnails Container -->
+        <div id="thumbnail-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
+      `;
+
+      // Create image thumbnails
+      const thumbContainer = document.getElementById("thumbnail-gallery");
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (key.startsWith("link") && typeof value === "string") {
+          const match = value.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+          if (match && match[1]) {
+            const fileId = match[1];
+            const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+            const img = document.createElement("img");
+            img.src = thumbnailUrl;
+            img.alt = "Gallery Image";
+            img.className = "rounded-xl w-full object-cover shadow-md";
+            thumbContainer.appendChild(img);
+          }
+        }
+      });
 
 
       } catch (err) {
@@ -108,6 +126,11 @@
         galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Error Loading Gallery</h2>`;
       }
     };
+
+
+
+
+    
   </script>
   
 
