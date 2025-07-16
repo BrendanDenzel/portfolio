@@ -257,70 +257,69 @@
     }
   
     async function uploadSelectedFiles() {
-  const lastName = lastNameInput.value.trim();
-  if (!lastName) return alert("Client last name is required");
+      const lastName = lastNameInput.value.trim();
+      if (!lastName) return alert("Client last name is required");
+  
+      let folderId;
+      try {
+        folderId = await createFolder(lastName);
+        const links = [];
+  
+        for (const file of selectedFiles) {
+          const link = await uploadFileToDrive(file, folderId);
+          links.push(link);
+        }
+  
+        form.style.display = "none";
+        resultBox.classList.remove("hidden");
+        resultBox.innerHTML = `
+          <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
+          <p>Gallery Link: <a class="text-blue-600 underline" href="/orders/#${lastName}">/orders/#${lastName}</a></p>
+          ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
+        `;
+  
+      } catch (err) {
+        alert("Upload failed: " + err.message);
+        console.error(err);
+        return;
+      }
+  
+      const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
+  
+      const now = new Date();
 
-  let folderId;
-  try {
-    folderId = await createFolder(lastName);
-    const links = [];
+// Format: YY:DD:MM with leading zeros
+const year = String(now.getFullYear()).slice(-2);
+const day = String(now.getDate()).padStart(2, '0');
+const month = String(now.getMonth() + 1).padStart(2, '0');
 
-    for (const file of selectedFiles) {
-      const link = await uploadFileToDrive(file, folderId);
-      links.push(link);
+// First two letters of lastName, capitalized
+const prefix = lastName.slice(0, 2).toUpperCase();
+
+// Final order number
+const orderNumber = `${prefix}-${year}${day}${month}`;
+
+      // ✅ Send to Google Sheets via Apps Script
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          id: lastName,
+          title: `${lastName}`,
+          link: folderLink,
+          orderNumber: orderNumber
+        })
+      })
+      .then(res => res.text())
+      .then(data => {
+        console.log("Apps Script response:", data);
+      })
+      .catch(err => {
+        console.error("Apps Script error:", err);
+      });
     }
-
-    form.style.display = "none";
-    resultBox.classList.remove("hidden");
-    resultBox.innerHTML = `
-      <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-      <p>Gallery Link: <a class="text-blue-600 underline" href="/orders/#${lastName}">/orders/#${lastName}</a></p>
-      ${links.map((link, i) => `<a class="block text-blue-600 hover:underline" href="${link}" target="_blank">File ${i + 1}</a>`).join("")}
-    `;
-
-  } catch (err) {
-    alert("Upload failed: " + err.message);
-    console.error(err);
-    return;
-  }
-
-  const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
-  const now = new Date();
-  const year = String(now.getFullYear()).slice(-2);
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const prefix = lastName.slice(0, 2).toUpperCase();
-  const orderNumber = `${prefix}-${year}${day}${month}`;
-
-  // Build the body data dynamically including all file links
-  const postData = {
-    id: lastName,
-    title: lastName,
-    link: folderLink,
-    orderNumber: orderNumber,
-  };
-
-  // Add each file link with keys file1, file2, file3, ...
-  links.forEach((link, index) => {
-    postData[`file${index + 1}`] = link;
-  });
-
-  // Send to Google Sheets via Apps Script
-  await fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(postData)
-  })
-  .then(res => res.text())
-  .then(data => {
-    console.log("Apps Script response:", data);
-  })
-  .catch(err => {
-    console.error("Apps Script error:", err);
-  });
-}
   
     form.addEventListener("submit", e => {
       e.preventDefault();
