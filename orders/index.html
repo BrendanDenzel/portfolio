@@ -66,9 +66,27 @@
           return;
         }
   
+        if (data.error) {
+  galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Gallery Not Found</h2>`;
+  return;
+}
+
+// ✅ Only do this if data.ziplink exists:
+if (data.ziplink) {
+  const ziplink = data.ziplink;
+  const match = ziplink.match(/\/d\/(.*?)\/view/);
+  var finalziplink = match ? match[1] : null;
+  console.log("Final Zip Link:", finalziplink);
+} else {
+  console.warn("No ziplink found in data.");
+  var finalziplink = null;
+}
+
+
+
         galleryContainer.innerHTML = `
 
-        
+
     <!-- Gallery Title -->
     <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
 
@@ -135,24 +153,19 @@ const downloadSection = document.createElement("div");
         downloadSection.className = "text-center mt-8";
         downloadSection.innerHTML = `
           <button id="download-all-btn" class="font-signika text-xl md:text-2xl px-6 py-2 bg-black text-white border-4 border-black rounded-md transition-all duration-300 hover:bg-white hover:text-black hover:scale-105">
-          [COMPUTER] DOWNLOAD ALL
+            DOWNLOAD ALL
           </button>`;
         galleryContainer.appendChild(downloadSection);
 
         const downloadBtn = document.getElementById("download-all-btn");
         downloadBtn.addEventListener("click", () => {
-            fileIds.forEach((id, index) => {
-  setTimeout(() => {
-    const link = document.createElement("a");
-    link.href = `https://drive.google.com/uc?export=download&id=${id}`;
-    link.download = `image-${index + 1}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, index * 2000); // 600ms delay between each
+  const link = document.createElement("a");
+  link.href = `https://drive.google.com/uc?export=download&id=${finalziplink}`;
+  link.download = "downloaded-file";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
-
-        });
 
 
       
