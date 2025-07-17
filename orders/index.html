@@ -87,10 +87,10 @@ if (data.ziplink) {
         galleryContainer.innerHTML = `
 
 
-    <!-- Gallery Title -->
-    <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
+
 
   <div class="mt-0 space-y-0 px-5 md:px-0">
+    <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
     <!-- ORDER NUMBER Label + Box -->
     <div class="flex items-center gap-3 pb-5 flex-wrap">
       <span class="text-2xl md:text-3xl font-signika uppercase">ORDER NUMBER -</span>
@@ -99,19 +99,32 @@ if (data.ziplink) {
           id="order-number-btn"
           onclick="copyOrderNumber('${data.orderNumber}')"
           class="font-signika text-xl md:text-2xl px-1 py-0
-                 bg-white text-black border-4 border-black
-                 rounded-md transition-all duration-300
-                 hover:scale-105"
+       bg-white text-black border-4 border-black
+       dark:bg-black dark:text-white dark:border-white
+       rounded-md transition-all duration-300
+       hover:scale-105"
         >
           <span id="order-number-text">${data.orderNumber}</span>
         </button>
+
+        <span class="font-signika text-red-600 dark:text-red-500 text-sm ml-2 md:text-base uppercase">
+  DONT SCREENSHOT BECAUSE OF QUALITY LOSS PLEASE USE BUTTON AT BOTTOM TO DOWNLOAD PHOTOS
+</span>
+
+
         <!-- Tooltip -->
-        <div class="absolute left-1/2 -translate-x-1/2 -bottom-8
-                    text-sm px-2 py-1 bg-black text-white rounded
-                    opacity-0 group-hover:opacity-100 transition
-                    whitespace-nowrap z-10">
-          📋 Click to copy
-        </div>
+        <div class="absolute left-1/2 -translate-x-1/2 
+            md:left-0 md:translate-x-0 md:ml-2
+            -top-8
+            text-sm px-2 py-1 bg-black text-white 
+            dark:bg-white dark:text-black
+            rounded
+            opacity-0 group-hover:opacity-100 transition
+            whitespace-nowrap z-10">
+  📋 Click to copy
+</div>
+
+
       </div>
     </div>
 
@@ -150,11 +163,64 @@ if (data.ziplink) {
 
 // Append Download All button
 const downloadSection = document.createElement("div");
-        downloadSection.className = "text-center mt-8";
+        downloadSection.className = "text-center mt-8 pb-5";
         downloadSection.innerHTML = `
-          <button id="download-all-btn" class="font-signika text-xl md:text-2xl px-6 py-2 bg-black text-white border-4 border-black rounded-md transition-all duration-300 hover:bg-white hover:text-black hover:scale-105">
-            DOWNLOAD ALL
-          </button>`;
+          <button 
+  id="download-all-btn" 
+  class="font-signika text-xl md:text-2xl px-6 py-2 
+         bg-white text-black border-4 border-black 
+         dark:bg-black dark:text-white dark:border-white 
+         rounded-md transition-all duration-300 
+         hover:bg-black hover:text-white 
+         dark:hover:bg-white dark:hover:text-black 
+         hover:scale-110">
+  DOWNLOAD PHOTOS
+</button>
+
+
+
+<div class="block md:hidden max-w-md mx-auto p-6 text-center font-signika">
+  <h2 class="text-xl md:text-2xl font-bold mt-5 mb-2 uppercase text-black dark:text-white">
+    TUTORIAL FOR SAVING TO PHOTOS APP
+  </h2>
+
+  <div class="flex justify-center gap-6 mb-6">
+    <button
+      id="iphoneBtn"
+      class="device-btn selected"
+      aria-pressed="true"
+      onclick="selectDevice('iphone')">
+      IPHONE
+    </button>
+
+    <button
+      id="androidBtn"
+      class="device-btn"
+      aria-pressed="false"
+      onclick="selectDevice('android')">
+      ANDROID
+    </button>
+  </div>
+
+  <div>
+    <video
+      id="iphoneVideo"
+      class="mx-auto rounded-md shadow-lg max-w-full"
+      controls
+      src="/dist/videos/tutorial1.mp4"
+      type="video/mp4"></video>
+
+    <video
+      id="androidVideo"
+      class="mx-auto rounded-md shadow-lg max-w-full hidden"
+      controls
+      src="/dist/videos/tutorial2.mp4"
+      type="video/mp4"></video>
+  </div>
+</div>
+`;
+
+
         galleryContainer.appendChild(downloadSection);
 
         const downloadBtn = document.getElementById("download-all-btn");
@@ -167,7 +233,6 @@ const downloadSection = document.createElement("div");
   document.body.removeChild(link);
 });
 
-
       
 
       } catch (err) {
@@ -176,11 +241,81 @@ const downloadSection = document.createElement("div");
       }
     };
 
-
-
-
-    
   </script>
+
+
+<!-- Container: Mobile/Tablet only -->
+
+  
+<script>
+    function selectDevice(device) {
+      const iphoneBtn = document.getElementById('iphoneBtn');
+      const androidBtn = document.getElementById('androidBtn');
+      const iphoneVideo = document.getElementById('iphoneVideo');
+      const androidVideo = document.getElementById('androidVideo');
+  
+      // Remove selected class from both
+      iphoneBtn.classList.remove('selected');
+      androidBtn.classList.remove('selected');
+  
+      if (device === 'iphone') {
+        iphoneBtn.classList.add('selected');
+        iphoneVideo.classList.remove('hidden');
+        androidVideo.classList.add('hidden');
+      } else {
+        androidBtn.classList.add('selected');
+        androidVideo.classList.remove('hidden');
+        iphoneVideo.classList.add('hidden');
+      }
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      selectDevice('iphone');
+    });
+  </script>
+  
+  
+  <style>
+    .device-btn {
+      flex: 1;
+      padding: 0.75rem 0;
+      border: 4px solid;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      background: white;
+      color: black;
+      border-color: gray;
+      border-radius: 0.5rem;
+    }
+  
+    .device-btn.selected {
+      border-color: black;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+  
+    /* Automatically apply dark styles if user's system prefers dark mode */
+    @media (prefers-color-scheme: dark) {
+      .device-btn {
+        background: black;
+        color: white;
+        border-color: gray;
+      }
+  
+      .device-btn.selected {
+        background: black;
+        color: white;
+        border-color: white;
+        box-shadow: 0 8px 15px rgba(243, 242, 242, 0.3);
+      }
+    }
+  </style>
+  
+  
+  
+  
+
+
   
 
 <body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20">
