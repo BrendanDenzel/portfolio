@@ -58,7 +58,7 @@
       galleryContainer.innerHTML = `<p class="text-center pt-12 text-gray-500 text-xl">Loading gallery...</p>`;
   
       try {
-        const res = await fetch(`https://script.google.com/macros/s/AKfycbyDdzkoTFw7uJzDtsd7l8s7JP5ZQa3ZDudrEkTxDGn11KEhAJYU3bB2eBMWdtMJ-3vL1Q/exec?id=${hash}`);
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbx7a08OwO72ApMtXPi8yu_n9Yc9h5ipKzetlawyOhelGA9batzPW6PAtTYkucayZ6KU-w/exec?id=${hash}`);
         const data = await res.json();
   
         if (data.error) {
