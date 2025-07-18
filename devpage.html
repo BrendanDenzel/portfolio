@@ -289,6 +289,23 @@
       <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
       <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded.</p>
       <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${lastName}">https://dizzstudios.org/orders/#${lastName}</a></p>
+      <div class="mt-3 group relative inline-block">
+  <button id="copyLinkBtn"
+    class="px-4 py-1 border text-sm rounded transition
+           border-black text-black
+           dark:border-white dark:text-white
+           hover:bg-black hover:text-white
+           dark:hover:bg-white dark:hover:text-black"
+    data-link="/orders/#${lastName}"
+  >
+    Copy Gallery Link
+  </button>
+  <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300">
+    Click to copy
+  </span>
+</div>
+
+
 
         <button id="resetFormBtn" class="mt-6 w-full bg-gray-200 hover:bg-gray-300 text-black py-2 rounded transition">
     Create New Gallery
@@ -296,9 +313,50 @@
 
     `;
 
-    document.getElementById("resetFormBtn").addEventListener("click", () => {
-  location.reload(); // Refreshes the page to reset everything
+    const copyButton = document.getElementById("copyLinkBtn");
+copyButton.addEventListener("click", () => {
+  const linkToCopy = copyButton.getAttribute("data-link");
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(location.origin + linkToCopy).then(() => {
+    const originalText = copyButton.textContent;
+    copyButton.textContent = "COPIED";
+
+    // Revert back after 2 seconds
+    setTimeout(() => {
+      copyButton.textContent = originalText;
+    }, 2000);
+  }).catch(err => {
+    console.error("Failed to copy: ", err);
+  });
 });
+
+    
+
+    document.getElementById("resetFormBtn").addEventListener("click", () => {
+  // Clear selected files
+  selectedFiles = [];
+
+  // Reset form input values
+  lastNameInput.value = "";
+  fileInput.value = null;
+
+  // Reset drop area text
+  dropArea.textContent = "Drag & Drop Images Here or Click to Upload (0 files)";
+
+  // Show form again, hide result
+  form.style.display = "block";
+  resultBox.classList.add("hidden");
+  resultBox.innerHTML = "";
+
+  // Reset the Create Gallery button (in case user wants to submit again)
+  const button = document.getElementById("createGalleryBtn");
+  button.textContent = "Create Gallery";
+  button.classList.remove("bg-red-600", "hover:bg-red-700");
+  button.classList.add("bg-blue-600", "hover:bg-blue-700");
+  button.disabled = false;
+});
+
 
 
   } catch (err) {
