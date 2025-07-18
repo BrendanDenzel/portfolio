@@ -82,6 +82,16 @@ if (data.ziplink) {
   var finalziplink = null;
 }
 
+if (data.ziplink2) {
+  const ziplink2 = data.ziplink;
+  const match = ziplink2.match(/\/d\/(.*?)\/view/);
+  var finalziplink2 = match ? match[1] : null;
+  console.log("Final Zip Link:", finalziplink);
+} else {
+  console.warn("No ziplink found in data.");
+  var finalziplink2 = null;
+}
+
 
 
         galleryContainer.innerHTML = `
@@ -163,7 +173,7 @@ if (data.ziplink) {
 
 // Append Download All button
 const downloadSection = document.createElement("div");
-        downloadSection.className = "text-center mt-8 pb-5";
+        downloadSection.className = "flex justify-center gap-4 mt-8 pb-5";
         downloadSection.innerHTML = `
           <button 
   id="download-all-btn" 
@@ -176,6 +186,19 @@ const downloadSection = document.createElement("div");
          hover:scale-110">
   DOWNLOAD PHOTOS
 </button>
+
+<button 
+  id="download-all-btn2" 
+  class="font-signika text-xl md:text-2xl px-6 py-2 
+         bg-white text-black border-4 border-black 
+         dark:bg-black dark:text-white dark:border-white 
+         rounded-md transition-all duration-300 
+         hover:bg-black hover:text-white 
+         dark:hover:bg-white dark:hover:text-black 
+         hover:scale-110">
+  DOWNLOAD PHOTOS 2
+</button>
+
 
 
 
@@ -207,7 +230,7 @@ const downloadSection = document.createElement("div");
       id="iphoneVideo"
       class="mx-auto rounded-md shadow-lg max-w-full"
       controls
-      src="/dist/videos/tutorial1.MP4"
+      src="/dist/videos/tutorial1.mp4"
       type="video/mp4"></video>
 
     <video
@@ -233,7 +256,23 @@ const downloadSection = document.createElement("div");
   document.body.removeChild(link);
 });
 
-      
+const downloadBtn2 = document.getElementById("download-all-btn2");
+downloadBtn2.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = `https://drive.google.com/uc?export=download&id=${finalziplink2}`;
+  link.download = "downloaded-file2";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+if (finalziplink2) {
+  downloadBtn.textContent = "DOWNLOAD PHOTOS 1";
+  downloadBtn2.style.display = "inline-block";
+} else {
+  downloadBtn.textContent = "DOWNLOAD PHOTOS";
+  downloadBtn2.style.display = "none";
+}
 
       } catch (err) {
         console.error("Error fetching gallery:", err);
@@ -241,6 +280,9 @@ const downloadSection = document.createElement("div");
       }
     };
 
+
+
+    
   </script>
 
 
