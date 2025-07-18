@@ -147,7 +147,7 @@
 
   <!-- Admin Upload Section -->
   <main class="flex flex-col items-center py-10">
-    <h2 class="text-3xl mb-6 font-bold uppercase">Create New Photo Gallery</h2>
+    <h2 class="text-3xl mb-6 font-bold font-signika">Create New Photo Gallery</h2>
 
     <form id="galleryForm" class="w-full max-w-lg bg-white p-6 rounded-lg shadow">
       <label for="lastName" class="font-semibold">Client Last Name:</label>
@@ -287,7 +287,7 @@
     resultBox.classList.remove("hidden");
     resultBox.innerHTML = `
       <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-      <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded</p>
+      <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded.</p>
       <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${lastName}">https://dizzstudios.org/orders/#${lastName}</a></p>
       <div class="mt-4 flex justify-center">
   <div class="group relative inline-block">
