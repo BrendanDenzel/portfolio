@@ -147,7 +147,7 @@
 
   <!-- Admin Upload Section -->
   <main class="flex flex-col items-center py-10">
-    <h2 class="text-3xl mb-6 font-bold font-signika">Create New Photo Gallery</h2>
+    <h2 class="text-3xl mb-6 font-bold uppercase">Create New Photo Gallery</h2>
 
     <form id="galleryForm" class="w-full max-w-lg bg-white p-6 rounded-lg shadow">
       <label for="lastName" class="font-semibold">Client Last Name:</label>
@@ -287,22 +287,21 @@
     resultBox.classList.remove("hidden");
     resultBox.innerHTML = `
       <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
-      <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded.</p>
+      <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded</p>
       <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${lastName}">https://dizzstudios.org/orders/#${lastName}</a></p>
-      <div class="mt-3 group relative inline-block">
-  <button id="copyLinkBtn"
-    class="px-4 py-1 border text-sm rounded transition
-           border-black text-black
-           dark:border-white dark:text-white
-           hover:bg-black hover:text-white
-           dark:hover:bg-white dark:hover:text-black"
-    data-link="/orders/#${lastName}"
-  >
-    Copy Gallery Link
-  </button>
-  <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300">
-    Click to copy
-  </span>
+      <div class="mt-4 flex justify-center">
+  <div class="group relative inline-block">
+    <button id="copyLinkBtn"
+      class="px-4 py-2 border-2 text-sm rounded transition
+             border-black text-black
+             dark:border-white dark:text-white
+             hover:bg-black hover:text-white
+             dark:hover:bg-white dark:hover:text-black"
+      data-link="/orders/#${lastName}"
+    >
+      Copy Gallery Link
+    </button>
+  </div>
 </div>
 
 
