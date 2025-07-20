@@ -270,18 +270,6 @@
   const lastName = lastNameInput.value.trim();
   if (!lastName) return alert("Client last name is required");
 
-  let folderId;
-  let links = []; // <-- ✅ Declare links outside try
-  const fileCount = selectedFiles.length;
-
-
-  try {
-    folderId = await createFolder(lastName);
-
-    for (const file of selectedFiles) {
-      const link = await uploadFileToDrive(file, folderId);
-      links.push(link);
-    }
 
   const now = new Date();
       // Format: YY:DD:MM with leading zeros
@@ -294,6 +282,21 @@
 
   // Final order number
   const orderNumber = `${prefix}-${year}${day}${month}`;
+
+
+
+  let folderId;
+  let links = []; // <-- ✅ Declare links outside try
+  const fileCount = selectedFiles.length;
+
+
+  try {
+    folderId = await createFolder(lastName);
+
+    for (const file of selectedFiles) {
+      const link = await uploadFileToDrive(file, folderId);
+      links.push(link);
+    }
 
     form.style.display = "none";
     resultBox.classList.remove("hidden");
