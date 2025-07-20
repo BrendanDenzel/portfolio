@@ -173,7 +173,7 @@ if (data.ziplink2) {
 
 // Append Download All button
 const downloadSection = document.createElement("div");
-        downloadSection.className = "flex justify-center gap-4 mt-8 pb-5";
+        downloadSection.className = "flex flex-col md:flex-row justify-center items-center gap-4 mt-8 pb-5";
         downloadSection.innerHTML = `
           <button 
   id="download-all-btn" 
@@ -231,7 +231,7 @@ const downloadSection = document.createElement("div");
       class="mx-auto rounded-md shadow-lg max-w-full"
       controls
       src="/dist/videos/tutorial1.mp4"
-      type="video/mp4"></video>
+      type="/dist/videos/tutorial1.MP4"></video>
 
     <video
       id="androidVideo"
