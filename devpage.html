@@ -283,6 +283,7 @@
       links.push(link);
     }
 
+  const now = new Date();
       // Format: YY:DD:MM with leading zeros
   const year = String(now.getFullYear()).slice(-2);
   const day = String(now.getDate()).padStart(2, '0');
@@ -373,7 +374,6 @@ copyButton.addEventListener("click", () => {
   }
 
   const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
-  const now = new Date();
 
 
   // ✅ Send to Google Sheets via Apps Script
