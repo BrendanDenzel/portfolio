@@ -283,12 +283,23 @@
       links.push(link);
     }
 
+      // Format: YY:DD:MM with leading zeros
+  const year = String(now.getFullYear()).slice(-2);
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+
+  // First two letters of lastName, capitalized
+  const prefix = lastName.slice(0, 2).toUpperCase();
+
+  // Final order number
+  const orderNumber = `${prefix}-${year}${day}${month}`;
+
     form.style.display = "none";
     resultBox.classList.remove("hidden");
     resultBox.innerHTML = `
       <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
       <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded.</p>
-      <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${lastName}">https://dizzstudios.org/orders/#${lastName}</a></p>
+      <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${orderNumber}">https://dizzstudios.org/orders/#${orderNumber}</a></p>
   <div class="group relative inline-block pt-2">
     <button id="copyLinkBtn"
       class="px-2 py-1 border-2 text-sm rounded transition
@@ -296,7 +307,7 @@
              dark:border-white dark:text-white
              hover:bg-black hover:text-white
              dark:hover:bg-white dark:hover:text-black"
-      data-link="/orders/#${lastName}"
+      data-link="/orders/#${orderNumber}"
     >
       Copy Gallery Link
     </button>
@@ -364,20 +375,10 @@ copyButton.addEventListener("click", () => {
   const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
   const now = new Date();
 
-  // Format: YY:DD:MM with leading zeros
-  const year = String(now.getFullYear()).slice(-2);
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-
-  // First two letters of lastName, capitalized
-  const prefix = lastName.slice(0, 2).toUpperCase();
-
-  // Final order number
-  const orderNumber = `${prefix}-${year}${day}${month}`;
 
   // ✅ Send to Google Sheets via Apps Script
   const bodyData = {
-    id: lastName,
+    id: orderNumber,
     title: `${lastName}`,
     link: folderLink,
     orderNumber: orderNumber
