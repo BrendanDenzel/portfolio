@@ -173,37 +173,45 @@ if (data.ziplink2) {
 
 // Append Download All button
 const downloadSection = document.createElement("div");
-        downloadSection.className = "flex flex-col md:flex-row justify-center items-center gap-4 mt-8 pb-5";
-        downloadSection.innerHTML = `
-          <button 
-  id="download-all-btn" 
-  class="font-signika text-xl md:text-2xl px-6 py-2 
-         bg-white text-black border-4 border-black 
-         dark:bg-black dark:text-white dark:border-white 
-         rounded-md transition-all duration-300 
-         hover:bg-black hover:text-white 
-         dark:hover:bg-white dark:hover:text-black 
-         hover:scale-110">
-  DOWNLOAD PHOTOS
-</button>
+downloadSection.className = "flex flex-col items-center gap-4 mt-8 pb-5";
+downloadSection.innerHTML = `
+  <!-- Button Row -->
+  <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+    <button 
+      id="download-all-btn" 
+      class="font-signika text-xl md:text-2xl px-6 py-2 
+             bg-white text-black border-4 border-black 
+             dark:bg-black dark:text-white dark:border-white 
+             rounded-md transition-all duration-300 
+             hover:bg-black hover:text-white 
+             dark:hover:bg-white dark:hover:text-black 
+             hover:scale-110">
+      DOWNLOAD PHOTOS
+    </button>
 
-<button 
-  id="download-all-btn2" 
-  class="font-signika text-xl md:text-2xl px-6 py-2 
-         bg-white text-black border-4 border-black 
-         dark:bg-black dark:text-white dark:border-white 
-         rounded-md transition-all duration-300 
-         hover:bg-black hover:text-white 
-         dark:hover:bg-white dark:hover:text-black 
-         hover:scale-110">
-  DOWNLOAD PHOTOS 2
-</button>
+    <button 
+      id="download-all-btn2" 
+      class="font-signika text-xl md:text-2xl px-3 py-2 
+             bg-white text-black border-4 border-black 
+             dark:bg-black dark:text-white dark:border-white 
+             rounded-md transition-all duration-300 
+             hover:bg-black hover:text-white 
+             dark:hover:bg-white dark:hover:text-black 
+             hover:scale-110">
+      DOWNLOAD PHOTOS 2
+    </button>
+  </div>
 
-
+  <!-- Text Message Below Buttons -->
+<div class="bg-blue-100 border-2 border-blue-400 text-black rounded-2xl p-4 md:mx-14 lg:mx-20 xl:mx-[400px] mt-2">
+  <p class="font-signika text-sm md:text-base uppercase text-center">
+    Please reach out to me if there is anything you are unhappy with — maybe editing, price, or photo count. I would be glad to make reasonable arrangements. Also, any feedback is greatly appreciated.
+  </p>
+</div>
 
 
 <div class="block md:hidden max-w-md mx-auto p-6 text-center font-signika">
-  <h2 class="text-xl md:text-2xl font-bold mt-5 mb-2 uppercase text-black dark:text-white">
+  <h2 class="text-xl md:text-2xl font-bold mt-0 mb-2 uppercase text-black dark:text-white">
     TUTORIAL FOR SAVING TO PHOTOS APP
   </h2>
 
@@ -231,7 +239,7 @@ const downloadSection = document.createElement("div");
       class="mx-auto rounded-md shadow-lg max-w-full"
       controls
       src="/dist/videos/tutorial1.mp4"
-      type="/dist/videos/tutorial1..mp4"></video>
+      type="/dist/videos/tutorial1.mp4"></video>
 
     <video
       id="androidVideo"
