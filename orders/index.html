@@ -98,7 +98,6 @@ if (data.ziplink2) {
 
 
 
-
   <div class="mt-0 space-y-0 px-5 md:px-0">
     <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
     <!-- ORDER NUMBER Label + Box -->
@@ -117,7 +116,9 @@ if (data.ziplink2) {
           <span id="order-number-text">${data.orderNumber}</span>
         </button>
 
-        <span class="font-signika text-red-600 dark:text-red-500 text-sm ml-2 md:text-base uppercase">
+
+           <!-- Desktop version -->
+<span class="hidden md:inline font-signika text-red-600 dark:text-red-500 text-sm md:text-base uppercase ml-2 md:mb-0">
   DONT SCREENSHOT BECAUSE OF QUALITY LOSS PLEASE USE BUTTON AT BOTTOM TO DOWNLOAD PHOTOS
 </span>
 
@@ -137,6 +138,16 @@ if (data.ziplink2) {
 
       </div>
     </div>
+
+ 
+<!-- Mobile version -->
+<div class="block md:hidden w-full mt-0">
+  <span class="font-signika text-red-600 dark:text-red-500 text-sm uppercase block mb-3">
+    DONT SCREENSHOT BECAUSE OF QUALITY LOSS<br>PLEASE USE BUTTON AT BOTTOM TO DOWNLOAD PHOTOS
+  </span>
+</div>
+
+
 
 
 <!-- Thumbnails Container -->
