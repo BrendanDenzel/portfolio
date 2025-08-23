@@ -94,6 +94,61 @@ if (data.ziplink2) {
 
 
 
+
+
+let discountBox = "";
+if (hash === "SC-252308") {
+  discountBox = `
+    <div class="flex items-center gap-3 pb-0 flex-wrap">
+      <span class="text-2xl md:text-3xl font-signika uppercase">
+        FREE PROMO -
+      </span>
+      <div class="relative group">
+        <button 
+          id="discount-code-btn"
+          onclick="copyDiscountCode('DS-9X4M52N')"
+          class="font-signika text-xl md:text-2xl px-1 py-0
+           bg-white text-black border-4 border-black
+           dark:bg-black dark:text-white dark:border-white
+           rounded-md transition-all duration-300
+           hover:scale-105"
+        >
+          <span id="discount-code-text">DS-9X4M52N</span>
+        </button>
+
+        <!-- Tooltip -->
+        <div class="absolute left-1/2 -translate-x-1/2 
+            md:left-0 md:translate-x-0 md:ml-2
+            -top-8
+            text-sm px-2 py-1 bg-black text-white 
+            dark:bg-white dark:text-black
+            rounded
+            opacity-0 group-hover:opacity-100 transition
+            whitespace-nowrap z-10">
+          📋 Click to copy
+        </div>
+      </div>
+    </div>
+    <p class="mt-0 text-sm md:text-base font-signika text-blue-600 dark:text-blue-400 underline cursor-pointer">
+      <a href="https://dizzstudios.org/orders" target="_blank">
+        View more details at dizzstudios.org/orders
+      </a>
+    </p>
+    <p class="pb-8 text-sm md:text-base font-signika text-black dark:text-blue-400 underline cursor-pointer">
+      PROMO CODE VALID FOR 1 MONTH ONLY AND ONLY FOR THE VAR BOYS SOCCER TEAM PERSONAL HIRE
+    </p>
+  `;
+}
+
+
+
+
+
+
+
+
+
+
         galleryContainer.innerHTML = `
 
 
@@ -101,7 +156,7 @@ if (data.ziplink2) {
   <div class="mt-0 space-y-0 px-5 md:px-0">
     <h2 class="text-4xl pt-8 pb-2 font-bold uppercase">${data.title}</h2>
     <!-- ORDER NUMBER Label + Box -->
-    <div class="flex items-center gap-3 pb-5 flex-wrap">
+    <div class="flex items-center gap-3 pb-3 flex-wrap">
       <span class="text-2xl md:text-3xl font-signika uppercase">ORDER NUMBER -</span>
       <div class="relative group">
         <button 
@@ -116,9 +171,8 @@ if (data.ziplink2) {
           <span id="order-number-text">${data.orderNumber}</span>
         </button>
 
-
            <!-- Desktop version -->
-<span class="hidden md:inline font-signika text-red-600 dark:text-red-500 text-sm md:text-base uppercase ml-2 md:mb-0">
+<span id="warning-message" class="hidden md:inline font-signika text-red-600 dark:text-red-500 text-sm md:text-base uppercase ml-2 md:mb-0">
   DONT SCREENSHOT BECAUSE OF QUALITY LOSS PLEASE USE BUTTON AT BOTTOM TO DOWNLOAD PHOTOS
 </span>
 
@@ -139,6 +193,7 @@ if (data.ziplink2) {
       </div>
     </div>
 
+    ${discountBox}
  
 <!-- Mobile version -->
 <div class="block md:hidden w-full mt-0">
@@ -153,6 +208,11 @@ if (data.ziplink2) {
 <!-- Thumbnails Container -->
         <div id="thumbnail-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
       `;
+
+const warning = document.getElementById("warning-message");
+
+
+
 
       // Create image thumbnails
       const thumbContainer = document.getElementById("thumbnail-gallery");
@@ -298,7 +358,6 @@ if (finalziplink2) {
         galleryContainer.innerHTML = `<h2 class="text-center text-2xl font-bold text-red-500">Error Loading Gallery</h2>`;
       }
     };
-
 
 
     
@@ -487,6 +546,25 @@ if (finalziplink2) {
             }, 1000);
           });
         }
+
+        function copyDiscountCode(discountCode) {
+  const btn = document.getElementById('discount-code-btn');
+  const textSpan = document.getElementById('discount-code-text');
+
+  navigator.clipboard.writeText(discountCode).then(() => {
+    textSpan.textContent = 'Copied!';
+    setTimeout(() => {
+      textSpan.textContent = discountCode;
+    }, 1000);
+  });
+}
+
+
+
+
+
+
+
       </script>
       
 
