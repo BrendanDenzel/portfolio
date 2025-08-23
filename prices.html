@@ -7,7 +7,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dizz Studios - Prices</title>
+  <title>Dizz Studios</title>
   <meta name="description"
     content="Im a 16 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
   <!-- Favicon -->
@@ -239,21 +239,239 @@
   <main class="px-5 md:px-20 pt-10">
     <h1 class="text-4xl font-bold text-center">PRICES</h1>
 
+<style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 20px;
+  }
+
+  .promo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .promo-label {
+    font-weight: bold;
+    color: #000;
+    font-size: 16px;
+  }
+
+  .promo-input {
+    border: 2px solid #000;
+    border-radius: 12px;
+    padding: 6px 10px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .promo-input:focus {
+    border-color: #333;
+  }
+
+  .promo-button {
+    background-color: #f2f2f2;
+    border: 2px solid #000;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .promo-button:hover {
+    background-color: #ddd;
+    transform: scale(1.08);
+  }
+
+  #statusMessage {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+</style>
+</head>
+<body>
+
+<form id="promoForm" class="promo-container">
+  <span class="promo-label">Promo Code:</span>
+  <input type="text" id="promoInput" class="promo-input" placeholder="Enter code" />
+  <button type="submit" class="promo-button">Add</button>
+</form>
+
+<div id="statusMessage"></div>
+
+<script>
+  const form = document.getElementById("promoForm");
+  const input = document.getElementById("promoInput");
+  const statusMessage = document.getElementById("statusMessage");
+
+  function showMessage(msg, color = "#444") {
+    statusMessage.textContent = msg;
+    statusMessage.style.color = color;
+    statusMessage.style.opacity = "1";
+
+    setTimeout(() => {
+      statusMessage.style.opacity = "0";
+    }, 4000); // disappears after 3 seconds
+  }
+
+  async function checkPromo(code) {
+    showMessage("Authenticating...", "#444"); // show while checking
+
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vQdEWKjQ_nhQtq_DpB_y5u2TyxmbKo3CgmaJlbLZ3fZT8D1mur7sA2DgYM47SGoOuo4IaI4x2MqnibU/pub?gid=1372411540&single=true&output=csv`;
+      const res = await fetch(url);
+      const text = await res.text();
+
+      const rows = text.trim().split("\n").map(r => r.split(","));
+      const promoCodes = rows.slice(1); // skip header
+
+      let found = false;
+
+      for (let row of promoCodes) {
+        const [promo, colB, colC, colD] = row;
+
+        if (promo && promo.toLowerCase() === code.toLowerCase()) {
+          found = true;
+
+
+            
+const basePrice = 25; // Original price
+const basePhotos = 15; // Original photo count
+
+const priceOriginal = document.getElementById("personalPriceOriginal");
+const priceNew = document.getElementById("personalPriceNew");
+const photosOriginal = document.getElementById("personalPhotosOriginal");
+const photosNew = document.getElementById("personalPhotosNew");
+
+if (colB.trim().toLowerCase() === "true") {
+  showMessage("Promo code has expired or been used", "red");
+
+  // Reset display
+  priceOriginal.textContent = `$${basePrice}`;
+  priceOriginal.style.color = "#000";
+  priceOriginal.style.textDecoration = "none";
+  priceNew.textContent = "";
+
+  photosOriginal.textContent = `${basePhotos} Photos`;
+  photosOriginal.style.color = "#000";
+  photosOriginal.style.textDecoration = "none";
+  photosNew.textContent = "";
+} else {
+  // Calculate discount and new photo count
+  const discountPercent = parseFloat(colC) || 0;
+  const addPhotos = parseInt(colD) || 0;
+
+  const newPrice = (basePrice - (basePrice * discountPercent / 100)).toFixed(2);
+  const newPhotoCount = basePhotos + addPhotos;
+
+  // Only apply strike-through if there’s actually a discount or extra photos
+if (discountPercent > 0) {
+    // Original becomes red and struck-through
+    priceOriginal.style.color = "#d60909";
+    priceOriginal.style.textDecoration = "line-through";
+
+    // New price / photo count next to it
+    if (colC) {
+        priceNew.textContent = `  $${newPrice}`;
+        priceNew.style.color = "#000";
+    } else {
+        priceNew.textContent = "";
+    }
+
+    
+} else {
+    // No discount or extra photos: keep original text normal
+    priceOriginal.style.color = "#000";
+    priceOriginal.style.textDecoration = "none";
+    priceNew.textContent = "";
+
+  
+}
+
+if (addPhotos > 0) {
+    photosOriginal.style.color = "#d60909";
+    photosOriginal.style.textDecoration = "line-through";
+
+    if (colD) {
+        photosNew.textContent = `  ${newPhotoCount} Photos`;
+        photosNew.style.color = "#000";
+    } else {
+        photosNew.textContent = "";
+    }
+} else {
+
+    photosOriginal.style.color = "#000";
+    photosOriginal.style.textDecoration = "none";
+    photosNew.textContent = "";
+}
+
+
+  showMessage("Changes have been applied below", "green");
+}
+
+
+
+
+          
+          break;
+        }
+      }
+
+      if (!found) {
+        showMessage("Promo Code doesn't exist", "red");
+      }
+
+    } catch (err) {
+      showMessage("Error checking promo: " + err.message, "red");
+      console.error(err);
+    }
+
+    input.value = "";
+  }
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const code = input.value.trim();
+    if (code) {
+      checkPromo(code);
+    } else {
+      showMessage("Please enter a promo code", "red");
+    }
+  });
+</script>
+
+
+
+
+
     <!-- Pricing Cards -->
     <section id="prices" class="pricing-container mt-10">
       <div class="card">
-        <div class="card-header">PERSONAL PHOTO SET</div>
-        <div class="card-subtitle">High School Sports Photos</div>
-        <div class="card-price">$20</div>
-        <ul>
-          <li>14–18 Photos</li>
-          <li>1–2 Days After Game</li>
-        </ul>
-        <div class="card-actions">
-          <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
-          <a href="/" class="example-button">Show Examples</a>
-        </div>
-      </div>
+  <div class="card-header">PERSONAL PHOTO SET</div>
+  <div class="card-subtitle">High School Sports Photos</div>
+  <div class="card-price" id="personalPrice">
+    <span id="personalPriceOriginal">$25</span>
+    <span id="personalPriceNew"></span>
+  </div>
+  <ul>
+    <li id="personalPhotos">
+      <span id="personalPhotosOriginal">15 Photos</span>
+      <span id="personalPhotosNew"></span>
+    </li>
+    <li>1–2 Days After Game</li>
+  </ul>
+  <div class="card-actions">
+    <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
+    <a href="/" class="example-button">Show Examples</a>
+  </div>
+</div>
 
       <div class="card">
         <div class="card-header">PERSONAL GRAPHIC</div>
@@ -294,11 +512,9 @@
         </div>
       </div>
     </section>
-    
-        <p class="text-center mt-6 max-w-xl mx-auto text-sm">
-      These prices are not final and may change based on location and length of the games.
+    <p class="text-center mt-6 max-w-xl mx-auto text-sm">
+      Prices semi-flexible
     </p>
-    
     <p class="text-center mt-6 max-w-xl mx-auto text-sm">
       Preview images will be provided before purchase. Final products will only be delivered after payment is received via Cash or Venmo.
     </p>
