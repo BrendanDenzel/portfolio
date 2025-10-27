@@ -1,28 +1,3 @@
-#statContainer {
-  font-family: sans-serif;
-  color: black;
-  font-weight: 700;
-}
-
-#statBoxWrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px; /* optional general padding */
-}
-
-.statLabel {
-  font-size: 1.4rem;
-}
-
-#statBox {
-  border: 2px solid black;
-  border-radius: 6px;
-  padding: 0px 5px;
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
 #statsDashboard {
   display: flex;
   justify-content: flex-start;
@@ -151,6 +126,7 @@
   padding-bottom: 1px;
   /* or margin-bottom: 50px; */
 }
+
 
 
 
