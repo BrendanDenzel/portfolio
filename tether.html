@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Tether — Dizz Studios</title>
+  <meta name="description" content="Live camera tethering for Sony A7 III — Dizz Studios">
+  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+  <link rel="stylesheet" href="/dist/output.css" />
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Fancybox -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'signika': ['Signika', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fade-in { animation: fadeIn 0.5s ease forwards; }
+
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .live-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+
+    .thumb-item { transition: transform 0.3s ease; }
+    .thumb-item:hover { transform: scale(1.05); }
+
+#fsOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+#fsOverlay.active { display: flex; }
+#fsOverlay img {
+  max-width: 100vw;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* bottom-right logo pill */
+#fsLogo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 5px 12px;
+}
+#fsLogo span {
+  font-family: 'Signika', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+/* bottom-left shot count */
+#fsShotCount {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  pointer-events: none;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-family: 'Signika', sans-serif;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+/* top-right time */
+#fsTime {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  pointer-events: none;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-family: 'Signika', sans-serif;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+#fsCloseBtn {
+  position: fixed;
+  top: 18px;
+  left: 22px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+#fsCloseBtn:hover { background: rgba(255,255,255,0.25); }
+    #fsBtn {
+      margin-top: 10px;
+      display: none;
+    }
+    #fsBtn.visible { display: inline-flex; }
+  </style>
+</head>
+
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+
+  <!-- ───────── NAVBAR (matches your existing pages) ───────── -->
+  <header class="flex w-full overflow-hidden pt-10 pb-1">
+    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+
+        <!-- Desktop Logo -->
+        <div class="hidden md:flex items-center">
+          <a href="/"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;"></a>
+          <a href="/"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;"></a>
+          <div class="ml-1">
+            <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
+          </div>
+        </div>
+
+        <!-- Mobile Logo -->
+        <div class="flex md:hidden items-center">
+          <a href="/"><img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;"></a>
+          <a href="/"><img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;"></a>
+        </div>
+
+        <!-- Contact Button -->
+        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
+          <a href="https://www.instagram.com/dizzstudios/"
+             target="_blank"
+             class="font-signika text-xl px-1.5 py-0.4 bg-black text-white dark:bg-white dark:text-black dark:border dark:border-black rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
+            CONTACT
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <div class="ml-auto md:hidden flex items-center justify-start">
+          <button onclick="menuToggle()" @click="open = !open"
+            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none">
+            <span class="sr-only">Open main menu</span>
+            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'opacity-0': open }"></span>
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Nav Links -->
+        <div id="menu" class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
+          <ul id="ulMenu" class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
+            <li class="group transition duration-300">
+              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent">PRICES
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/tether" class="font-signika text-2xl tap-highlight-transparent">LIVE TETHER
+                <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ───────── MAIN CONTENT ───────── -->
+  <div class="container mx-auto">
+    <h1 class="text-4xl pt-10 pb-3 font-bold font-signika">LIVE TETHER</h1>
+
+    <!-- Status / Connect bar -->
+    <div class="flex items-center gap-3 flex-wrap mb-6">
+      <!-- Live indicator dot -->
+      <span id="liveDot" class="inline-block w-3 h-3 rounded-full bg-gray-300 dark:bg-neutral-600"></span>
+      <span id="statusText" class="font-signika text-lg">Not connected</span>
+
+      <!-- Shot counter (styled like your "Moments Captured" button) -->
+      <button
+        id="shotCountBtn"
+        class="border-2 border-black dark:border-white rounded-md px-2 py-0.5 font-signika font-bold text-lg dark:text-white hover:scale-105 transition-transform duration-200 focus:outline-none"
+        type="button"
+      >
+        <span id="shotCount">0 shots</span>
+      </button>
+
+      <!-- Connect button -->
+      <button
+        id="connectBtn"
+        onclick="connectFolder()"
+        class="font-signika font-bold text-lg px-4 py-1 bg-black text-white dark:bg-white dark:text-black rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition"
+      >
+        SELECT FOLDER
+      </button>
+
+      <!-- Browser warning (hidden once connected or if supported) -->
+      <span id="browserWarn" class="text-sm text-red-600 dark:text-red-400 hidden">
+        ⚠ Use Chrome or Edge — Firefox doesn't support folder watching.
+      </span>
+    </div>
+
+    <!-- Instructions -->
+    <p id="instructions" class="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-xl">
+      Point to your Sony A7 III's SD card folder (or the folder your tethering software saves to). 
+      New shots appear automatically every 1.5 seconds. <strong>Nothing is saved by this page.</strong>
+    </p>
+    
+
+    <!-- Latest Shot -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-2">
+        <p class="text-xs font-bold tracking-widest text-gray-500 dark:text-gray-400 font-signika">LATEST SHOT</p>
+        <button
+          id="fsBtn"
+          onclick="openFullscreen()"
+          class="font-signika font-bold text-sm px-3 py-0.5 bg-black text-white dark:bg-white dark:text-black rounded-md hover:bg-neutral-700 dark:hover:bg-neutral-200 transition"
+        >⛶ FULLSCREEN</button>
+      </div>
+      <div id="latestBox"
+        class="w-full max-w-3xl bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg overflow-hidden flex items-center justify-center"
+        style="aspect-ratio: 3/2;">
+        <p class="text-gray-400 dark:text-neutral-500 font-signika text-sm text-center px-8">
+          Your latest shot will appear here once you select a folder and start shooting.
+        </p>
+      </div>
+    </div>
+
+<div id="fsOverlay" onclick="closeFullscreen()">
+  <img id="fsImg" src="" alt="Fullscreen shot" />
+  <button id="fsCloseBtn" onclick="closeFullscreen()" title="Close">&#x2715;</button>
+  <div id="fsTime"></div>
+  <div id="fsShotCount"></div>
+  <div id="fsLogo">
+    <span>DIZZ STUDIOS</span>
+  </div>
+  <div id="fsDelay" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);pointer-events:none;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:5px 12px;font-family:'Signika',sans-serif;font-weight:400;font-size:0.95rem;color:#fff;letter-spacing:0.04em;white-space:nowrap;">
+  3 second preview delay
+</div>
+</div>
+
+    <hr class="border-gray-200 dark:border-neutral-800 mb-6">
+
+    <!-- Session Grid -->
+    <p class="text-2xl font-bold font-signika mb-4">THIS SESSION</p>
+
+    <section class="text-neutral-700 dark:text-neutral-300 pb-20">
+      <div id="grid" class="flex flex-wrap w-full">
+        <p id="emptyMsg" class="text-gray-400 dark:text-neutral-500 font-signika text-sm py-4">
+          No shots yet — start shooting!
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ───────── FOOTER (matches your existing pages) ───────── -->
+  <footer>
+    <div class="max-w-screen-xl py-16 mx-auto">
+      <div class="grid grid-cols-1 gap-8 text-center mx-auto">
+        <div>
+          <p class="font-signika text-xl"><b>BRENDAN DENZEL</b></p>
+          <div class="flex flex-col md:flex-row items-center justify-center mt-6 space-y-8 md:space-y-0 md:space-x-12">
+            <div class="text-center md:text-left">
+              <p class="text-sm text-gray-600 dark:text-gray-300">East Amherst, NY</p>
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Reach out through my Instagram below</p>
+              <div class="flex justify-center md:justify-start mt-4">
+                <a class="transition duration-300 hover:opacity-75" href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer">
+                  <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="w-[300px] h-[300px]">
+              <iframe
+                src="https://www.google.com/maps?q=Amherst,+NY&output=embed"
+                width="100%" height="100%" frameborder="0"
+                class="rounded-xl border-2 border-black"
+                allowfullscreen="">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fancybox init -->
+  <script>
+    Fancybox.bind("[data-fancybox='tether']", {});
+  </script>
+
+  <!-- Existing scripts -->
+  <script src="dist/fade_in.js"></script>
+  <script src="dist/menu.js?v=2"></script>
+
+  <!-- ───────── TETHER LOGIC ───────── -->
+  <script>
+    if (!('showDirectoryPicker' in window)) {
+      document.getElementById('browserWarn').classList.remove('hidden');
+    }
+
+    let dirHandle = null;
+    let watchInterval = null;
+    let seenFiles = new Set();
+    let allImages = [];
+
+    async function connectFolder() {
+      try {
+        dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+        const dot = document.getElementById('liveDot');
+        dot.classList.remove('bg-gray-300', 'dark:bg-neutral-600');
+        dot.classList.add('bg-green-500', 'live-dot');
+        document.getElementById('statusText').textContent = 'Watching: ' + dirHandle.name;
+        document.getElementById('connectBtn').textContent = 'CHANGE FOLDER';
+        document.getElementById('connectBtn').classList.remove('bg-black', 'text-white', 'dark:bg-white', 'dark:text-black');
+        document.getElementById('connectBtn').classList.add('bg-white', 'text-black', 'border-2', 'border-black', 'dark:bg-black', 'dark:text-white', 'dark:border-white');
+        seenFiles.clear();
+        allImages.forEach(function(img) { URL.revokeObjectURL(img.objectURL); });
+        allImages = [];
+        renderGrid();
+        await scanFolder();
+        if (watchInterval) clearInterval(watchInterval);
+        watchInterval = setInterval(scanFolder, 1500);
+      } catch (err) {}
+    }
+
+    async function extractJpegFromArw(file) {
+  const buffer = await file.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+
+  // Search for the largest JPEG embedded in the file
+  // Sony ARW files contain multiple JPEGs (thumbnail + full preview)
+  // We want the last/largest one
+  let bestOffset = -1;
+  let bestLength = 0;
+
+  for (let i = 0; i < bytes.length - 4; i++) {
+    if (bytes[i] === 0xFF && bytes[i + 1] === 0xD8 &&
+        bytes[i + 2] === 0xFF &&
+       (bytes[i + 3] === 0xE0 || bytes[i + 3] === 0xE1 || bytes[i + 3] === 0xDB)) {
+
+      // Found a JPEG start — now find its end (FFD9)
+      let end = -1;
+      for (let j = i + 2; j < bytes.length - 1; j++) {
+        if (bytes[j] === 0xFF && bytes[j + 1] === 0xD9) {
+          end = j + 2;
+          break;
+        }
+      }
+      if (end !== -1) {
+        const length = end - i;
+        if (length > bestLength) {
+          bestLength = length;
+          bestOffset = i;
+        }
+      }
+    }
+  }
+
+  if (bestOffset === -1) return null;
+
+  const jpegBytes = bytes.slice(bestOffset, bestOffset + bestLength);
+  const blob = new Blob([jpegBytes], { type: 'image/jpeg' });
+  return URL.createObjectURL(blob);
+}
+
+async function scanFolder() {
+  if (!dirHandle) return;
+  let newFound = false;
+  for await (const [name, handle] of dirHandle.entries()) {
+    if (handle.kind !== 'file') continue;
+    if (seenFiles.has(name)) continue;
+    if (!/\.(jpg|jpeg|png|webp|arw|nef|cr2|cr3|heic|heif)$/i.test(name)) continue;
+    seenFiles.add(name);
+    const file = await handle.getFile();
+
+    let objectURL;
+    if (/\.arw$/i.test(name)) {
+      objectURL = await extractJpegFromArw(file);
+      if (!objectURL) {
+        // Couldn't extract — skip this file
+        seenFiles.delete(name);
+        continue;
+      }
+    } else {
+      objectURL = URL.createObjectURL(file);
+    }
+
+    allImages.unshift({ name, objectURL, time: file.lastModified });
+    newFound = true;
+  }
+  if (newFound) renderGrid();
+}
+
+    function renderGrid() {
+      const count = allImages.length;
+      document.getElementById('shotCount').textContent = count + (count === 1 ? ' shot' : ' shots');
+
+      const latestBox = document.getElementById('latestBox');
+      if (count > 0) {
+        const latest = allImages[0];
+        const a = document.createElement('a');
+        a.href = latest.objectURL;
+        a.setAttribute('data-fancybox', 'tether');
+        a.setAttribute('data-caption', latest.name);
+        const img = document.createElement('img');
+        img.src = latest.objectURL;
+        img.alt = 'Latest: ' + latest.name;
+        img.className = 'block w-full h-full object-contain opacity-0 animate-fade-in transition duration-500';
+        img.style.maxHeight = '600px';
+        a.appendChild(img);
+        latestBox.innerHTML = '';
+        latestBox.appendChild(a);
+        document.getElementById('fsBtn').classList.add('visible');
+        document.getElementById('fsImg').src = latest.objectURL;
+      }
+
+      const grid = document.getElementById('grid');
+      const emptyMsg = document.getElementById('emptyMsg');
+      if (count === 0) {
+        emptyMsg.style.display = '';
+        grid.innerHTML = '';
+        grid.appendChild(emptyMsg);
+        return;
+      }
+      emptyMsg.style.display = 'none';
+      grid.innerHTML = allImages.map(function(img) {
+        return '<div class="w-full md:w-1/4 p-1 thumb-item">'
+          + '<div class="overflow-hidden aspect-square w-full">'
+          + '<a href="' + img.objectURL + '" data-fancybox="tether" data-caption="' + img.name + '">'
+          + '<img src="' + img.objectURL + '" alt="' + img.name + '" loading="lazy"'
+          + ' class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110" />'
+          + '</a></div></div>';
+      }).join('');
+      Fancybox.bind("[data-fancybox='tether']", {});
+    }
+
+let fsClockInterval = null;
+
+function updateFsClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  const el = document.getElementById('fsTime');
+  if (el) el.textContent = h + ':' + m + ':' + s;
+}
+
+function openFullscreen() {
+  if (allImages.length === 0) return;
+  document.getElementById('fsImg').src = allImages[0].objectURL;
+
+  const count = allImages.length;
+  document.getElementById('fsShotCount').textContent = count + (count === 1 ? ' shot' : ' shots');
+
+  const overlay = document.getElementById('fsOverlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  updateFsClock();
+  fsClockInterval = setInterval(updateFsClock, 1000);
+
+  if (overlay.requestFullscreen) overlay.requestFullscreen();
+  else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
+}
+
+function closeFullscreen() {
+  document.getElementById('fsOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  clearInterval(fsClockInterval);
+  if (document.fullscreenElement) document.exitFullscreen();
+  else if (document.webkitFullscreenElement) document.webkitExitFullscreen();
+}
+
+document.addEventListener('fullscreenchange', function() {
+  if (!document.fullscreenElement) {
+    document.getElementById('fsOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    clearInterval(fsClockInterval);
+  }
+});
+
+function closeFullscreen() {
+  document.getElementById('fsOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+
+  // Exit browser fullscreen if active
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else if (document.webkitFullscreenElement) {
+    document.webkitExitFullscreen();
+  }
+}
+
+    document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeFullscreen();
+});
+
+// Sync overlay state when browser exits fullscreen natively (e.g. pressing F11 or Esc)
+document.addEventListener('fullscreenchange', function() {
+  if (!document.fullscreenElement) {
+    document.getElementById('fsOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+  </script>
+
+</body>
+</html>
