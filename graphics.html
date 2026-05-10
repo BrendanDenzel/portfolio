@@ -2,49 +2,27 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
-  <meta name="robots" content="noindex">
   <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dizz Studios - Graphics</title>
-  <meta name="description"
-    content="Im a 16 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
+  <title>Graphics - Dizz Studios</title>
+  <meta name="description" content="Im a 17 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
-  <link rel="stylesheet" href="/dist/output.css" />
-  <link rel="stylesheet" href="styles.css" />
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <!-- Start - Fonts -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
-  <!-- End - Fonts -->
-  <!-- Start - Fancybox Scripts -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Fancybox -->
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-  <!-- End - Fancybox Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      content: ["./dist/*.{html,js}"],
-      theme: {
-        extend:
-                {
-                  fontFamily: {
-                    'nothingyoucoulddo': ['Nothing You Could Do', 'cursive'],
-                    'signika': ['Signika', 'sans-serif'],
-                  },
-                },
-      },
-      plugins: [],
-    }
-  </script>
-</head>
-<script>
     tailwind.config = {
       content: ["./dist/*.{html,js}"],
       theme: {
@@ -306,6 +284,36 @@
   transform: scale(1);
 }
 
+  /* ── GALLERY ── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 20px;
+  }
+  @media (min-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+  .gallery-grid .tall {
+    grid-row: span 2;
+  }
+  .gallery-item {
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+  }
+  .gallery-item.tall {
+    aspect-ratio: unset;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    display: block;
+    transition: transform .5s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+
   /* ── FOOTER ── */
   footer {
     background: #f9f8f8;
@@ -324,7 +332,6 @@
   
   footer { background: #0e0e0e; color: rgba(255,255,255,.6);}
 }
-
 </style>
 </head>
 <body>
@@ -374,63 +381,33 @@
     </div>
   </div>
 </nav>
-  <!-- Content -->
-  <div class="container mx-auto">
-  <h1 class="text-4xl pt-10 pb-3 font-bold">GRAPHICS</h1>
-  <section class="text-neutral-700">
-    <div class="container w-full">
-      <div class="flex flex-wrap w-full">
-        <div class="flex w-full md:w-1/2 flex-wrap">
-          <div class="w-full md:w-1/2 p-1">
-            <div class="overflow-hidden h-full w-full">
-              <a href="dist/assets/graphic-1.PNG" data-fancybox="gallery">
-                <img
-                  alt="Graphic 1"
-                  class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                  src="dist/assets/graphic-1.PNG"
-                />
-              </a>
-            </div>
-          </div>
-          <div class="w-full md:w-1/2 p-1">
-            <div class="overflow-hidden h-full w-full">
-              <a href="dist/assets/graphic-2.PNG" data-fancybox="gallery">
-                <img
-                  alt="Graphic 2"
-                  class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                  src="dist/assets/graphic-2.PNG"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="flex w-full md:w-1/2 flex-wrap">
-          <div class="w-full md:w-1/2 p-1">
-            <div class="overflow-hidden h-full w-full">
-              <a href="dist/assets/graphic-3.PNG" data-fancybox="gallery">
-                <img
-                  alt="Graphic 3"
-                  class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                  src="dist/assets/graphic-3.PNG"
-                />
-              </a>
-            </div>
-          </div>
-          <div class="w-full md:w-1/2 p-1">
-            <div class="overflow-hidden h-full w-full">
-              <a href="dist/assets/graphic-4.PNG" data-fancybox="gallery">
-                <img
-                  alt="Graphic 4"
-                  class="block h-full w-full object-cover object-center opacity-0 animate-fade-in transition duration-500 transform scale-100 hover:scale-110"
-                  src="dist/assets/graphic-4.PNG"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="page-content">
+  <h1 class="text-4xl pt-4 pb-3 font-bold reveal-left">MY GRAPHICS</h1>
+  <!-- GALLERY GRID -->
+  <div class="gallery-grid">
+    <div class="gallery-item tall reveal-scale">
+      <a href="dist/assets/graphic-1.png" data-fancybox="gallery">
+        <img alt="Image 1" src="dist/assets/graphic-1.png" />
+      </a>
     </div>
-  </section>
+    <div class="gallery-item tall reveal-scale">
+      <a href="dist/assets/graphic-2.png" data-fancybox="gallery">
+        <img alt="Image 2" src="dist/assets/graphic-2.png" />
+      </a>
+    </div>
+    <div class="gallery-item tall reveal-scale">
+      <a href="dist/assets/graphic-3.png" data-fancybox="gallery">
+        <img alt="Image 3" src="dist/assets/graphic-3.png" />
+      </a>
+    </div>
+    <div class="gallery-item tall reveal-scale">
+      <a href="dist/assets/graphic-4.png" data-fancybox="gallery">
+        <img alt="Image 4" src="dist/assets/graphic-4.png" />
+      </a>
+    </div>
+  
+      </div>
+</div>
 </div>
 
   <!-- FOOTER -->
