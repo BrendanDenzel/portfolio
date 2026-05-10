@@ -11,7 +11,6 @@
     content="Im a 16 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
-  <link rel="stylesheet" href="/dist/output.css" />
   <link rel="stylesheet" href="/counter/styles?v=2.css" />
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -43,100 +42,256 @@
     }
   </script>
 </head>
+<style>
+footer {
+  border-top: 2px solid #4fa8d8;
+}
+    /* ════ PAGE ════ */
+    #statBox {
+  border-color: #4fa8d8 !important;
+  color: #ffffff !important;
+}
+    .page {
+      max-width: 820px; margin: 0 auto;
+      padding: 56px 24px 96px;
+    }
+
+    .doc-label {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 5px;
+    }
+    .doc-brand {
+      font-size: .92rem; color: var(--text-muted); margin-bottom: 20px;
+    }
+    .doc-brand a { color: var(--accent); }
+
+    h1.page-title {
+      font-family: 'Barlow', sans-serif;
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+      font-weight: 700; letter-spacing: -.01em;
+      color: var(--heading); line-height: 1.2; margin-bottom: 12px;
+    }
+    .doc-meta { font-size: .84rem; color: var(--text-muted); margin-bottom: 36px; }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 22px; margin-bottom: 44px;
+      font-size: .96rem; color: var(--text);
+    }
+        /* ── SYSTEM DARK MODE ── */
+    :root {
+      --accent:       #4fa8d8;
+      --accent-dim:   rgba(79,168,216,.13);
+      --radius:       11px;
+      --transition:   .2s ease;
+
+      --bg:           #ffffff;
+      --bg-subtle:    #f4f7fb;
+      --border:       #e2e8f0;
+      --text:         #111827;
+      --text-muted:   #6b7280;
+      --heading:      #0f172a;
+      --nav-bg:       #111111;
+      --shadow:       0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:           #111111;
+        --bg-subtle:    #1c1c1c;
+        --border:       #2e2e2e;
+        --text:         #e2e8f0;
+        --text-muted:   #8899b0;
+        --heading:      #f0f4f8;
+        --shadow:       0 1px 4px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.28);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.72;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* scroll progress */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); width: 0%; z-index: 300;
+      transition: width .1s linear;
+    }
+
+    /* ════ NAV ════ */
+    nav {
+      background: var(--nav-bg);
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px; height: 68px;
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .nav-brand { display: flex; align-items: center; gap: 6px; }
+    .nav-logo-light { display: block; }
+    .nav-logo-dark  { display: none;  }
+    @media (prefers-color-scheme: dark) {
+      .nav-logo-light { display: none;  }
+      .nav-logo-dark  { display: block; }
+    }
+    .nav-logo-light img,
+    .nav-logo-dark  img { height: 36px; width: auto; display: block; }
+
+    .nav-wordmark {
+      font-family: 'Signika', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #fff; letter-spacing: .04em; white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+      list-style: none; margin-left: 20px;
+    }
+    .nav-links a {
+      font-family: 'Signika', sans-serif;
+      font-size: .87rem; font-weight: 600; letter-spacing: .04em;
+      color: rgba(255,255,255,.72);
+      padding: 6px 12px; border-radius: 6px;
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: ''; position: absolute;
+      left: 12px; right: 12px; bottom: 3px;
+      height: 1.5px; background: #fff;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-right {
+      display: flex; align-items: center; gap: 12px; margin-left: auto;
+    }
+    .nav-insta {
+      color: rgba(255,255,255,.7); display: flex; align-items: center;
+      padding: 6px; border-radius: 6px; transition: color var(--transition);
+    }
+    .nav-insta:hover { color: #fff; }
+    .nav-insta svg { width: 19px; height: 19px; }
+
+    .btn-book {
+      font-family: 'Signika', sans-serif;
+      font-size: .85rem; font-weight: 700; letter-spacing: .05em;
+      background: #fff; color: #111;
+      padding: 7px 18px; border-radius: 7px; white-space: nowrap;
+      transition: background var(--transition);
+    }
+    .btn-book:hover { background: #e2e8f0; }
+
+    /* hamburger */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 30px; height: 30px;
+      background: none; border: none; cursor: pointer; padding: 2px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: transform .35s ease, opacity .25s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* mobile drawer */
+    .mobile-menu {
+      display: none;
+      background: #1a1a1a;
+      border-top: 1px solid rgba(255,255,255,.07);
+      max-height: 0; overflow: hidden;
+      transition: max-height .38s ease;
+    }
+    .mobile-menu.open { max-height: 320px; }
+    .mobile-menu ul { list-style: none; padding: 12px 0 8px; }
+    .mobile-menu li a {
+      font-family: 'Signika', sans-serif;
+      font-size: 1rem; font-weight: 600; letter-spacing: .06em;
+      color: rgba(255,255,255,.8);
+      display: block; padding: 10px 28px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .mobile-menu li a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .mobile-book { padding: 10px 28px 18px; }
+    .mobile-book-btn {
+      font-family: 'Signika', sans-serif;
+      font-size: .9rem; font-weight: 700; letter-spacing: .05em;
+      background: #fff; color: #111;
+      border-radius: 7px; padding: 9px 22px;
+      display: inline-block; transition: background var(--transition);
+    }
+    .mobile-book-btn:hover { background: #e2e8f0; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: block; }
+    }
+</style>
 
 
-<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
-  <!-- Navbar -->
-  <header class="flex w-full overflow-hidden pt-10 pb-1">
-    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
-      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+<div id="progress"></div>
 
-        <!-- Desktop Logo + Text -->
-<div class="hidden md:flex items-center">
-  <!-- Light Mode Logo -->
-  <a href="/"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;"></a>
-  <!-- Dark Mode Logo -->
-  <a href="/"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;"></a>
-  <!-- Text -->
-  <div class="ml-1">
-    <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="nav-logo-light"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" /></span>
+      <span class="nav-logo-dark"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" /></span>
+      <span class="nav-wordmark">DIZZ STUDIOS</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="nav-insta" aria-label="Instagram">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="btn-book">BOOK / CONTACT</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-</div>
 
-<!-- Mobile Logo Only -->
-<div class="flex md:hidden items-center">
-  <!-- Light Mode Mobile Logo -->
-  <a href="/"><img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;"></a>
-  <!-- Dark Mode Mobile Logo -->
-  <a href="/"><img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;"></a>
-</div>
-        
-
-        <!-- Contact Link -->
-        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
-  <a href="https://www.instagram.com/dizzstudios/" 
-     target="_blank" 
-     class="font-signika text-xl px-1.5 py-0.4
-            bg-black text-white 
-            dark:bg-white dark:text-black 
-            dark:border dark:border-black 
-            rounded-md 
-            hover:bg-neutral-800 dark:hover:bg-neutral-200 
-            transition">
-    CONTACT
-  </a>
-</div>
-
-        <div class="ml-auto md:hidden flex items-center justify-start">
-          <button onclick="menuToggle()" @click="open = !open"
-            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
-            @click="open = !open">
-            <span class="sr-only">Open main menu</span>
-            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <span aria-hidden="true"
-                class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
-                :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
-              <span aria-hidden="true"
-                class="block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out"
-                :class="{'opacity-0': open } "></span>
-              <span aria-hidden="true"
-                class="block absolute h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out"
-                :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
-            </div>
-          </button>
-        </div>
-        <div id="menu"
-          class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
-          <ul id="ulMenu"
-            class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
-            <li class="group transition duration-300">
-              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
-                <span class="hidden md:block h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent">PRICES
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
-                <span
-                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+    <div class="mobile-book">
+      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="mobile-book-btn">BOOK / CONTACT</a>
+    </div>
+  </div>
+</nav>
   <!-- Content -->
   <div class="container mx-auto">
     <h1 class="text-4xl pt-10 pb-3 font-bold">PHOTOGRAPHS</h1>
@@ -343,48 +498,51 @@
       </div>
     </section>
   </div>
-  <!-- Footer -->
-  <footer>
-    <div class="max-w-screen-xl py-16 mx-auto">
-      <div class="grid grid-cols-1 gap-8 text-center mx-auto">
-        <div>
-          <p class="font-signika text-xl"><b>BRENDAN DENZEL</b></p>
-          <!-- New flex container for text + map -->
-          <div class="flex flex-col md:flex-row items-center justify-center mt-6 space-y-8 md:space-y-0 md:space-x-12">
-            <!-- Text section -->
-            <div class="text-center md:text-left">
-              <p class="text-sm text-gray-600 dark:text-gray-300">East Amherst, NY</p>
-              <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                Reach out through my Instagram below
-              </p>
-              <!-- Instagram icon -->
-              <div class="flex justify-center md:justify-start mt-4">
-                <a class="transition duration-300 hover:opacity-75" href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer">
-                  <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-  
-            <!-- Map section -->
-            <div class="w-[300px] h-[300px]">
-              <iframe
-                src="https://www.google.com/maps?q=Amherst,+NY&output=embed"
-                width="100%" height="100%" frameborder="0"
-                class="rounded-xl border-2 border-black"
-                allowfullscreen="">
-              </iframe>
-            </div>
-            
-            
+  <script>
+  // scroll progress
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    document.getElementById('progress').style.width =
+      (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
 
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  // hamburger toggle
+  const ham  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('click', e => {
+    if (!ham.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.remove('open');
+      ham.classList.remove('open');
+      ham.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+        /* ════ FOOTER ════ */
+    footer {
+      background: #111111;
+      color: rgba(255,255,255,.6);
+      font-size: .82rem;
+      padding: 28px 32px;
+      text-align: center;
+      font-family: 'Barlow', sans-serif;
+      margin-top: 64px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+  <footer>
+  <p>© 2025–2026 Dizz Studios &nbsp;·&nbsp; <a href="https://www.dizzstudios.org">www.dizzstudios.org</a> &nbsp;·&nbsp; Buffalo / Williamsville, NY</p>
+  <p style="margin-top: 8px;">
+    <a href="/client-agreement">Client Agreement &amp; Privacy Policy</a>
+  </p>
+</footer>
 
   <!-- Script for the LightBox -->
   <script>
