@@ -1,413 +1,516 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-
 <head>
   <meta name="robots" content="noindex">
-  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dizz Studios</title>
-  <meta name="description"
-    content="Im a 7 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
-  <link rel="stylesheet" href="/dist/output.css" />
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Alpine.js -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <!-- Start - Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <title>Prices - Dizz Studios</title>
+  <meta name="description" content="Photography pricing for Dizz Studios — high school sports photos and graphics based out of Amherst, NY.">
+  <link rel="icon" type="image/x-icon" href="/dist/assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
-  <!-- End - Fonts -->
-  <!-- Start - Fancybox Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-  <!-- End - Fancybox Scripts -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      content: ["./dist/*.{html,js}"],
-      theme: {
-        extend: {
-          fontFamily: {
-            'nothingyoucoulddo': ['Nothing You Could Do', 'cursive'],
-            'signika': ['Signika', 'sans-serif'],
-          },
-        },
-      },
-      plugins: [],
-    }
-  </script>
-<style>
-#loader {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: loaderFade .4s ease 1.8s forwards;
-}
-#loader.skip {
-  display: none !important;
-}
-.no-loader #loader {
-  display: none !important;
-}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-#loader-logo {
-  width: 120px;
-  animation: logoAnim 1.4s ease forwards;
-}
-
-@keyframes logoAnim {
-  0%   { transform: scale(0.6); opacity: 0; }
-  40%  { transform: scale(1.1); opacity: 1; }
-  70%  { transform: scale(1);   opacity: 1; }
-  85%  { transform: scale(1);   opacity: 1; }
-  100% { transform: scale(8);   opacity: 0; }
-}
-
-@keyframes loaderFade {
-  to { opacity: 0; pointer-events: none; }
-}
-  /* ── CSS VARIABLES ── */
-  :root {
-    --accent:     #4fa8d8;
-    --accent-dim: rgba(79,168,216,.13);
-    --radius:     11px;
-    --transition: .2s ease;
-    --bg:         #ffffff;
-    --bg-subtle:  #f4f7fb;
-    --border:     #e2e8f0;
-    --text:       #111827;
-    --text-muted: #6b7280;
-    --heading:    #0f172a;
-    --nav-bg:     #0b0b0b;
-  }
-  @media (prefers-color-scheme: dark) {
     :root {
-      --bg:         #111111;
-      --bg-subtle:  #1c1c1c;
-      --border:     #2e2e2e;
-      --text:       #e2e8f0;
-      --text-muted: #8899b0;
-      --heading:    #f0f4f8;
-    }
-  }
+      --accent:       #4fa8d8;
+      --accent-dim:   rgba(79,168,216,0.12);
+      --accent-glow:  rgba(79,168,216,0.25);
+      --radius:       12px;
+      --transition:   0.22s ease;
+      --nav-bg:       #0b0b0b;
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Barlow', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.72;
-    transition: background var(--transition), color var(--transition);
-  }
-  a { color: inherit; text-decoration: none; }
-
-  /* scroll progress */
-  #progress {
-    position: fixed; top: 0; left: 0; height: 3px;
-    background: var(--accent); width: 0%; z-index: 300;
-    transition: width .1s linear;
-  }
-
-  /* ── NAV ── */
-  nav {
-    background: var(--nav-bg);
-    position: sticky; top: 0; z-index: 200;
-    border-bottom: 1px solid rgba(255,255,255,.05);
-  }
-.nav-inner {
-  max-width: 1200px; margin: 0 auto;
-  padding: 0 28px; height: 68px;
-  display: flex; align-items: center; gap: 16px;
-}
-.nav-brand { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-right: auto; }
-  .nav-wordmark {
-    font-family: 'Signika', sans-serif;
-    font-size: 1.2rem; font-weight: 700;
-    color: #fff; letter-spacing: .04em; white-space: nowrap;
-  }
-  .nav-links {
-    display: flex; align-items: center; gap: 2px;
-    list-style: none; margin-left: 20px;
-  }
-  .nav-links a {
-    font-family: 'Signika', sans-serif;
-    font-size: .87rem; font-weight: 600; letter-spacing: .04em;
-    color: rgba(255,255,255,.72);
-    padding: 6px 12px; border-radius: 6px;
-    position: relative; transition: color var(--transition);
-  }
-  .nav-links a::after {
-    content: ''; position: absolute;
-    left: 12px; right: 12px; bottom: 3px;
-    height: 1.5px; background: #fff;
-    transform: scaleX(0); transform-origin: left;
-    transition: transform .35s ease;
-  }
-  .nav-links a:hover { color: #fff; }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
-  .nav-insta {
-    color: rgba(255,255,255,.7); display: flex; align-items: center;
-    padding: 6px; border-radius: 6px; transition: color var(--transition);
-  }
-  .nav-insta:hover { color: #fff; }
-  .nav-insta svg { width: 19px; height: 19px; }
-  .btn-book {
-    font-family: 'Signika', sans-serif;
-    font-size: .85rem; font-weight: 700; letter-spacing: .05em;
-    background: #fff; color: #111;
-    padding: 7px 18px; border-radius: 7px; white-space: nowrap;
-    transition: background var(--transition);
-  }
-  .btn-book:hover { background: #e2e8f0; }
-
-  .mobile-close {
-  position: absolute;
-  top: 24px; right: 28px;
-  background: none; border: none;
-  color: rgba(255,255,255,.7);
-  font-size: 1.6rem;
-  cursor: pointer;
-  transition: color var(--transition);
-  line-height: 1;
-}
-.mobile-close:hover { color: #fff; }
-  /* hamburger */
-  .hamburger {
-    display: none; flex-direction: column; justify-content: center;
-    gap: 5px; width: 30px; height: 30px;
-    background: none; border: none; cursor: pointer; padding: 2px;
-  }
-  .hamburger span {
-    display: block; width: 22px; height: 2px;
-    background: #fff; border-radius: 2px;
-    transition: transform .35s ease, opacity .25s ease;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-  /* mobile drawer */
- .mobile-menu {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #0b0b0b;
-  z-index: 199;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity .35s ease, transform .35s ease;
-  pointer-events: none;
-}
-.mobile-menu.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: all;
-}
-.mobile-menu ul {
-  list-style: none;
-  padding: 0;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.mobile-menu li a {
-  font-family: 'Signika', sans-serif;
-  font-size: 2rem; font-weight: 700; letter-spacing: .08em;
-  color: rgba(255,255,255,.8);
-  display: block; padding: 14px 28px;
-  transition: color var(--transition);
-}
-.mobile-menu li a:hover { color: #4fa8d8; }
-.mobile-book { padding: 24px 28px 0; text-align: center; }
-.mobile-book-btn {
-  font-family: 'Signika', sans-serif;
-  font-size: 1rem; font-weight: 700; letter-spacing: .05em;
-  background: #fff; color: #111;
-  border-radius: 7px; padding: 12px 32px;
-  display: inline-block; transition: background var(--transition);
-}
-.mobile-book-btn:hover { background: #e2e8f0; }
-
-@media (max-width: 768px) {
-  .nav-links, .nav-right { display: none; }
-  .hamburger { display: flex; }
-  .mobile-menu { display: flex; }
-}
-
-  /* ── PAGE CONTENT ── */
-  .page-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 20px 0;
-  }
-  @media (min-width: 768px) {
-    .page-content { padding: 40px 28px 0; }
-  }
-
-  .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-24px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-.reveal-scale {
-  opacity: 0;
-  transform: scale(.96);
-  transition: opacity .5s ease, transform .5s ease;
-}
-.reveal-scale.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-  /* ── FOOTER ── */
-  footer {
-    background: #f9f8f8;
-    color: rgba(0, 0, 0, 0.6);
-    font-size: .82rem;
-    padding: 28px 32px;
-    text-align: center;
-    font-family: 'Barlow', sans-serif;
-    margin-top: 64px;
-    border-top: 1px dashed rgba(15, 158, 236, 1);
-  }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
-
-@media (prefers-color-scheme: dark) {
-  
-  footer { background: #0e0e0e; color: rgba(255,255,255,.6);}
-}
-
-</style>
-
- <style>
-    .pricing-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .card {
-      background-color: var(--card-bg, #f5f5f5);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 320px;
-      width: 100%;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-header, .card-subtitle {
-      background-color: #111;
-      color: #fff;
-      text-align: center;
-      padding: 12px;
-      font-weight: 600;
-    }
-
-    .card-price {
-      font-size: 22px;
-      text-align: center;
-      padding: 12px;
-      font-weight: 600;
-    }
-
-    .card ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .card li {
-      padding: 12px;
-      text-align: center;
-      border-top: 1px solid #ccc;
-    }
-
-    .card-actions {
-      padding: 16px;
-      text-align: center;
-    }
-
-    .button, .example-button {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .button {
-      background-color: #111;
-      color: #fff;
-    }
-
-    .example-button {
-      background: transparent;
-      color: #000;
-      border: 1px solid #000;
-    }
-
-    .example-button:hover {
-      background-color: #000;
-      color: #fff;
+      /* Light mode */
+      --bg:           #f8fafC;
+      --bg-subtle:    #ffffff;
+      --bg-card:      #ffffff;
+      --border:       #e2e8f0;
+      --text:         #1a202c;
+      --text-muted:   #64748b;
+      --heading:      #0f172a;
+      --shadow:       0 4px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 12px 40px rgba(79,168,216,0.18);
     }
 
     @media (prefers-color-scheme: dark) {
-      .card {
-        background-color: #1e1e1e;
-      }
-      .example-button {
-        color: #fff;
-        border-color: #fff;
-      }
-      .example-button:hover {
-        background-color: #fff;
-        color: #111;
+      :root {
+        --bg:           #0d0d0d;
+        --bg-subtle:    #141414;
+        --bg-card:      #1a1a1a;
+        --border:       #2a2a2a;
+        --text:         #e2e8f0;
+        --text-muted:   #7a8fa6;
+        --heading:      #f0f4f8;
+        --shadow:       0 4px 24px rgba(0,0,0,0.4);
+        --shadow-hover: 0 12px 40px rgba(79,168,216,0.2);
       }
     }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), #7ec8e3);
+      width: 0%; z-index: 500;
+      transition: width 0.08s linear;
+    }
+
+    /* ── LOADER ── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      animation: loaderFade 0.5s ease 1.8s forwards;
+    }
+    #loader.skip { display: none !important; }
+    .no-loader #loader { display: none !important; }
+    #loader-logo {
+      width: 110px;
+      animation: logoAnim 1.5s ease forwards;
+    }
+    @keyframes logoAnim {
+      0%   { transform: scale(0.5); opacity: 0; }
+      40%  { transform: scale(1.08); opacity: 1; }
+      75%  { transform: scale(1);   opacity: 1; }
+      100% { transform: scale(7);   opacity: 0; }
+    }
+    @keyframes loaderFade { to { opacity: 0; pointer-events: none; } }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--nav-bg);
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px; height: 68px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0; margin-right: auto;
+    }
+    .nav-wordmark {
+      font-family: 'Signika', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #fff; letter-spacing: 0.05em; white-space: nowrap;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.65);
+      padding: 6px 13px; border-radius: 6px;
+      position: relative; transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: ''; position: absolute;
+      left: 13px; right: 13px; bottom: 2px;
+      height: 1.5px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: #fff; }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-insta {
+      color: rgba(255,255,255,0.6); display: flex; align-items: center;
+      padding: 6px; border-radius: 6px; transition: color var(--transition);
+    }
+    .nav-insta:hover { color: #fff; }
+    .nav-insta svg { width: 19px; height: 19px; }
+
+    .btn-book {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
+      background: var(--accent); color: #fff;
+      padding: 8px 18px; border-radius: 7px; white-space: nowrap;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 2px 12px rgba(79,168,216,0.35);
+    }
+    .btn-book:hover {
+      background: #3d96c8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(79,168,216,0.5);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 30px; height: 30px;
+      background: none; border: none; cursor: pointer; padding: 2px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: transform 0.35s ease, opacity 0.25s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0b0b0b; z-index: 199;
+      flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; transform: translateY(-20px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+    }
+    .mobile-menu.open {
+      opacity: 1; transform: translateY(0);
+      pointer-events: all;
+    }
+    .mobile-close {
+      position: absolute; top: 24px; right: 28px;
+      background: none; border: none;
+      color: rgba(255,255,255,0.65); font-size: 1.6rem;
+      cursor: pointer; transition: color var(--transition); line-height: 1;
+    }
+    .mobile-close:hover { color: #fff; }
+    .mobile-menu ul { list-style: none; text-align: center; }
+    .mobile-menu li a {
+      font-family: 'Signika', sans-serif;
+      font-size: 2rem; font-weight: 700; letter-spacing: 0.07em;
+      color: rgba(255,255,255,0.75);
+      display: block; padding: 14px 28px;
+      transition: color var(--transition);
+    }
+    .mobile-menu li a:hover { color: var(--accent); }
+    .mobile-book { padding: 28px 28px 0; text-align: center; }
+    .mobile-book-btn {
+      font-family: 'Signika', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      background: var(--accent); color: #fff;
+      border-radius: 8px; padding: 12px 32px;
+      display: inline-block;
+      box-shadow: 0 4px 18px rgba(79,168,216,0.4);
+      transition: background var(--transition);
+    }
+    .mobile-book-btn:hover { background: #3d96c8; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      max-width: 1200px; margin: 0 auto;
+      padding: 64px 28px 0;
+      text-align: center;
+    }
+    .page-hero-label {
+      display: inline-block;
+      font-family: 'Signika', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(79,168,216,0.3);
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .page-hero h1 {
+      font-family: 'Signika', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .page-hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 480px; margin: 0 auto;
+    }
+
+    /* ── PROMO CODE ── */
+    .promo-wrap {
+      max-width: 1200px; margin: 36px auto 0;
+      padding: 0 28px;
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 8px;
+    }
+    .promo-label {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .promo-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .promo-input {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem; font-weight: 500;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      width: 180px;
+    }
+    .promo-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    .promo-input::placeholder { color: var(--text-muted); }
+    .promo-btn {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em;
+      background: var(--heading);
+      color: #fff; /* forced white for contrast in both modes */
+      padding: 8px 18px; border-radius: 8px; border: none;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    @media (prefers-color-scheme: dark) {
+      .promo-btn { background: #fff; color: #111; }
+    }
+    .promo-btn:hover { opacity: 0.82; transform: scale(1.03); }
+    #statusMessage {
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--text-muted);
+      opacity: 0; height: 0; overflow: hidden;
+      transition: opacity 0.3s ease, height 0.3s ease;
+    }
+    #statusMessage.visible {
+      opacity: 1; height: auto;
+    }
+
+    /* ── PRICING GRID ── */
+    .pricing-section {
+      max-width: 1200px; margin: 48px auto 0;
+      padding: 0 28px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #7ec8e3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(79,168,216,0.3);
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-header {
+      background: #111;
+      color: #fff;
+      font-family: 'Signika', sans-serif;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center;
+      padding: 14px 16px 6px;
+    }
+    .card-subtitle {
+      background: #111;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.04em;
+      text-align: center;
+      padding: 0 16px 14px;
+    }
+    .card-price {
+      font-family: 'Signika', sans-serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--heading);
+      text-align: center;
+      padding: 22px 16px 14px;
+      line-height: 1;
+    }
+    .card-price .price-new {
+      font-size: 2.2rem;
+      color: var(--accent);
+    }
+    .card-price .price-original.struck {
+      color: #e53e3e;
+      text-decoration: line-through;
+      font-size: 1.4rem;
+    }
+
+    .card-features {
+      list-style: none;
+      flex: 1;
+      border-top: 1px solid var(--border);
+    }
+    .card-features li {
+      padding: 11px 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-features li:last-child { border-bottom: none; }
+    .card-features li::before {
+      content: '';
+      display: block; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* highlight/featured card */
+    .card.featured {
+      border-color: rgba(79,168,216,0.4);
+    }
+    .card.featured::before { opacity: 1; }
+
+    .card-actions {
+      padding: 18px 18px 20px;
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    }
+    .btn-card {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
+      padding: 9px 18px; border-radius: 7px;
+      transition: all 0.2s ease;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(79,168,216,0.3);
+    }
+    .btn-primary:hover {
+      background: #3d96c8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(79,168,216,0.45);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── FOOTNOTES ── */
+    .footnotes {
+      max-width: 640px; margin: 32px auto 0;
+      padding: 0 28px;
+      text-align: center;
+    }
+    .footnotes p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .footnotes p:last-child { margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 80px;
+      border-top: 1px dashed rgba(79,168,216,0.5);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      padding: 28px 32px;
+      text-align: center;
+      font-family: 'Barlow', sans-serif;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 6px; }
+
+    @media (max-width: 560px) {
+  .promo-wrap {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* staggered card delays */
+    .card:nth-child(1) { transition-delay: 0.05s; }
+    .card:nth-child(2) { transition-delay: 0.12s; }
+    .card:nth-child(3) { transition-delay: 0.19s; }
+    .card:nth-child(4) { transition-delay: 0.26s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 560px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .page-hero { padding: 44px 20px 0; }
+      .pricing-section { padding: 0 16px; }
+      .promo-wrap { padding: 0 16px; }
+      .promo-input { width: 150px; }
+    }
   </style>
-	
 </head>
+
 <body>
 <script>
   if (sessionStorage.getItem('siteVisited')) {
@@ -415,8 +518,10 @@
   }
 </script>
 
+<!-- Scroll Progress -->
 <div id="progress"></div>
-  <!-- NAV -->
+
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-brand">
@@ -426,7 +531,7 @@
     <ul class="nav-links">
       <li><a href="/">PHOTOGRAPHS</a></li>
       <li><a href="/graphics">GRAPHICS</a></li>
-      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/prices" class="active">PRICES</a></li>
       <li><a href="/dist/about">ABOUT ME</a></li>
     </ul>
     <div class="nav-right">
@@ -435,12 +540,13 @@
           <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
         </svg>
       </a>
-      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="btn-book">BOOK / CONTACT</a>
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="btn-book">BOOK / CONTACT</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
+
   <div class="mobile-menu" id="mobileMenu">
     <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
     <ul>
@@ -450,357 +556,256 @@
       <li><a href="/dist/about">ABOUT ME</a></li>
     </ul>
     <div class="mobile-book">
-      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="mobile-book-btn">BOOK / CONTACT</a>
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="mobile-book-btn">BOOK / CONTACT</a>
     </div>
   </div>
 </nav>
-<!-- Main Content -->
-  <main class="px-5 md:px-20 pt-10">
-    <h1 class="text-4xl font-bold text-center">PRICES</h1>
 
-<style>
+<!-- PAGE HERO -->
+<header class="page-hero reveal">
+  <div class="page-hero-label">Dizz Studios</div>
+  <h1>PRICING</h1>
+  <p>Prices will vary; take this as a starting point.</p>
+</header>
 
-  .promo-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-
-  .promo-input {
-    border: 2px solid #000;
-    border-radius: 12px;
-    padding: 6px 10px;
-    font-size: 14px;
-    outline: none;
-  }
-
-  .promo-input:focus {
-    border-color: #333;
-  }
-
-  .promo-button {
-    background-color: #f2f2f2;
-    border: 2px solid #000;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-weight: bold;
-    font-size: 14px;
-    color: #000;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-  }
-
-  .promo-button:hover {
-    background-color: #ddd;
-    transform: scale(1.08);
-  }
-
-  #statusMessage {
-    margin-top: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #444;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-</style>
-</head>
-<body>
-
-<form id="promoForm" class="promo-container">
-  <span class="text-black dark:text-white font-bold text-base">Promo Code:</span>
-  <input type="text" id="promoInput" class="promo-input" placeholder="Enter code" />
-  <button type="submit" class="promo-button">Add</button>
-</form>
-
-<div id="statusMessage"></div>
-
-<script>
-  const form = document.getElementById("promoForm");
-  const input = document.getElementById("promoInput");
-  const statusMessage = document.getElementById("statusMessage");
-
-  function showMessage(msg, color = "#444") {
-    statusMessage.textContent = msg;
-    statusMessage.style.color = color;
-    statusMessage.style.opacity = "1";
-
-    setTimeout(() => {
-      statusMessage.style.opacity = "0";
-    }, 4000); // disappears after 3 seconds
-  }
-
-  async function checkPromo(code) {
-    showMessage("Authenticating...", "#444"); // show while checking
-
-    try {
-      const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vQdEWKjQ_nhQtq_DpB_y5u2TyxmbKo3CgmaJlbLZ3fZT8D1mur7sA2DgYM47SGoOuo4IaI4x2MqnibU/pub?gid=1372411540&single=true&output=csv`;
-      const res = await fetch(url);
-      const text = await res.text();
-
-      const rows = text.trim().split("\n").map(r => r.split(","));
-      const promoCodes = rows.slice(1); // skip header
-
-      let found = false;
-
-      for (let row of promoCodes) {
-        const [promo, colB, colC, colD] = row;
-
-        if (promo && promo.toLowerCase() === code.toLowerCase()) {
-          found = true;
-
-
-            
-const basePrice = 25; // Original price
-const basePhotos = 15; // Original photo count
-
-const priceOriginal = document.getElementById("personalPriceOriginal");
-const priceNew = document.getElementById("personalPriceNew");
-const photosOriginal = document.getElementById("personalPhotosOriginal");
-const photosNew = document.getElementById("personalPhotosNew");
-
-if (colB.trim().toLowerCase() === "true") {
-  showMessage("Promo code has expired or been used", "red");
-
-  // Reset display
-  priceOriginal.textContent = `$${basePrice}`;
-  priceOriginal.style.color = "#000";
-  priceOriginal.style.textDecoration = "none";
-  priceNew.textContent = "";
-
-  photosOriginal.textContent = `${basePhotos} Photos`;
-  photosOriginal.style.color = "#000";
-  photosOriginal.style.textDecoration = "none";
-  photosNew.textContent = "";
-} else {
-  // Calculate discount and new photo count
-  const discountPercent = parseFloat(colC) || 0;
-  const addPhotos = parseInt(colD) || 0;
-
-  const newPrice = (basePrice - (basePrice * discountPercent / 100)).toFixed(2);
-  const newPhotoCount = basePhotos + addPhotos;
-
-  // Only apply strike-through if there’s actually a discount or extra photos
-if (discountPercent > 0) {
-    // Original becomes red and struck-through
-    priceOriginal.style.color = "#d60909";
-    priceOriginal.style.textDecoration = "line-through";
-
-    // New price / photo count next to it
-    if (colC) {
-        priceNew.textContent = `  $${newPrice}`;
-        priceNew.style.color = "#000";
-    } else {
-        priceNew.textContent = "";
-    }
-
-    
-} else {
-    // No discount or extra photos: keep original text normal
-    priceOriginal.style.color = "#000";
-    priceOriginal.style.textDecoration = "none";
-    priceNew.textContent = "";
-
-  
-}
-
-if (addPhotos > 0) {
-    photosOriginal.style.color = "#d60909";
-    photosOriginal.style.textDecoration = "line-through";
-
-    if (colD) {
-        photosNew.textContent = `  ${newPhotoCount} Photos`;
-        photosNew.style.color = "#000";
-    } else {
-        photosNew.textContent = "";
-    }
-} else {
-
-    photosOriginal.style.color = "#000";
-    photosOriginal.style.textDecoration = "none";
-    photosNew.textContent = "";
-}
-
-
-  showMessage("Changes have been applied below", "green");
-}
-
-
-
-
-          
-          break;
-        }
-      }
-
-      if (!found) {
-        showMessage("Promo Code doesn't exist", "red");
-      }
-
-    } catch (err) {
-      showMessage("Error checking promo: " + err.message, "red");
-      console.error(err);
-    }
-
-    input.value = "";
-  }
-
-  form.addEventListener("submit", function(event) {
-    event.preventDefault();
-    const code = input.value.trim();
-    if (code) {
-      checkPromo(code);
-    } else {
-      showMessage("Please enter a promo code", "red");
-    }
-  });
-</script>
-
-
-
-
-
-    <!-- Pricing Cards -->
-    <section id="prices" class="pricing-container mt-10">
-      <div class="card">
-  <div class="card-header">PERSONAL PHOTO SET</div>
-  <div class="card-subtitle">High School Sports Photos</div>
-  <div class="card-price" id="personalPrice">
-    <span id="personalPriceOriginal">$25</span>
-    <span id="personalPriceNew"></span>
-  </div>
-  <ul>
-    <li id="personalPhotos">
-      <span id="personalPhotosOriginal">15 Photos</span>
-      <span id="personalPhotosNew"></span>
-    </li>
-    <li>1–2 Days After Game</li>
-  </ul>
-  <div class="card-actions">
-    <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
-    <a href="/" class="example-button">Show Examples</a>
-  </div>
+<!-- PROMO CODE -->
+<div class="promo-wrap reveal">
+  <span class="promo-label">Promo Code</span>
+  <form class="promo-row" id="promoForm">
+    <input type="text" id="promoInput" class="promo-input" placeholder="Enter code" autocomplete="off" />
+    <button type="submit" class="btn-card promo-btn">Apply</button>
+  </form>
+  <div id="statusMessage"></div>
 </div>
 
-      <div class="card">
-        <div class="card-header">PERSONAL GRAPHIC</div>
-        <div class="card-subtitle">Sports Design Graphic</div>
-        <div class="card-price">$8</div>
-        <ul>
-          <li>1 Graphic</li>
-          <li>1–2 Days</li>
-          <li>Must provide photos unless photo set is purchased</li>
-        </ul>
-        <div class="card-actions">
-          <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
-          <a href="/graphics" class="example-button">Show Examples</a>
-        </div>
-      </div>
+<!-- PRICING CARDS -->
+<section class="pricing-section">
+  <div class="pricing-grid">
 
-	<div class="card">
-        <div class="card-header">TEAM PHOTO SET</div>
-        <div class="card-subtitle">Highschool Team Sports Photos</div>
-        <div class="card-price">Contact</div>
-        <ul>
-          <li>Flexible</li>
-        </ul>
-        <div class="card-actions">
-          <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
-        </div>                
+    <!-- Personal Photo Set -->
+    <div class="card featured reveal-scale">
+      <div class="card-header">PERSONAL PHOTO SET</div>
+      <div class="card-subtitle">High School Sports Photos</div>
+      <div class="card-price">
+        <span id="personalPriceOriginal" class="price-original">$25</span><span id="personalPriceNew" class="price-new"></span>
       </div>
+      <ul class="card-features">
+        <li id="personalPhotosLi">
+          <span id="personalPhotosOriginal" class="photos-original">15 Photos</span><span id="personalPhotosNew" class="photos-new"></span>
+        </li>
+        <li>1–2 days after game</li>
+        <li>Delivered digitally</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="btn-card btn-primary" target="_blank">Contact</a>
+        <a href="/" class="btn-card btn-secondary">Examples</a>
+      </div>
+    </div>
 
-      <div class="card">
-        <div class="card-header">OTHER</div>
-        <div class="card-subtitle">Non-Sports Photos/Graphics</div>
-        <div class="card-price">Contact</div>
-        <ul>
-          <li>Flexible</li>
-        </ul>
-        <div class="card-actions">
-          <a href="https://ig.me/m/dizzstudios" class="button" target="_blank">Contact</a>
-        </div>
+    <!-- Personal Graphic -->
+    <div class="card reveal-scale">
+      <div class="card-header">PERSONAL GRAPHIC</div>
+      <div class="card-subtitle">Sports Design Graphic</div>
+      <div class="card-price">$8</div>
+      <ul class="card-features">
+        <li>1 graphic</li>
+        <li>1–2 days turnaround</li>
+        <li>Must provide photos unless photo set purchased</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="btn-card btn-primary" target="_blank">Contact</a>
+        <a href="/graphics" class="btn-card btn-secondary">Examples</a>
       </div>
-    </section>
-    <p class="text-center mt-6 max-w-xl mx-auto text-sm">
-      Prices semi-flexible
-    </p>
-    <p class="text-center mt-6 max-w-xl mx-auto text-sm">
-      Preview images will be provided before purchase. Final products will only be delivered after payment is received via Cash or Venmo.
-    </p>
-  </main>
-  <!-- FOOTER -->
+    </div>
+
+    <!-- Team Photo Set -->
+    <div class="card reveal-scale">
+      <div class="card-header">TEAM PHOTO SET</div>
+      <div class="card-subtitle">High School Team Sports Photos</div>
+      <div class="card-price" style="font-size:1.5rem;padding-top:28px;">Contact</div>
+      <ul class="card-features">
+        <li>Flexible pricing</li>
+        <li>Full team coverage</li>
+        <li>Reach out for a quote</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="btn-card btn-primary" target="_blank">Contact</a>
+      </div>
+    </div>
+
+    <!-- Other -->
+    <div class="card reveal-scale">
+      <div class="card-header">OTHER</div>
+      <div class="card-subtitle">Non-Sports Photos / Graphics</div>
+      <div class="card-price" style="font-size:1.5rem;padding-top:28px;">Contact</div>
+      <ul class="card-features">
+        <li>Flexible pricing</li>
+        <li>Various categories</li>
+        <li>Reach out for a quote</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://ig.me/m/dizzstudios" class="btn-card btn-primary" target="_blank">Contact</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTNOTES -->
+<div class="footnotes reveal">
+  <p>Prices are semi-flexible — feel free to reach out if you have questions.</p>
+  <p>Preview images provided before purchase. Final files delivered only after payment via Cash or Venmo.</p>
+</div>
+
+<!-- FOOTER -->
 <footer>
   <p>© 2025–2026 Dizz Studios &nbsp;·&nbsp; <a href="https://www.dizzstudios.org">www.dizzstudios.org</a> &nbsp;·&nbsp; Buffalo / Williamsville, NY</p>
-  <p style="margin-top: 8px;">
-    <a href="/client-agreement">Client Agreement &amp; Privacy Policy</a>
-  </p>
+  <p><a href="/client-agreement">Client Agreement &amp; Privacy Policy</a></p>
 </footer>
 
+<!-- LOADER -->
+<div id="loader">
+  <img src="/dist/assets/white.png" alt="Dizz Studios" id="loader-logo" />
+</div>
+
 <script>
-  // scroll progress
+  /* ── SCROLL PROGRESS ── */
   window.addEventListener('scroll', () => {
     const d = document.documentElement;
     document.getElementById('progress').style.width =
       (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
   });
-const ham  = document.getElementById('hamburger');
-const menu = document.getElementById('mobileMenu');
 
-document.getElementById('mobileClose').addEventListener('click', () => {
-  menu.classList.remove('open');
-  ham.classList.remove('open');
-  ham.setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = '';
-});
+  /* ── NAV HAMBURGER ── */
+  const ham  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
 
-ham.addEventListener('click', () => {
-  const open = menu.classList.toggle('open');
-  ham.classList.toggle('open', open);
-  ham.setAttribute('aria-expanded', String(open));
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-
-// close when a link is clicked
-menu.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
+  document.getElementById('mobileClose').addEventListener('click', closeMenu);
+  ham.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+  function closeMenu() {
     menu.classList.remove('open');
     ham.classList.remove('open');
     ham.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
-  });
-});
-
-function initAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-scale')
-    .forEach(el => observer.observe(el));
-}
-
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loader');
-
-  if (sessionStorage.getItem('siteVisited')) {
-    initAnimations();
-  } else {
-    sessionStorage.setItem('siteVisited', '1');
-    setTimeout(() => {
-      loader.style.display = 'none';
-      initAnimations();
-    }, 1800);
   }
-});
+
+  /* ── REVEAL ANIMATIONS ── */
+  function initAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+  }
+
+  window.addEventListener('load', () => {
+    if (sessionStorage.getItem('siteVisited')) {
+      initAnimations();
+    } else {
+      sessionStorage.setItem('siteVisited', '1');
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        initAnimations();
+      }, 1800);
+    }
+  });
+
+  /* ── PROMO CODE ── */
+  const form    = document.getElementById('promoForm');
+  const input   = document.getElementById('promoInput');
+  const statusEl = document.getElementById('statusMessage');
+
+  function showMessage(msg, color) {
+    statusEl.textContent = msg;
+    statusEl.style.color = color || 'var(--text-muted)';
+    statusEl.classList.add('visible');
+    clearTimeout(statusEl._timer);
+    statusEl._timer = setTimeout(() => statusEl.classList.remove('visible'), 4500);
+  }
+
+  const BASE_PRICE  = 25;
+  const BASE_PHOTOS = 15;
+
+  async function checkPromo(code) {
+    showMessage('Authenticating…');
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vQdEWKjQ_nhQtq_DpB_y5u2TyxmbKo3CgmaJlbLZ3fZT8D1mur7sA2DgYM47SGoOuo4IaI4x2MqnibU/pub?gid=1372411540&single=true&output=csv`;
+      const res  = await fetch(url);
+      const text = await res.text();
+
+      const rows  = text.trim().split('\n').map(r => r.split(','));
+      const codes = rows.slice(1);
+      let found = false;
+
+      const priceOrig  = document.getElementById('personalPriceOriginal');
+      const priceNew   = document.getElementById('personalPriceNew');
+      const photosOrig = document.getElementById('personalPhotosOriginal');
+      const photosNew  = document.getElementById('personalPhotosNew');
+
+      for (let row of codes) {
+        const [promo, expired, discountPct, addPhotos] = row;
+        if (!promo || promo.trim().toLowerCase() !== code.toLowerCase()) continue;
+
+        found = true;
+
+        if (expired && expired.trim().toLowerCase() === 'true') {
+          showMessage('Promo code has expired or been used.', '#e53e3e');
+          resetPriceDisplay(priceOrig, priceNew, photosOrig, photosNew);
+          break;
+        }
+
+        const disc       = parseFloat(discountPct) || 0;
+        const extraPics  = parseInt(addPhotos)     || 0;
+        const newPrice   = (BASE_PRICE - BASE_PRICE * disc / 100).toFixed(2);
+        const newPhotos  = BASE_PHOTOS + extraPics;
+
+        if (disc > 0) {
+          priceOrig.classList.add('struck');
+          priceNew.textContent = `  $${newPrice}`;
+        } else {
+          priceOrig.classList.remove('struck');
+          priceNew.textContent = '';
+        }
+
+        if (extraPics > 0) {
+          photosOrig.classList.add('struck');
+          photosNew.textContent = `  ${newPhotos} Photos`;
+        } else {
+          photosOrig.classList.remove('struck');
+          photosNew.textContent = '';
+        }
+
+        showMessage('Promo applied — updated pricing shown below.', '#38a169');
+        break;
+      }
+
+      if (!found) showMessage("Promo code doesn't exist.", '#e53e3e');
+    } catch (err) {
+      showMessage('Error checking promo: ' + err.message, '#e53e3e');
+    }
+    input.value = '';
+  }
+
+  function resetPriceDisplay(po, pn, fo, fn) {
+    po.classList.remove('struck'); pn.textContent = '';
+    fo.classList.remove('struck'); fn.textContent = '';
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const code = input.value.trim();
+    code ? checkPromo(code) : showMessage('Please enter a promo code.', '#e53e3e');
+  });
 </script>
 </body>
-<div id="loader">
-  <img src="/dist/assets/white.png" alt="Dizz Studios" id="loader-logo" />
-</div>
 </html>
