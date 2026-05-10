@@ -37,7 +37,7 @@
     }
   </script>
 <style>
-  #loader {
+#loader {
   position: fixed;
   inset: 0;
   background: #000;
@@ -47,6 +47,13 @@
   justify-content: center;
   animation: loaderFade .4s ease 1.8s forwards;
 }
+#loader.skip {
+  display: none !important;
+}
+.no-loader #loader {
+  display: none !important;
+}
+
 
 #loader-logo {
   width: 120px;
@@ -383,6 +390,11 @@
 </style>
 </head>
 <body>
+<script>
+  if (sessionStorage.getItem('siteVisited')) {
+    document.documentElement.classList.add('no-loader');
+  }
+</script>
 
 <div id="progress"></div>
 
@@ -591,10 +603,17 @@ function initAnimations() {
 }
 
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loader').style.display = 'none';
+  const loader = document.getElementById('loader');
+
+  if (sessionStorage.getItem('siteVisited')) {
     initAnimations();
-  }, 1800);
+  } else {
+    sessionStorage.setItem('siteVisited', '1');
+    setTimeout(() => {
+      loader.style.display = 'none';
+      initAnimations();
+    }, 1800);
+  }
 });
 </script>
 
