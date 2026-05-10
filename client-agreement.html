@@ -65,13 +65,12 @@
       position: sticky; top: 0; z-index: 200;
       border-bottom: 1px solid rgba(255,255,255,.05);
     }
-    .nav-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0 28px; height: 68px;
-      display: flex; align-items: center; gap: 16px;
-    }
-
-    .nav-brand { display: flex; align-items: center; gap: 6px; }
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 28px; height: 68px;
+  display: flex; align-items: center; gap: 16px;
+}
+.nav-brand { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-right: auto; }
     .nav-logo-light { display: block; }
     .nav-logo-dark  { display: none;  }
     @media (prefers-color-scheme: dark) {
@@ -128,54 +127,85 @@
     }
     .btn-book:hover { background: #e2e8f0; }
 
-    /* hamburger */
-    .hamburger {
-      display: none; flex-direction: column; justify-content: center;
-      gap: 5px; width: 30px; height: 30px;
-      background: none; border: none; cursor: pointer; padding: 2px;
-    }
-    .hamburger span {
-      display: block; width: 22px; height: 2px;
-      background: #fff; border-radius: 2px;
-      transition: transform .35s ease, opacity .25s ease;
-    }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+     .mobile-close {
+  position: absolute;
+  top: 24px; right: 28px;
+  background: none; border: none;
+  color: rgba(255,255,255,.7);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: color var(--transition);
+  line-height: 1;
+}
+.mobile-close:hover { color: #fff; }
+  /* hamburger */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; width: 30px; height: 30px;
+    background: none; border: none; cursor: pointer; padding: 2px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: #fff; border-radius: 2px;
+    transition: transform .35s ease, opacity .25s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* mobile drawer */
-    .mobile-menu {
-      display: none;
-      background: #1a1a1a;
-      border-top: 1px solid rgba(255,255,255,.07);
-      max-height: 0; overflow: hidden;
-      transition: max-height .38s ease;
-    }
-    .mobile-menu.open { max-height: 320px; }
-    .mobile-menu ul { list-style: none; padding: 12px 0 8px; }
-    .mobile-menu li a {
-      font-family: 'Signika', sans-serif;
-      font-size: 1rem; font-weight: 600; letter-spacing: .06em;
-      color: rgba(255,255,255,.8);
-      display: block; padding: 10px 28px;
-      transition: color var(--transition), background var(--transition);
-    }
-    .mobile-menu li a:hover { color: #fff; background: rgba(255,255,255,.06); }
-    .mobile-book { padding: 10px 28px 18px; }
-    .mobile-book-btn {
-      font-family: 'Signika', sans-serif;
-      font-size: .9rem; font-weight: 700; letter-spacing: .05em;
-      background: #fff; color: #111;
-      border-radius: 7px; padding: 9px 22px;
-      display: inline-block; transition: background var(--transition);
-    }
-    .mobile-book-btn:hover { background: #e2e8f0; }
+  /* mobile drawer */
+ .mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #0b0b0b;
+  z-index: 199;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity .35s ease, transform .35s ease;
+  pointer-events: none;
+}
+.mobile-menu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-menu li a {
+  font-family: 'Signika', sans-serif;
+  font-size: 2rem; font-weight: 700; letter-spacing: .08em;
+  color: rgba(255,255,255,.8);
+  display: block; padding: 14px 28px;
+  transition: color var(--transition);
+}
+.mobile-menu li a:hover { color: #4fa8d8; }
+.mobile-book { padding: 24px 28px 0; text-align: center; }
+.mobile-book-btn {
+  font-family: 'Signika', sans-serif;
+  font-size: 1rem; font-weight: 700; letter-spacing: .05em;
+  background: #fff; color: #111;
+  border-radius: 7px; padding: 12px 32px;
+  display: inline-block; transition: background var(--transition);
+}
+.mobile-book-btn:hover { background: #e2e8f0; }
 
-    @media (max-width: 768px) {
-      .nav-links, .nav-right { display: none; }
-      .hamburger { display: flex; }
-      .mobile-menu { display: block; }
-    }
+@media (max-width: 768px) {
+  .nav-links, .nav-right { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu { display: flex; }
+}
+
 
     /* ════ PAGE ════ */
     .page {
@@ -317,8 +347,7 @@
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-brand">
-      <span class="nav-logo-light"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" /></span>
-      <span class="nav-logo-dark"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" /></span>
+      <img src="/dist/assets/white.png" alt="Dizz Studios Logo" style="height:36px;width:auto;" />
       <span class="nav-wordmark">DIZZ STUDIOS</span>
     </a>
 
@@ -344,6 +373,7 @@
   </div>
 
   <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
     <ul>
       <li><a href="/">PHOTOGRAPHS</a></li>
       <li><a href="/graphics">GRAPHICS</a></li>
@@ -512,21 +542,41 @@
       (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
   });
 
-  // hamburger toggle
-  const ham  = document.getElementById('hamburger');
-  const menu = document.getElementById('mobileMenu');
-  ham.addEventListener('click', () => {
-    const open = menu.classList.toggle('open');
-    ham.classList.toggle('open', open);
-    ham.setAttribute('aria-expanded', String(open));
+const ham  = document.getElementById('hamburger');
+const menu = document.getElementById('mobileMenu');
+
+document.getElementById('mobileClose').addEventListener('click', () => {
+  menu.classList.remove('open');
+  ham.classList.remove('open');
+  ham.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+});
+
+ham.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  ham.classList.toggle('open', open);
+  ham.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+
+// close when a link is clicked
+menu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    menu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
   });
-  document.addEventListener('click', e => {
-    if (!ham.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.remove('open');
-      ham.classList.remove('open');
-      ham.setAttribute('aria-expanded', 'false');
-    }
-  });
+});
+
+document.addEventListener('click', e => {
+  if (!ham.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+});;
 </script>
 </body>
 </html>
