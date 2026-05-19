@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dizz Studios</title>
+  <meta name="description"
+    content="Im a 17 year old beginning photographer more into the relm of sports based out of Amherst, NY.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+  <link rel="stylesheet" href="/dist/output.css" />
+  <link rel="stylesheet" href="/counter/styles.css?v=3" />
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Start - Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
+  <!-- End - Fonts -->
+  <!-- Start - Fancybox Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <!-- End - Fancybox Scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      content: ["./dist/*.{html,js}"],
+      theme: {
+        extend:
+                {
+                  fontFamily: {
+                    'nothingyoucoulddo': ['Nothing You Could Do', 'cursive'],
+                    'signika': ['Signika', 'sans-serif'],
+                  },
+                },
+      },
+      plugins: [],
+    }
+  </script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+
+<body class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+  <!-- Navbar -->
+  <header class="flex w-full overflow-hidden pt-10 pb-0">
+    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+
+        <!-- Desktop Logo + Text -->
+<div class="hidden md:flex items-center">
+  <!-- Light Mode Logo -->
+  <a href="/"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;"></a>
+  <!-- Dark Mode Logo -->
+  <a href="/"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;"></a>
+  <!-- Text -->
+  <div class="ml-1">
+    <a href="/" class="text-2xl font-signika font-bold">DIZZ STUDIOS</a>
+  </div>
+</div>
+
+<!-- Mobile Logo Only -->
+<div class="flex md:hidden items-center">
+  <!-- Light Mode Mobile Logo -->
+  <a href="/"><img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;"></a>
+  <!-- Dark Mode Mobile Logo -->
+  <a href="/"><img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;"></a>
+</div>
+        
+
+        <!-- Contact Link -->
+        <div class="ml-4 md:ml-5 mr-4 md:mr-8 flex items-center">
+            <button
+              class="font-signika text-xl px-1.5 py-0.4
+                     bg-red-600 text-white
+                     rounded-md
+                     hover:bg-red-700
+                     dark:hover:bg-red-700
+                     transition cursor-default"
+              disabled
+            >
+              ADMIN PAGE
+            </button>
+          </div>
+          
+          
+          
+
+        <div class="ml-auto md:hidden flex items-center justify-start">
+          <button onclick="menuToggle()" @click="open = !open"
+            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
+            @click="open = !open">
+            <span class="sr-only">Open main menu</span>
+            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span aria-hidden="true"
+                class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out"
+                :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+              <span aria-hidden="true"
+                class="block absolute  h-0.5 w-5 bg-current   transform transition duration-500 ease-in-out"
+                :class="{'opacity-0': open } "></span>
+              <span aria-hidden="true"
+                class="block absolute h-0.5 w-5 bg-current transform  transition duration-500 ease-in-out"
+                :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+            </div>
+          </button>
+        </div>
+        <div id="menu"
+          class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
+          <ul id="ulMenu"
+            class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
+            <li class="group transition duration-300">
+              <a href="/" class="font-signika text-2xl tap-highlight-transparent">PHOTOGRAPHS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent">GRAPHICS
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent">PRICES
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent">ABOUT ME
+                <span
+                  class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black dark:bg-white"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+
+  <!-- Admin Upload Section -->
+  <main class="flex flex-col items-center py-10">
+    <h2 class="text-3xl mb-6 font-bold font-signika">Create New Photo Gallery</h2>
+
+    <form id="galleryForm" class="w-full max-w-lg bg-white p-6 rounded-lg shadow">
+      <label for="lastName" class="font-semibold">Client Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required class="w-full mt-1 p-2 border rounded">
+
+      <div id="dropArea" class="mt-4 p-6 border-2 border-dashed text-center rounded cursor-pointer text-gray-600">
+        Drag & Drop Images Here or Click to Upload (0 files)
+      </div>
+      <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+
+      <button type="submit" id="createGalleryBtn" class="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Create Gallery</button>
+    </form>
+
+    <div id="result" class="hidden mt-8 max-w-xl bg-white p-4 rounded shadow text-base"></div>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    const CLIENT_ID = "963878728417-c13l1bufmapmm6mj1omralmkc4usfvqa.apps.googleusercontent.com";
+    const SCOPES = "https://www.googleapis.com/auth/drive.file";
+    const PARENT_FOLDER_ID = "1NcfxZufpOeg749C0JcnfqXfTwC97s7aR";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7a08OwO72ApMtXPi8yu_n9Yc9h5ipKzetlawyOhelGA9batzPW6PAtTYkucayZ6KU-w/exec";
+  
+    let selectedFiles = [];
+    let accessToken = null;
+    let tokenClient;
+  
+    const form = document.getElementById("galleryForm");
+    const lastNameInput = document.getElementById("lastName");
+    const dropArea = document.getElementById("dropArea");
+    const fileInput = document.getElementById("fileInput");
+    const resultBox = document.getElementById("result");
+  
+    dropArea.addEventListener("click", () => fileInput.click());
+    dropArea.addEventListener("dragover", e => {
+      e.preventDefault();
+      dropArea.classList.add("bg-blue-100", "border-blue-400");
+    });
+    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("bg-blue-100", "border-blue-400"));
+    dropArea.addEventListener("drop", e => {
+      e.preventDefault();
+      dropArea.classList.remove("bg-blue-100", "border-blue-400");
+      handleFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener("change", e => handleFiles(e.target.files));
+  
+    function handleFiles(files) {
+      selectedFiles = [...selectedFiles, ...Array.from(files)];
+      dropArea.textContent = `Drag & Drop Images Here or Click to Upload (${selectedFiles.length} file${selectedFiles.length !== 1 ? 's' : ''})`;
+    }
+  
+    window.onload = () => {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: tokenResponse => {
+          if (!tokenResponse?.access_token) return alert("Failed to get access token");
+          accessToken = tokenResponse.access_token;
+
+          
+          // ✅ Change button text *after* authentication
+          const button = document.getElementById("createGalleryBtn");
+          button.textContent = "UPLOADING FILES";
+          button.classList.remove("bg-blue-600", "hover:bg-blue-700");
+          button.classList.add("bg-red-600", "hover:bg-red-700", "text-white");
+          button.disabled = true;
+
+
+          uploadSelectedFiles();
+        }
+      });
+    };
+  
+    function authenticateAndUpload() {
+      tokenClient.requestAccessToken();
+    }
+  
+    async function createFolder(folderName) {
+      const metadata = {
+        name: folderName,
+        mimeType: 'application/vnd.google-apps.folder',
+        parents: [PARENT_FOLDER_ID]
+      };
+  
+      const res = await fetch('https://www.googleapis.com/drive/v3/files', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(metadata)
+      });
+  
+      const data = await res.json();
+      return data.id;
+    }
+  
+    async function uploadFileToDrive(file, folderId) {
+      const metadata = {
+        name: file.name,
+        mimeType: file.type,
+        parents: [folderId]
+      };
+  
+      const formData = new FormData();
+      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      formData.append('file', file);
+  
+      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
+        method: 'POST',
+        headers: new Headers({ Authorization: 'Bearer ' + accessToken }),
+        body: formData
+      });
+  
+      const data = await res.json();
+      return data.webViewLink;
+    }
+  
+    async function uploadSelectedFiles() {
+  const lastName = lastNameInput.value.trim();
+  if (!lastName) return alert("Client last name is required");
+
+
+  const now = new Date();
+      // Format: YY:DD:MM with leading zeros
+  const year = String(now.getFullYear()).slice(-2);
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+
+  // First two letters of lastName, capitalized
+  const prefix = lastName.slice(0, 2).toUpperCase();
+
+  // Final order number
+  const orderNumber = `${prefix}-${year}${day}${month}`;
+
+
+
+  let folderId;
+  let links = []; // <-- ✅ Declare links outside try
+  const fileCount = selectedFiles.length;
+
+
+  try {
+    folderId = await createFolder(lastName);
+
+    for (const file of selectedFiles) {
+      const link = await uploadFileToDrive(file, folderId);
+      links.push(link);
+    }
+
+    form.style.display = "none";
+    resultBox.classList.remove("hidden");
+    resultBox.innerHTML = `
+      <h3 class="font-bold text-lg mb-2">Gallery Created for ${lastName}</h3>
+      <p>${fileCount} file${fileCount !== 1 ? 's' : ''} uploaded.</p>
+      <p>Gallery Link: <a class="text-blue-600 underline" href="https://dizzstudios.org/orders/#${orderNumber}">https://dizzstudios.org/orders/#${orderNumber}</a></p>
+  <div class="group relative inline-block pt-2">
+    <button id="copyLinkBtn"
+      class="px-2 py-1 border-2 text-sm rounded transition
+             border-black text-black
+             dark:border-white dark:text-white
+             hover:bg-black hover:text-white
+             dark:hover:bg-white dark:hover:text-black"
+      data-link="/orders/#${orderNumber}"
+    >
+      Copy Gallery Link
+    </button>
+  </div>
+
+
+        <button id="resetFormBtn" class="mt-6 w-full bg-gray-200 hover:bg-gray-300 text-black py-2 rounded transition">
+    Create New Gallery
+  </button>
+
+    `;
+
+    const copyButton = document.getElementById("copyLinkBtn");
+copyButton.addEventListener("click", () => {
+  const linkToCopy = copyButton.getAttribute("data-link");
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(location.origin + linkToCopy).then(() => {
+    const originalText = copyButton.textContent;
+    copyButton.textContent = "COPIED";
+
+    // Revert back after 2 seconds
+    setTimeout(() => {
+      copyButton.textContent = originalText;
+    }, 2000);
+  }).catch(err => {
+    console.error("Failed to copy: ", err);
+  });
+});
+
+    
+
+    document.getElementById("resetFormBtn").addEventListener("click", () => {
+  // Clear selected files
+  selectedFiles = [];
+
+  // Reset form input values
+  lastNameInput.value = "";
+  fileInput.value = null;
+
+  // Reset drop area text
+  dropArea.textContent = "Drag & Drop Images Here or Click to Upload (0 files)";
+
+  // Show form again, hide result
+  form.style.display = "block";
+  resultBox.classList.add("hidden");
+  resultBox.innerHTML = "";
+
+  // Reset the Create Gallery button (in case user wants to submit again)
+  const button = document.getElementById("createGalleryBtn");
+  button.textContent = "Create Gallery";
+  button.classList.remove("bg-red-600", "hover:bg-red-700");
+  button.classList.add("bg-blue-600", "hover:bg-blue-700");
+  button.disabled = false;
+});
+
+
+
+  } catch (err) {
+    alert("Upload failed: " + err.message);
+    console.error(err);
+    return;
+  }
+
+  const folderLink = `https://drive.google.com/drive/folders/${folderId}`;
+
+
+  // ✅ Send to Google Sheets via Apps Script
+  const bodyData = {
+    id: orderNumber,
+    title: `${lastName}`,
+    link: folderLink,
+    orderNumber: orderNumber
+  };
+
+  // Add each link as a separate key: link1, link2, etc.
+  links.forEach((link, index) => {
+    bodyData[`link${index + 1}`] = link;
+  });
+
+  await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(bodyData)
+  })
+    .then(res => res.text())
+    .then(data => {
+      console.log("Apps Script response:", data);
+    })
+    .catch(err => {
+      console.error("Apps Script error:", err);
+    });
+
+// ✅ Reset the Create Gallery button
+const button = document.getElementById("createGalleryBtn");
+button.textContent = "Create Gallery";
+button.classList.remove("bg-red-600", "hover:bg-red-700");
+button.classList.add("bg-blue-600", "hover:bg-blue-700");
+button.disabled = false;
+
+
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  if (selectedFiles.length === 0) return alert("Please upload at least one image.");
+  if (!lastNameInput.value.trim()) return alert("Please enter a last name.");
+  authenticateAndUpload();
+});
+
+
+  </script>  
+  
+
+  <!-- Script for the LightBox -->
+  <script>
+    Fancybox.bind("[data-fancybox]", {});
+  </script>
+  <script src="dist/fade_in.js"></script>
+  <script src="dist/menu.js?v=2"></script>
+</body>
+</html>
+

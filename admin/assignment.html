@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assignment - Dizz Studios</title>
+  <meta name="description" content="Upcoming and recent shoots by Dizz Studios — WNY sports photography.">
+  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Signika:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'media',
+      theme: { extend: { fontFamily: { 'signika': ['Signika', 'sans-serif'] } } },
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .tap-highlight-transparent { -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg:       #ffffff;
+      --bg2:      #f3f4f6;
+      --border:   #e5e7eb;
+      --text:     #111827;
+      --dim:      #6b7280;
+      --dimmer:   #9ca3af;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:     #000000;
+        --bg2:    #111111;
+        --border: #222222;
+        --text:   #ffffff;
+        --dim:    #888888;
+        --dimmer: #444444;
+      }
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Signika', sans-serif;
+      min-height: 100vh;
+    }
+
+    body {
+      display: block;
+      padding: 0 20px 80px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+    }
+    @media (prefers-color-scheme: dark) { body::before { opacity: 0.4; } }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding-top: 48px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeDown 0.7s ease both;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 80px);
+      letter-spacing: 6px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .page-rule { display: flex; align-items: center; gap: 10px; margin: 14px auto; width: 200px; }
+    .page-rule-line { flex: 1; height: 1px; background: var(--dimmer); }
+    .page-rule-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--dim); }
+    .page-sub {
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ── FILTER PILLS ── */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+      animation: fadeDown 0.7s 0.1s ease both;
+    }
+    .filter-pill {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--dim);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-pill:hover,
+    .filter-pill.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--dimmer);
+      margin-bottom: 16px;
+      padding-left: 2px;
+    }
+
+    /* ── EVENT CARDS GRID ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+
+    .event-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      animation: fadeUp 0.6s ease both;
+      cursor: default;
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      border-color: var(--dim);
+    }
+    @media (prefers-color-scheme: dark) {
+      .event-card:hover { box-shadow: 0 12px 40px rgba(255,255,255,0.06); }
+    }
+
+    .card-accent {
+      height: 4px;
+      width: 100%;
+    }
+    .accent-upcoming { background: #3b82f6; }
+    .accent-live     { background: #ef4444; }
+    .accent-covered  { background: #22c55e; }
+
+    .card-body {
+      padding: 20px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      color: var(--text);
+      line-height: 1.2;
+      flex: 1;
+    }
+
+    .badge {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-upcoming { background: rgba(59,130,246,0.12); color: #3b82f6; }
+    .badge-live     { background: rgba(239,68,68,0.12);  color: #ef4444; }
+    .badge-covered  { background: rgba(34,197,94,0.12);  color: #22c55e; }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--dim);
+    }
+    .meta-row svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    /* ── LIVE PULSE ── */
+    .live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ef4444;
+      margin-right: 4px;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── EMPTY / LOADING STATES ── */
+    .state-box {
+      grid-column: 1 / -1;
+      padding: 56px 24px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+    }
+    .state-box p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--dimmer);
+      letter-spacing: 0.05em;
+    }
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--dim);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── PAST LIST ── */
+    .past-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .past-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      gap: 12px;
+      animation: fadeUp 0.5s ease both;
+      transition: border-color 0.2s;
+    }
+    .past-row:hover { border-color: var(--dim); }
+    .past-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+    .past-sub {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+    .past-date {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dimmer);
+      white-space: nowrap;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0 36px;
+    }
+
+    /* ── FOOTER NOTE ── */
+    .bottom-note { margin-top: 60px; text-align: center; }
+    .bottom-note-text {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--dimmer);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @media (prefers-color-scheme: light) {
+      .event-card { box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+      .past-row   { box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAVBAR (exact match) ── -->
+  <header class="flex w-full overflow-hidden pt-10 pb-1" style="position:relative;z-index:10;">
+    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
+      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+
+        <div class="hidden md:flex items-center">
+          <a href="/"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;"></a>
+          <a href="/"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;"></a>
+          <div class="ml-1">
+            <a href="/" class="text-2xl font-signika font-bold" style="color:var(--text);">DIZZ STUDIOS</a>
+          </div>
+        </div>
+
+        <div class="flex md:hidden items-center">
+          <a href="/"><img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;"></a>
+          <a href="/"><img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;"></a>
+        </div>
+
+        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
+          <a href="https://www.instagram.com/dizzstudios/"
+             target="_blank"
+             class="font-signika text-xl px-1.5 bg-black text-white dark:bg-white dark:text-black dark:border dark:border-black rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
+            CONTACT
+          </a>
+        </div>
+
+        <div class="ml-auto md:hidden flex items-center justify-start">
+          <button onclick="menuToggle()" @click="open = !open"
+            class="tap-highlight-transparent w-5 h-5 relative focus:outline-none" style="color:var(--text);">
+            <span class="sr-only">Open main menu</span>
+            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'opacity-0': open }"></span>
+              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+            </div>
+          </button>
+        </div>
+
+        <div id="menu" class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
+          <ul id="ulMenu" class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
+            <li class="group transition duration-300">
+              <a href="/" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">PHOTOGRAPHS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">GRAPHICS
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">PRICES
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">ABOUT ME
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
+              </a>
+            </li>
+            <li class="group transition duration-300">
+              <a href="/assignment" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">ON ASSIGNMENT
+                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <div class="wrap">
+
+    <div class="page-header">
+      <div class="page-title">On Assignment</div>
+      <div class="page-rule">
+        <div class="page-rule-line"></div>
+        <div class="page-rule-dot"></div>
+        <div class="page-rule-line"></div>
+      </div>
+      <div class="page-sub">Upcoming & Recent Shoots</div>
+    </div>
+
+    <!-- Filter pills -->
+    <div class="filters" id="filterRow">
+      <button class="filter-pill active" data-filter="all">ALL</button>
+    </div>
+
+    <!-- Upcoming section -->
+    <div class="section-label" id="upcomingLabel">UPCOMING</div>
+    <div class="cards-grid" id="upcomingGrid">
+      <div class="state-box">
+        <div class="spinner"></div>
+        <p>Loading events&hellip;</p>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Past section -->
+    <div class="section-label">RECENTLY COVERED</div>
+    <div class="past-list" id="pastList">
+      <div class="state-box">
+        <div class="spinner"></div>
+        <p>Loading events&hellip;</p>
+      </div>
+    </div>
+
+    <div class="bottom-note">
+      <div class="bottom-note-text">&copy; 2025-2026 Dizz Studios &nbsp;&middot;&nbsp; All rights reserved</div>
+    </div>
+
+  </div>
+
+  <script src="dist/menu.js?v=2"></script>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       CONFIG — replace these two values
+       ═══════════════════════════════════════════ */
+    const CALENDAR_ID  = 'e41c5a00752e67d50409be3f0f79f4cb3874604d7739a75996718ff49d6167e7@group.calendar.google.com';   // e.g. abc123@group.calendar.google.com
+    const API_KEY      = 'AIzaSyCNE7lO2XfPHB7mBSNKz--vezzCu4W3fXU';
+    /* ═══════════════════════════════════════════ */
+
+    const NOW       = new Date();
+    const PAST_DAYS = 60; // how many days back to show in "Recently Covered"
+
+    /* ── helpers ── */
+    function fmt(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    function fmtTime(dateStr) {
+      if (!dateStr || dateStr.length === 10) return null; // all-day
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    }
+    function isLive(start, end) {
+      const s = new Date(start), e = new Date(end || start);
+      return NOW >= s && NOW <= e;
+    }
+    function statusOf(start, end) {
+      if (isLive(start, end)) return 'live';
+      if (new Date(start) > NOW) return 'upcoming';
+      return 'covered';
+    }
+
+    /* ── icons (inline svg) ── */
+    const icon = {
+      cal:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+      time: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`,
+      loc:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s-8-5.686-8-11a8 8 0 1116 0c0 5.314-8 11-8 11z"/><circle cx="12" cy="11" r="3"/></svg>`,
+    };
+
+    /* ── card builder ── */
+    function buildCard(ev, idx) {
+      const start  = ev.start.dateTime || ev.start.date;
+      const end    = ev.end?.dateTime  || ev.end?.date;
+      const status = statusOf(start, end);
+      const time   = fmtTime(start);
+      const loc    = ev.location || '';
+
+      const accentClass = { upcoming:'accent-upcoming', live:'accent-live', covered:'accent-covered' }[status];
+      const badgeClass  = { upcoming:'badge-upcoming',  live:'badge-live',  covered:'badge-covered'  }[status];
+      const badgeLabel  = status === 'live'
+        ? `<span class="live-dot"></span>LIVE NOW`
+        : status === 'upcoming' ? 'UPCOMING' : 'COVERED';
+
+      return `
+        <div class="event-card" style="animation-delay:${idx * 0.07}s" data-sport="${(ev.summary || '').toUpperCase()}">
+          <div class="card-accent ${accentClass}"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-title">${ev.summary || 'Untitled Event'}</div>
+              <div class="badge ${badgeClass}">${badgeLabel}</div>
+            </div>
+            <div class="card-meta">
+              <div class="meta-row">${icon.cal}<span>${fmt(start)}</span></div>
+              ${time ? `<div class="meta-row">${icon.time}<span>${time}</span></div>` : ''}
+              ${loc  ? `<div class="meta-row">${icon.loc}<span>${loc}</span></div>`  : ''}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ── past row builder ── */
+    function buildPastRow(ev, idx) {
+      const start = ev.start.dateTime || ev.start.date;
+      const loc   = ev.location || '';
+      return `
+        <div class="past-row" style="animation-delay:${idx * 0.05}s">
+          <div>
+            <div class="past-title">${ev.summary || 'Untitled Event'}</div>
+            ${loc ? `<div class="past-sub">${loc}</div>` : ''}
+          </div>
+          <div class="past-date">${fmt(start)}</div>
+        </div>`;
+    }
+
+    /* ── filter logic ── */
+    let allUpcoming = [], allPast = [], activeFilter = 'all';
+
+    function applyFilter(f) {
+      activeFilter = f;
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === f));
+
+      const fu = f === 'all' ? allUpcoming : allUpcoming.filter(e => (e.summary||'').toUpperCase().includes(f));
+      const fp = f === 'all' ? allPast     : allPast.filter(e     => (e.summary||'').toUpperCase().includes(f));
+
+      renderUpcoming(fu);
+      renderPast(fp);
+    }
+
+    function renderUpcoming(events) {
+      const grid = document.getElementById('upcomingGrid');
+      if (!events.length) {
+        grid.innerHTML = `<div class="state-box"><p>No upcoming shoots scheduled yet.</p></div>`;
+        return;
+      }
+      grid.innerHTML = events.map((e, i) => buildCard(e, i)).join('');
+    }
+
+    function renderPast(events) {
+      const list = document.getElementById('pastList');
+      if (!events.length) {
+        list.innerHTML = `<div class="state-box"><p>No recent shoots found.</p></div>`;
+        return;
+      }
+      list.innerHTML = events.map((e, i) => buildPastRow(e, i)).join('');
+    }
+
+    /* ── build sport filter pills from events ── */
+    function buildFilters(events) {
+      const sports = new Set();
+      events.forEach(e => {
+        const title = (e.summary || '').toUpperCase();
+        ['FOOTBALL','BASKETBALL','BASEBALL','LACROSSE','SOCCER','WRESTLING','HOCKEY','VOLLEYBALL','TRACK','SWIMMING'].forEach(s => {
+          if (title.includes(s)) sports.add(s);
+        });
+      });
+      const row = document.getElementById('filterRow');
+      sports.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-pill';
+        btn.dataset.filter = s;
+        btn.textContent = s;
+        btn.onclick = () => applyFilter(s);
+        row.appendChild(btn);
+      });
+      row.querySelector('[data-filter="all"]').onclick = () => applyFilter('all');
+    }
+
+    /* ── fetch from Google Calendar ── */
+    async function loadEvents() {
+      const pastStart = new Date(NOW);
+      pastStart.setDate(pastStart.getDate() - PAST_DAYS);
+
+      const futureEnd = new Date(NOW);
+      futureEnd.setDate(futureEnd.getDate() + 180); // 6 months ahead
+
+      const base = 'https://www.googleapis.com/calendar/v3/calendars/';
+      const params = new URLSearchParams({
+        key:          API_KEY,
+        timeMin:      pastStart.toISOString(),
+        timeMax:      futureEnd.toISOString(),
+        singleEvents: true,
+        orderBy:      'startTime',
+        maxResults:   50,
+      });
+
+      try {
+        const res  = await fetch(`${base}${encodeURIComponent(CALENDAR_ID)}/events?${params}`);
+        if (!res.ok) throw new Error(`API error ${res.status}`);
+        const data = await res.json();
+        const items = data.items || [];
+
+        allUpcoming = items.filter(e => {
+          const start = e.start.dateTime || e.start.date;
+          return new Date(start) >= NOW || isLive(start, e.end?.dateTime || e.end?.date);
+        });
+        allPast = items.filter(e => {
+          const start = e.start.dateTime || e.start.date;
+          return new Date(start) < NOW && !isLive(start, e.end?.dateTime || e.end?.date);
+        }).reverse(); // most recent first
+
+        buildFilters(items);
+        renderUpcoming(allUpcoming);
+        renderPast(allPast);
+
+      } catch (err) {
+        console.error('Calendar fetch failed:', err);
+        const errMsg = `<div class="state-box"><p>Could not load events. Check your API key and Calendar ID.</p></div>`;
+        document.getElementById('upcomingGrid').innerHTML = errMsg;
+        document.getElementById('pastList').innerHTML     = errMsg;
+      }
+    }
+
+    loadEvents();
+  </script>
+
+</body>
+</html>
