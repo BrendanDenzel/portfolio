@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Hub — Dizz Studios</title>
+  <meta name="description" content="Dizz Studios internal admin tools hub.">
+  <link rel="icon" type="image/x-icon" href="/dist/assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --accent:       #4fa8d8;
+      --accent-dim:   rgba(79,168,216,0.12);
+      --accent-glow:  rgba(79,168,216,0.25);
+      --radius:       12px;
+      --transition:   0.22s ease;
+      --nav-bg:       #0b0b0b;
+
+      --bg:           #f8fafc;
+      --bg-subtle:    #ffffff;
+      --bg-card:      #ffffff;
+      --border:       #e2e8f0;
+      --text:         #1a202c;
+      --text-muted:   #64748b;
+      --heading:      #0f172a;
+      --shadow:       0 4px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 12px 40px rgba(79,168,216,0.18);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:           #0d0d0d;
+        --bg-subtle:    #141414;
+        --bg-card:      #1a1a1a;
+        --border:       #2a2a2a;
+        --text:         #e2e8f0;
+        --text-muted:   #7a8fa6;
+        --heading:      #f0f4f8;
+        --shadow:       0 4px 24px rgba(0,0,0,0.4);
+        --shadow-hover: 0 12px 40px rgba(79,168,216,0.2);
+      }
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SCROLL PROGRESS ── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), #7ec8e3);
+      width: 0%; z-index: 500;
+      transition: width 0.08s linear;
+    }
+
+    /* ── LOADER ── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      animation: loaderFade 0.5s ease 1.8s forwards;
+    }
+    .no-loader #loader { display: none !important; }
+    #loader-logo {
+      width: 110px;
+      animation: logoAnim 1.5s ease forwards;
+    }
+    @keyframes logoAnim {
+      0%   { transform: scale(0.5); opacity: 0; }
+      40%  { transform: scale(1.08); opacity: 1; }
+      75%  { transform: scale(1);   opacity: 1; }
+      100% { transform: scale(7);   opacity: 0; }
+    }
+    @keyframes loaderFade { to { opacity: 0; pointer-events: none; } }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--nav-bg);
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px; height: 68px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-right: auto; }
+    .nav-wordmark {
+      font-family: 'Signika', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #fff; letter-spacing: .04em; white-space: nowrap;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+      list-style: none; margin-left: 20px;
+    }
+    .nav-links a {
+      font-family: 'Signika', sans-serif;
+      font-size: .87rem; font-weight: 600; letter-spacing: .04em;
+      color: rgba(255,255,255,.72);
+      padding: 6px 12px; border-radius: 6px;
+      position: relative; transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: ''; position: absolute;
+      left: 12px; right: 12px; bottom: 3px;
+      height: 1.5px; background: #fff;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: #fff; }
+    .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .nav-insta {
+      color: rgba(255,255,255,.7); display: flex; align-items: center;
+      padding: 6px; border-radius: 6px; transition: color var(--transition);
+    }
+    .nav-insta:hover { color: #fff; }
+    .nav-insta svg { width: 19px; height: 19px; }
+    .btn-book {
+      font-family: 'Signika', sans-serif;
+      font-size: .85rem; font-weight: 700; letter-spacing: .05em;
+      background: #fff; color: #111;
+      padding: 7px 18px; border-radius: 7px; white-space: nowrap;
+      transition: background var(--transition);
+    }
+    .btn-book:hover { background: #e2e8f0; }
+
+    .mobile-close {
+      position: absolute; top: 24px; right: 28px;
+      background: none; border: none;
+      color: rgba(255,255,255,.7); font-size: 1.6rem;
+      cursor: pointer; transition: color var(--transition); line-height: 1;
+    }
+    .mobile-close:hover { color: #fff; }
+
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 30px; height: 30px;
+      background: none; border: none; cursor: pointer; padding: 2px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: transform .35s ease, opacity .25s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: #0b0b0b; z-index: 199;
+      flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; transform: translateY(-20px);
+      transition: opacity .35s ease, transform .35s ease; pointer-events: none;
+    }
+    .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .mobile-menu ul { list-style: none; padding: 0; text-align: center; display: flex; flex-direction: column; gap: 8px; }
+    .mobile-menu li a {
+      font-family: 'Signika', sans-serif;
+      font-size: 2rem; font-weight: 700; letter-spacing: .08em;
+      color: rgba(255,255,255,.8); display: block; padding: 14px 28px;
+      transition: color var(--transition);
+    }
+    .mobile-menu li a:hover { color: #4fa8d8; }
+    .mobile-book { padding: 24px 28px 0; text-align: center; }
+    .mobile-book-btn {
+      font-family: 'Signika', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: .05em;
+      background: #fff; color: #111;
+      border-radius: 7px; padding: 12px 32px;
+      display: inline-block; transition: background var(--transition);
+    }
+    .mobile-book-btn:hover { background: #e2e8f0; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      max-width: 1200px; margin: 0 auto;
+      padding: 64px 28px 0; text-align: center;
+    }
+    .page-hero-label {
+      display: inline-block;
+      font-family: 'Signika', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-dim);
+      border: 1px solid rgba(79,168,216,0.3);
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+    }
+    .page-hero h1 {
+      font-family: 'Signika', sans-serif;
+      font-size: clamp(2.6rem, 6vw, 4.5rem); font-weight: 700;
+      color: var(--heading); letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 14px;
+    }
+    .page-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 480px; margin: 0 auto; }
+
+    /* ── ACCESS BADGE ── */
+    .access-bar {
+      max-width: 1200px; margin: 28px auto 0;
+      padding: 0 28px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .access-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-family: 'Signika', sans-serif;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .access-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #e53e3e;
+      box-shadow: 0 0 6px #e53e3e;
+      animation: pulse 2s infinite;
+    }
+    .access-dot.green { background: #38a169; box-shadow: 0 0 6px #38a169; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 1200px; margin: 48px auto 0;
+      padding: 0 28px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-label {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── TOOLS GRID ── */
+    .tools-section {
+      max-width: 1200px; margin: 32px auto 0;
+      padding: 0 28px 80px;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── TOOL CARD ── */
+    .tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      position: relative;
+      text-decoration: none; color: inherit;
+      cursor: pointer;
+    }
+    .tool-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .tool-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(79,168,216,0.3);
+    }
+    .tool-card:hover::before { opacity: 1; }
+
+    /* colour-coded top bars per tool */
+    .tool-card.color-blue::before  { background: linear-gradient(90deg, #4fa8d8, #7ec8e3); }
+    .tool-card.color-green::before { background: linear-gradient(90deg, #38a169, #68d391); }
+    .tool-card.color-purple::before{ background: linear-gradient(90deg, #805ad5, #b794f4); }
+    .tool-card.color-orange::before{ background: linear-gradient(90deg, #dd6b20, #f6ad55); }
+    .tool-card.color-red::before   { background: linear-gradient(90deg, #e53e3e, #fc8181); }
+    .tool-card.color-teal::before  { background: linear-gradient(90deg, #319795, #81e6d9); }
+
+    .tool-card-top {
+      background: #111; padding: 20px 22px 18px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .tool-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tool-icon svg { width: 22px; height: 22px; }
+
+    .tool-icon.ic-blue   { background: rgba(79,168,216,0.18); color: #4fa8d8; }
+    .tool-icon.ic-green  { background: rgba(56,161,105,0.18); color: #68d391; }
+    .tool-icon.ic-purple { background: rgba(128,90,213,0.18); color: #b794f4; }
+    .tool-icon.ic-orange { background: rgba(221,107,32,0.18); color: #f6ad55; }
+    .tool-icon.ic-red    { background: rgba(229,62,62,0.18);  color: #fc8181; }
+    .tool-icon.ic-teal   { background: rgba(49,151,149,0.18); color: #81e6d9; }
+
+    .tool-title-block { flex: 1; min-width: 0; }
+    .tool-name {
+      font-family: 'Signika', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #fff; margin-bottom: 3px;
+    }
+    .tool-subtitle {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+      color: rgba(255,255,255,0.45); letter-spacing: 0.03em;
+    }
+    .tool-arrow {
+      margin-left: auto; flex-shrink: 0;
+      color: rgba(255,255,255,0.25);
+      transition: transform 0.25s ease, color 0.25s ease;
+      margin-top: 2px;
+    }
+    .tool-card:hover .tool-arrow { transform: translate(3px, -3px); color: rgba(255,255,255,0.7); }
+
+    .tool-body {
+      padding: 18px 22px 20px; flex: 1;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .tool-desc {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;
+    }
+
+    .tool-features {
+      list-style: none; display: flex; flex-direction: column; gap: 6px;
+    }
+    .tool-features li {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.8rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tool-features li::before {
+      content: ''; display: block; flex-shrink: 0;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .tool-action {
+      margin-top: auto;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Signika', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
+      background: var(--accent); color: #fff;
+      padding: 9px 18px; border-radius: 7px;
+      box-shadow: 0 2px 10px rgba(79,168,216,0.3);
+      transition: all 0.2s ease;
+      align-self: flex-start;
+      border: none; cursor: pointer;
+    }
+    .tool-action:hover {
+      background: #3d96c8; transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(79,168,216,0.45);
+    }
+    .tool-action svg { width: 14px; height: 14px; }
+
+    /* ── STATUS PILL ── */
+    .tool-status {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 99px;
+      border: 1px solid transparent;
+    }
+    .tool-status.live    { color: #38a169; background: rgba(56,161,105,0.1); border-color: rgba(56,161,105,0.25); }
+    .tool-status.wip     { color: #dd6b20; background: rgba(221,107,32,0.1); border-color: rgba(221,107,32,0.25); }
+    .tool-status.planned { color: var(--text-muted); background: var(--border); border-color: transparent; }
+    .tool-status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    .tool-card-footer {
+      padding: 0 22px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 0;
+      border-top: 1px dashed rgba(79,168,216,0.5);
+      background: var(--bg-subtle); color: var(--text-muted);
+      font-size: 0.82rem; padding: 28px 32px;
+      text-align: center; font-family: 'Barlow', sans-serif;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 6px; }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-scale {
+      opacity: 0; transform: scale(0.96);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    .tool-card:nth-child(1) { transition-delay: 0.04s; }
+    .tool-card:nth-child(2) { transition-delay: 0.10s; }
+    .tool-card:nth-child(3) { transition-delay: 0.16s; }
+    .tool-card:nth-child(4) { transition-delay: 0.22s; }
+    .tool-card:nth-child(5) { transition-delay: 0.28s; }
+    .tool-card:nth-child(6) { transition-delay: 0.34s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .page-hero { padding: 44px 20px 0; }
+      .tools-section { padding: 0 16px 60px; }
+      .access-bar { padding: 0 16px; }
+      .divider { padding: 0 16px; }
+    }
+  </style>
+</head>
+
+<body>
+<script>
+  if (sessionStorage.getItem('siteVisited')) {
+    document.documentElement.classList.add('no-loader');
+  }
+</script>
+
+<!-- Scroll Progress -->
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/dist/assets/white.png" alt="Dizz Studios Logo" style="height:36px;width:auto;" />
+      <span class="nav-wordmark">DIZZ STUDIOS</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="nav-insta" aria-label="Instagram">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+        </svg>
+      </a>
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="btn-book">BOOK / CONTACT</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <ul>
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+    <div class="mobile-book">
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="mobile-book-btn">BOOK / CONTACT</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<header class="page-hero reveal">
+  <div class="page-hero-label">Dizz Studios</div>
+  <h1>ADMIN HUB</h1>
+  <p>Internal tools and management pages. Restricted access only.</p>
+</header>
+
+<!-- ACCESS BADGE -->
+<div class="access-bar reveal">
+  <div class="access-badge">
+    <span class="access-dot green"></span>
+    Internal Access — 6 Tools Available
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="divider reveal">
+  <div class="divider-line"></div>
+  <span class="divider-label">Tools</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- TOOLS GRID -->
+<section class="tools-section">
+  <div class="tools-grid">
+
+    <!-- 1. Assignment -->
+    <a href="/admin/assignment" class="tool-card color-blue reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-blue">
+          <!-- Calendar icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <circle cx="8" cy="15" r="1" fill="currentColor"/>
+            <circle cx="12" cy="15" r="1" fill="currentColor"/>
+            <circle cx="16" cy="15" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Assignment</div>
+          <div class="tool-subtitle">Google Calendar Integration</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">View past and upcoming photoshoot assignments pulled directly from Google Calendar. Plan your schedule and track sessions at a glance.</p>
+        <ul class="tool-features">
+          <li>Upcoming photoshoot schedule</li>
+          <li>Past session history</li>
+          <li>Synced with Google Calendar</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- 2. Gallery Creator -->
+    <a href="/admin/gallery-creator" class="tool-card color-green reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-green">
+          <!-- Image upload icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+            <line x1="12" y1="3" x2="12" y2="7"/>
+            <line x1="10" y1="5" x2="14" y2="5"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Gallery Creator</div>
+          <div class="tool-subtitle">Photo Upload &amp; Gallery Backend</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">Create and manage photo galleries, upload images, and organize shoots for client delivery. The backend engine behind the public gallery pages.</p>
+        <ul class="tool-features">
+          <li>Create &amp; name new galleries</li>
+          <li>Batch photo uploads</li>
+          <li>Manage existing galleries</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- 3. Order Sheet -->
+    <a href="/admin/orders" class="tool-card color-purple reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-purple">
+          <!-- Chart icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6"  y1="20" x2="6"  y2="14"/>
+            <line x1="2"  y1="20" x2="22" y2="20"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Order Sheet</div>
+          <div class="tool-subtitle">Orders &amp; Business Analytics</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">Login to view all orders, revenue statistics, and business performance metrics. A private dashboard for tracking the financial side of Dizz Studios.</p>
+        <ul class="tool-features">
+          <li>Full order history</li>
+          <li>Revenue &amp; earnings stats</li>
+          <li>Login-protected access</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- 4. Player Lookup -->
+    <a href="/admin/player-lookup" class="tool-card color-orange reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-orange">
+          <!-- Search / person icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="11" y1="8" x2="11" y2="14"/>
+            <line x1="8" y1="11" x2="14" y2="11"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Player Lookup</div>
+          <div class="tool-subtitle">Athlete Database Search</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">Search a full database of players filtered by gender, grade, sport, and jersey number. Quickly find any athlete during or before a shoot.</p>
+        <ul class="tool-features">
+          <li>Filter by sport, grade &amp; gender</li>
+          <li>Search by jersey number</li>
+          <li>Fast on-field lookup</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- 5. Tether -->
+    <a href="/admin/tether" class="tool-card color-red reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-red">
+          <!-- Wifi / live stream icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1.5 8.5a17 17 0 0 1 21 0"/>
+            <path d="M5 12.5a11 11 0 0 1 14 0"/>
+            <path d="M8.5 16.5a6 6 0 0 1 7 0"/>
+            <circle cx="12" cy="20" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Tether</div>
+          <div class="tool-subtitle">Live Camera Display</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">Display photos live as they're tethered from the camera in real time. A dedicated site for on-site viewing during active photoshoots.</p>
+        <ul class="tool-features">
+          <li>Real-time photo display</li>
+          <li>Direct camera tether feed</li>
+          <li>On-site presentation mode</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- 6. Wristband Creator -->
+    <a href="/admin/wristband" class="tool-card color-teal reveal-scale">
+      <div class="tool-card-top">
+        <div class="tool-icon ic-teal">
+          <!-- ID card / print icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            <line x1="12" y1="12" x2="12" y2="16"/>
+            <line x1="10" y1="14" x2="14" y2="14"/>
+          </svg>
+        </div>
+        <div class="tool-title-block">
+          <div class="tool-name">Wristband Creator</div>
+          <div class="tool-subtitle">Print-Ready Wristband Cards</div>
+        </div>
+        <div class="tool-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="tool-body">
+        <p class="tool-desc">Generate print-ready wristband cards in the correct size. Import jersey numbers to quickly produce wristbands for an entire team or session.</p>
+        <ul class="tool-features">
+          <li>Import jersey numbers in bulk</li>
+          <li>Print-optimized card sizing</li>
+          <li>Quick per-session generation</li>
+        </ul>
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-status live"><span class="tool-status-dot"></span>Live</span>
+        <span class="tool-action">Open Tool
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 13L13 3M13 3H7M13 3V9"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025–2026 Dizz Studios &nbsp;·&nbsp; <a href="https://www.dizzstudios.org">www.dizzstudios.org</a> &nbsp;·&nbsp; Buffalo / Williamsville, NY</p>
+  <p><a href="/client-agreement">Client Agreement &amp; Privacy Policy</a></p>
+</footer>
+
+<!-- LOADER -->
+<div id="loader">
+  <img src="/dist/assets/white.png" alt="Dizz Studios" id="loader-logo" />
+</div>
+
+<script>
+  /* ── SCROLL PROGRESS ── */
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    document.getElementById('progress').style.width =
+      (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
+
+  /* ── NAV HAMBURGER ── */
+  const ham  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+
+  document.getElementById('mobileClose').addEventListener('click', closeMenu);
+  ham.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+  function closeMenu() {
+    menu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  /* ── REVEAL ANIMATIONS ── */
+  function initAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+  }
+
+  window.addEventListener('load', () => {
+    if (sessionStorage.getItem('siteVisited')) {
+      initAnimations();
+    } else {
+      sessionStorage.setItem('siteVisited', '1');
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        initAnimations();
+      }, 1800);
+    }
+  });
+</script>
+</body>
+</html>
