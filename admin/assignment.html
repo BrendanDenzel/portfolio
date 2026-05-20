@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assignment - Dizz Studios</title>
   <meta name="description" content="Upcoming and recent shoots by Dizz Studios — WNY sports photography.">
-  <link rel="icon" type="image/x-icon" href="dist/assets/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="/dist/assets/favicon.ico" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,53 +19,52 @@
     }
   </script>
   <style>
+    /* ── RESET & VARIABLES ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    .tap-highlight-transparent { -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
 
     :root {
-      --bg:       #ffffff;
-      --bg2:      #f3f4f6;
-      --border:   #e5e7eb;
-      --text:     #111827;
-      --dim:      #6b7280;
-      --dimmer:   #9ca3af;
+      --accent:       #4fa8d8;
+      --accent-dim:   rgba(79,168,216,0.12);
+      --accent-glow:  rgba(79,168,216,0.25);
+      --radius:       12px;
+      --transition:   0.22s ease;
+      --nav-bg:       #0b0b0b;
+
+      /* Light mode */
+      --bg:           #f8fafC;
+      --bg-subtle:    #ffffff;
+      --bg-card:      #ffffff;
+      --border:       #e2e8f0;
+      --text:         #1a202c;
+      --text-muted:   #64748b;
+      --heading:      #0f172a;
+      --shadow:       0 4px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 12px 40px rgba(79,168,216,0.18);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg:     #000000;
-        --bg2:    #111111;
-        --border: #222222;
-        --text:   #ffffff;
-        --dim:    #888888;
-        --dimmer: #444444;
+        --bg:           #0d0d0d;
+        --bg-subtle:    #141414;
+        --bg-card:      #1a1a1a;
+        --border:       #2a2a2a;
+        --text:         #e2e8f0;
+        --text-muted:   #7a8fa6;
+        --heading:      #f0f4f8;
+        --shadow:       0 4px 24px rgba(0,0,0,0.4);
+        --shadow-hover: 0 12px 40px rgba(79,168,216,0.2);
       }
     }
 
-    html, body {
+    body {
+      font-family: 'Barlow', sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Signika', sans-serif;
+      line-height: 1.7;
       min-height: 100vh;
     }
-
-    body {
-      display: block;
-      padding: 0 20px 80px;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.2;
-    }
-    @media (prefers-color-scheme: dark) { body::before { opacity: 0.4; } }
+    a { color: inherit; text-decoration: none; }
 
     .wrap {
       position: relative;
@@ -340,82 +339,293 @@
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+        /* ── SCROLL PROGRESS ── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), #7ec8e3);
+      width: 0%; z-index: 500;
+      transition: width 0.08s linear;
+    }
+
+    /* ── LOADER ── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      animation: loaderFade 0.5s ease 1.8s forwards;
+    }
+    #loader.skip { display: none !important; }
+    .no-loader #loader { display: none !important; }
+    #loader-logo {
+      width: 110px;
+      animation: logoAnim 1.5s ease forwards;
+    }
+    @keyframes logoAnim {
+      0%   { transform: scale(0.5); opacity: 0; }
+      40%  { transform: scale(1.08); opacity: 1; }
+      75%  { transform: scale(1);   opacity: 1; }
+      100% { transform: scale(7);   opacity: 0; }
+    }
+    @keyframes loaderFade { to { opacity: 0; pointer-events: none; } }
+
+    /* ── NAV ── */
+  nav {
+    background: var(--nav-bg);
+    position: sticky; top: 0; z-index: 200;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 28px; height: 68px;
+  display: flex; align-items: center; gap: 16px;
+}
+.nav-brand { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-right: auto; }
+  .nav-wordmark {
+    font-family: 'Signika', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: #fff; letter-spacing: .04em; white-space: nowrap;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 2px;
+    list-style: none; margin-left: 20px;
+  }
+  .nav-links a {
+    font-family: 'Signika', sans-serif;
+    font-size: .87rem; font-weight: 600; letter-spacing: .04em;
+    color: rgba(255,255,255,.72);
+    padding: 6px 12px; border-radius: 6px;
+    position: relative; transition: color var(--transition);
+  }
+  .nav-links a::after {
+    content: ''; position: absolute;
+    left: 12px; right: 12px; bottom: 3px;
+    height: 1.5px; background: #fff;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .35s ease;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+  .nav-insta {
+    color: rgba(255,255,255,.7); display: flex; align-items: center;
+    padding: 6px; border-radius: 6px; transition: color var(--transition);
+  }
+  .nav-insta:hover { color: #fff; }
+  .nav-insta svg { width: 19px; height: 19px; }
+  .btn-book {
+    font-family: 'Signika', sans-serif;
+    font-size: .85rem; font-weight: 700; letter-spacing: .05em;
+    background: #fff; color: #111;
+    padding: 7px 18px; border-radius: 7px; white-space: nowrap;
+    transition: background var(--transition);
+  }
+  .btn-book:hover { background: #e2e8f0; }
+
+  .mobile-close {
+  position: absolute;
+  top: 24px; right: 28px;
+  background: none; border: none;
+  color: rgba(255,255,255,.7);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: color var(--transition);
+  line-height: 1;
+}
+.mobile-close:hover { color: #fff; }
+  /* hamburger */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; width: 30px; height: 30px;
+    background: none; border: none; cursor: pointer; padding: 2px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: #fff; border-radius: 2px;
+    transition: transform .35s ease, opacity .25s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* mobile drawer */
+ .mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #0b0b0b;
+  z-index: 199;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity .35s ease, transform .35s ease;
+  pointer-events: none;
+}
+.mobile-menu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-menu li a {
+  font-family: 'Signika', sans-serif;
+  font-size: 2rem; font-weight: 700; letter-spacing: .08em;
+  color: rgba(255,255,255,.8);
+  display: block; padding: 14px 28px;
+  transition: color var(--transition);
+}
+.mobile-menu li a:hover { color: #4fa8d8; }
+.mobile-book { padding: 24px 28px 0; text-align: center; }
+.mobile-book-btn {
+  font-family: 'Signika', sans-serif;
+  font-size: 1rem; font-weight: 700; letter-spacing: .05em;
+  background: #fff; color: #111;
+  border-radius: 7px; padding: 12px 32px;
+  display: inline-block; transition: background var(--transition);
+}
+.mobile-book-btn:hover { background: #e2e8f0; }
+
+@media (max-width: 768px) {
+  .nav-links, .nav-right { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu { display: flex; }
+}
+
+/* ── FOOTNOTES ── */
+    .footnotes {
+      max-width: 640px; margin: 32px auto 0;
+      padding: 0 28px;
+      text-align: center;
+    }
+    .footnotes p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .footnotes p:last-child { margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 80px;
+      border-top: 1px dashed rgba(79,168,216,0.5);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      padding: 28px 32px;
+      text-align: center;
+      font-family: 'Barlow', sans-serif;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 6px; }
+
+    @media (max-width: 560px) {
+  .promo-wrap {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* staggered card delays */
+    .card:nth-child(1) { transition-delay: 0.05s; }
+    .card:nth-child(2) { transition-delay: 0.12s; }
+    .card:nth-child(3) { transition-delay: 0.19s; }
+    .card:nth-child(4) { transition-delay: 0.26s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 560px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .page-hero { padding: 44px 20px 0; }
+      .pricing-section { padding: 0 16px; }
+      .promo-wrap { padding: 0 16px; }
+      .promo-input { width: 150px; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- ── NAVBAR (exact match) ── -->
-  <header class="flex w-full overflow-hidden pt-10 pb-1" style="position:relative;z-index:10;">
-    <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
-      <div class="container mx-auto flex items-center justify-between flex-wrap md:flex-nowrap">
+  <script>
+  if (sessionStorage.getItem('siteVisited')) {
+    document.documentElement.classList.add('no-loader');
+  }
+</script>
 
-        <div class="hidden md:flex items-center">
-          <a href="/"><img src="/dist/assets/black.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:81.375px;height:45.75px;"></a>
-          <a href="/"><img src="/dist/assets/white.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:81.375px;height:45.75px;"></a>
-          <div class="ml-1">
-            <a href="/" class="text-2xl font-signika font-bold" style="color:var(--text);">DIZZ STUDIOS</a>
-          </div>
-        </div>
+<!-- Scroll Progress -->
+<div id="progress"></div>
 
-        <div class="flex md:hidden items-center">
-          <a href="/"><img src="/dist/assets/black2.png" alt="Dizz Studios Logo" class="block dark:hidden" style="width:146.304px;height:100px;"></a>
-          <a href="/"><img src="/dist/assets/white2.png" alt="Dizz Studios Logo" class="hidden dark:block" style="width:146.304px;height:100px;"></a>
-        </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/dist/assets/white.png" alt="Dizz Studios Logo" style="height:36px;width:auto;" />
+      <span class="nav-wordmark">DIZZ STUDIOS</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices" class="active">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://www.instagram.com/dizzstudios/" target="_blank" rel="noreferrer" class="nav-insta" aria-label="Instagram">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+        </svg>
+      </a>
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="btn-book">BOOK / CONTACT</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 
-        <div class="ml-4 md:ml-8 mr-4 md:mr-8 flex items-center">
-          <a href="https://www.instagram.com/dizzstudios/"
-             target="_blank"
-             class="font-signika text-xl px-1.5 bg-black text-white dark:bg-white dark:text-black dark:border dark:border-black rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
-            CONTACT
-          </a>
-        </div>
-
-        <div class="ml-auto md:hidden flex items-center justify-start">
-          <button onclick="menuToggle()" @click="open = !open"
-            class="tap-highlight-transparent w-5 h-5 relative focus:outline-none" style="color:var(--text);">
-            <span class="sr-only">Open main menu</span>
-            <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
-              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'opacity-0': open }"></span>
-              <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
-            </div>
-          </button>
-        </div>
-
-        <div id="menu" class="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center">
-          <ul id="ulMenu" class="flex flex-col duration-300 ease-out md:space-x-5 sm:transition-none mt-5 md:flex-row md:items-center md:ml-auto md:mt-0 md:pt-0 md:border-0">
-            <li class="group transition duration-300">
-              <a href="/" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">PHOTOGRAPHS
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/graphics" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">GRAPHICS
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/prices" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">PRICES
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="dist/about" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">ABOUT ME
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
-              </a>
-            </li>
-            <li class="group transition duration-300">
-              <a href="/assignment" class="font-signika text-2xl tap-highlight-transparent" style="color:var(--text);">ON ASSIGNMENT
-                <span class="hidden md:block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5" style="background:var(--text);"></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-      </div>
-    </nav>
-  </header>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <ul>
+      <li><a href="/">PHOTOGRAPHS</a></li>
+      <li><a href="/graphics">GRAPHICS</a></li>
+      <li><a href="/prices">PRICES</a></li>
+      <li><a href="/dist/about">ABOUT ME</a></li>
+    </ul>
+    <div class="mobile-book">
+      <a href="https://ig.me/m/dizzstudios" target="_blank" rel="noreferrer" class="mobile-book-btn">BOOK / CONTACT</a>
+    </div>
+  </div>
+</nav>
 
   <!-- ── MAIN ── -->
   <div class="wrap">
@@ -455,12 +665,76 @@
       </div>
     </div>
 
-    <div class="bottom-note">
-      <div class="bottom-note-text">&copy; 2025-2026 Dizz Studios &nbsp;&middot;&nbsp; All rights reserved</div>
-    </div>
+<!-- FOOTER -->
+<footer>
+  <p>© 2025–2026 Dizz Studios &nbsp;·&nbsp; <a href="https://www.dizzstudios.org">www.dizzstudios.org</a> &nbsp;·&nbsp; Buffalo / Williamsville, NY</p>
+  <p style="margin-top: 8px;">
+    <a href="/client-agreement">Client Agreement &amp; Privacy Policy</a>
+  </p>
+</footer>
 
-  </div>
+<script>
+  // scroll progress
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    document.getElementById('progress').style.width =
+      (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
+const ham  = document.getElementById('hamburger');
+const menu = document.getElementById('mobileMenu');
 
+document.getElementById('mobileClose').addEventListener('click', () => {
+  menu.classList.remove('open');
+  ham.classList.remove('open');
+  ham.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+});
+
+ham.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  ham.classList.toggle('open', open);
+  ham.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+
+// close when a link is clicked
+menu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    menu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  });
+});
+
+function initAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-scale')
+    .forEach(el => observer.observe(el));
+}
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+
+  if (sessionStorage.getItem('siteVisited')) {
+    initAnimations();
+  } else {
+    sessionStorage.setItem('siteVisited', '1');
+    setTimeout(() => {
+      loader.style.display = 'none';
+      initAnimations();
+    }, 1800);
+  }
+});
+</script>
   <script src="dist/menu.js?v=2"></script>
 
   <script>
@@ -646,6 +920,8 @@
 
     loadEvents();
   </script>
-
 </body>
+<div id="loader">
+  <img src="/dist/assets/white.png" alt="Dizz Studios" id="loader-logo" />
+</div>
 </html>
