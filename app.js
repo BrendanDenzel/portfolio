@@ -30,7 +30,7 @@ let currentResults = [];
 // ─── INIT ────────────────────────────────────────────────────────
 async function init() {
   try {
-    const res = await fetch('players.json');
+    const res = await fetch('/players.json');
     ALL_PLAYERS = await res.json();
   } catch (e) {
     console.error('Could not load players.json:', e);
